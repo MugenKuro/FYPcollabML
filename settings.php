@@ -107,7 +107,7 @@
                         </div>
                         <div class="settings-container09">
                             <span class="settings-text09">
-                                <span>Re-type Passowrd</span>
+                                <span>Re-type Password</span>
                                 <br />
                             </span>
                             <div class="settings-container10">
