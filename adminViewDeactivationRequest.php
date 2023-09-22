@@ -46,7 +46,7 @@
 <form action="adminAcceptSeller.php">
 <button class="tabs">Accept New Seller</button>
 </form>
-<form class="logoutButton" action="loginPage.php">
+<form class="logoutButton" action="login.php">
 <button class="tabs">Log Out</button>
 </form>
 </div>
