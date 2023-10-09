@@ -6,18 +6,26 @@ class Db {
     private $password;
     private $dbname;
     private $connection;
+    private $ssl;
 
     public function __construct() {
-        $this->servername = "localhost";
-        $this->username = "root";
-        $this->password = "";
+        $this->servername = "icloth.mysql.database.azure.com";
+        $this->username = "iclothfyp";
+        $this->password = "Fyp123!@#";
         $this->dbname = "eComDB";
+        $this->ssl = dirname(__FILE__) . '/../SSL_cert/DigiCertGlobalRootCA.crt.pem';
         $this->connect();
     }
 
     private function connect() {
-        $this->connection = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
-        if ($this->connection->connect_error) {
+        // Initialize mysqli
+        $this->connection = mysqli_init();
+        
+        // Set SSL options
+        mysqli_ssl_set($this->connection, NULL, NULL, $this->ssl, NULL, NULL);
+        
+        // Real connect using SSL
+        if (!$this->connection->real_connect($this->servername, $this->username, $this->password, $this->dbname, 3306, NULL, MYSQLI_CLIENT_SSL)) {
             die("ERROR: Could not connect. " . $this->connection->connect_error);
         }
     }
