@@ -73,7 +73,7 @@
                 </div>
 
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="login.php"><img src="images/user.svg"></a></li>
+                    <li><a class="nav-link" href="logout.php"><img src="images/user.svg"></a></li>
                     <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
                 </ul>
             </div>
