@@ -1,5 +1,11 @@
 <!doctype html>
 <html lang="en">
+<?php
+require dirname(__FILE__) . '\entity\users.php';
+$database = new Db();
+$seller = new Users();
+$ID = $seller->getUserId();
+?>
 
 <head>
     <meta charset="utf-8">
@@ -75,23 +81,17 @@
                 </div>
                 <div class="request-category-container03"></div>
                 <div class="request-category-container04">
-                    <form class="request-category-form">
+                    <form class="request-category-form"  action="redirect.php" method="POST">
                         <div class="request-category-container05">
                             <span class="request-category-text03">
                                 <span>Category Request: </span>
                                 <br />
                             </span>
-                            <textarea placeholder="Write what category you are requesting for"
-                                class="request-category-textarea textarea"></textarea>
+                            <input type="text" name="category" placeholder = "insert category name" class="request-category-textarea textarea"></input>
                         </div>
                         <div class="request-category-container06">
                             <div class="request-category-container07">
-                                <button type="button" class="request-category-button button" onclick="window.location='sellerIndex.php'">
-                                    <span class="request-category-text06">
-                                        <span>Submit</span>
-                                        <br />
-                                    </span>
-                                </button>
+                                <input type="submit" name="requestCategory" value="Submit"></input>
                                 <button type="button" class="request-category-button1 button" onclick="window.location='sellerIndex.php'">
                                     <span class="request-category-text09">
                                         <span class="request-category-text10">Cancel</span>
@@ -103,6 +103,9 @@
                     </form>
                 </div>
             </div>
+
+
+
             <div class="request-category-container08">
                 <div class="request-category-container09">
                     <span class="request-category-text12">
@@ -124,33 +127,32 @@
                                     <br />
                                 </span>
                             </div>
+                            <?php
+                            $sql = "SELECT * FROM CategoryRequests WHERE seller_id=$ID" ;
+                            $sellerRequest = $database->query($sql);
+                            // output data of each row
+                            while($row = mysqli_fetch_assoc($sellerRequest)) {
+                            ?>
                             <div class="request-category-container14">
                                 <span class="request-category-text21">
-                                    <span>Underwear</span>
+                                    <span><?php echo $row["category_name"] ?></span>
                                     <br />
                                 </span>
                                 <span class="request-category-text24">
-                                    <span>Pending</span>
+                                    <span><?php echo $row["status"] ?></span>
                                     <br />
                                 </span>
                             </div>
-                            <div class="request-category-container15">
-                                <span class="request-category-text27">
-                                    <span>T-shirt</span>
-                                    <br />
-                                </span>
-                                <span class="request-category-text30">
-                                    <span>Approved</span>
-                                    <br />
-                                </span>
-                            </div>
+                            <?php                    
+                            }                    
+                            ?>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
+  
 
 </body>
 

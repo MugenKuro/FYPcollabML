@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="en">
-
+<?php
+require dirname(__FILE__) . '\entity\users.php';
+$database = new Db();
+$seller = new Users();
+$ID = $seller->getUserId();
+?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -76,15 +81,15 @@
                 </div>
                 <div class="seller-settings-container03"></div>
                 <div class="seller-settings-container04">
-                    <form class="seller-settings-form">
+                    <form class="seller-settings-form" action="redirect.php" method="POST">
                         <div class="seller-settings-container05">
                             <span class="seller-settings-text03">
                                 <span>Username</span>
                                 <br />
                             </span>
                             <div class="seller-settings-container06">
-                                <input type="text" placeholder="username"
-                                    class="seller-settings-textinput input" />
+                                <input type="text" placeholder="username" name = "username" class="seller-settings-textinput input" />
+                                </input>
                             </div>
                         </div>
                         <div class="seller-settings-container07">
@@ -93,25 +98,21 @@
                                 <br />
                             </span>
                             <div class="seller-settings-container08">
-                                <input type="text" placeholder="password" class="seller-settings-textinput1 input" />
+                                <input type="text" placeholder="password" name = "password1" class="seller-settings-textinput1 input" /></input>
                             </div>
                         </div>
                         <div class="seller-settings-container09">
                             <span class="seller-settings-text09">
-                                <span>Re-type Passowrd</span>
+                                <span>Re-type Password</span>
                                 <br />
                             </span>
                             <div class="seller-settings-container10">
-                                <input type="text" placeholder="password" class="seller-settings-textinput2 input" />
+                                <input type="text" placeholder="password" name= "password2" class="seller-settings-textinput2 input" /></input>
                             </div>
                         </div>
                         <div class="seller-settings-container11">
-                            <button type="button" class="seller-settings-button button" onclick="window.location='sellerIndex.php'">
-                                <span class="seller-settings-text12">
-                                    <span>Submit</span>
-                                    <br />
-                                </span>
-                            </button>
+                        <input type="submit" name="updateLogin" value="Submit"></input>
+                    
                             <button type="button" class="seller-settings-button1 button" onclick="window.location='sellerIndex.php'">
                                 <span class="seller-settings-text15">
                                     <span class="seller-settings-text16">Cancel</span>
@@ -120,12 +121,13 @@
                             </button>
                         </div>
                     </form>
-                    <button type="button" class="seller-settings-button2 button" onclick="window.location='sellerIndex.php'">
-                        <span class="seller-settings-text18">
-                            <span>Request for Deactivation</span>
-                            <br />
-                        </span>
-                    </button>
+                    <?php
+
+                    ?>
+                    <form method ="POST" action="redirect.php">
+                    <input type="submit" name="requestDeactivation" value="Request Deactivation">
+                    </input>
+                    </form>
                 </div>
             </div>
         </div>

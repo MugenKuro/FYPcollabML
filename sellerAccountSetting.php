@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="en">
-
+<?php
+require dirname(__FILE__) . '\entity\users.php';
+$database = new Db();
+$seller = new Users();
+$ID = $seller->getUserId();
+?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -64,6 +69,12 @@
 
     </nav>
     <!-- End Header/Navigation -->
+    <?php
+
+        $sql = "SELECT * FROM sellers JOIN users ON sellers.user_id = users.user_id  WHERE sellers.user_id=$ID" ;
+        $sellerSetting = $database->query($sql);
+        while($row = mysqli_fetch_assoc($sellerSetting)){
+    ?>
     <div>
         <div class="account-setting-container">
             <div class="account-setting-container01">
@@ -82,7 +93,7 @@
                                 <br />
                             </span>
                             <div class="account-setting-container06">
-                                <img alt="image" src="./images/seller_profile.jpg" class="account-setting-image" />
+                                <img alt="no image found " src="<?php echo $row["profile_image"] ?>" class="account-setting-image" />
                             </div>
                         </div>
                         <div class="account-setting-container07">
@@ -91,19 +102,20 @@
                                 <br />
                             </span>
                             <span class="account-setting-text09">
-                                <span>HyperSeller</span>
+                                <span><?php echo $row["seller_name"] ?></span>
                                 <br />
                             </span>
                         </div>
                         <div class="account-setting-container08">
                             <span class="account-setting-text12">
-                                <span>Description</span>
+                                <span>
+                                    Description
+                                </span>
                                 <br />
                             </span>
                             <span class="account-setting-text15">
                                 <span>
-                                    Best Clothes seller, cheap and affordable, buy from me and you
-                                    won&apos;t regret guarentee.
+                                <?php echo $row["description"] ?>
                                 </span>
                                 <br />
                             </span>
@@ -114,12 +126,8 @@
                                 <br />
                             </span>
                             <span class="account-setting-text21">
-                                <span>Jurong west street 81,</span>
-                                <br />
-                                <span>BLK 812 #04-12,</span>
-                                <br />
-                                <span>Singapore 640812</span>
-                                <br />
+                                <span><?php echo $row["pick_up_address"] ?>
+                                </span>
                             </span>
                         </div>
                         <div class="account-setting-container10">
@@ -127,7 +135,7 @@
                                 <span>Payment QR</span>
                                 <br />
                             </span>
-                            <img alt="image" src="./images/paynow_qr_1.jpg" class="account-setting-image1" />
+                            <img alt="no image found" src="<?php echo $row["payment_QR"] ?>" class="account-setting-image1" />
                         </div>
                         <div class="account-setting-container11">
                             <span class="account-setting-text31">
@@ -135,7 +143,7 @@
                                 <br />
                             </span>
                             <span class="account-setting-text34">
-                                <span>hyper112</span>
+                                <span><?php echo $row["username"] ?></span>
                                 <br />
                             </span>
                         </div>
@@ -145,10 +153,14 @@
                                 <br />
                             </span>
                             <span class="account-setting-text40">
-                                <span>hyper112@gmail.com</span>
+                                <span><?php echo $row["email"] ?></span>
                                 <br />
                             </span>
                         </div>
+                        <?php
+                         }
+                        ?>
+
                         <div class="account-setting-container13">
                             <button type="button" class="account-setting-button button"  onclick="window.location='sellerSettings.php'">
                                 <span class="account-setting-text43">
