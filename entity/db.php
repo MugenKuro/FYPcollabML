@@ -65,14 +65,7 @@ class Db {
     }
 
     public function prepare($sql) {
-        // return $this->connection->prepare($sql);
-        $stmt = $this->connection->prepare($sql);
-
-        if ($params) {
-            foreach ($params as $key => $value) {
-                $stmt->bindParam(":$key", $params[$key]);
-            }
-        }
+        return $this->connection->prepare($sql);
     }
 }
 
