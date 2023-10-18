@@ -1,22 +1,22 @@
 <?php
-include __DIR__ . "/../entity/db.php";// Include the db.php file
 include "admin_header.php";
+include "Admin.php"; 
 
-// Create a new Db instance
-$db = new Db();
+// Create an instance of the Admin class
+$admin = new Admin();
 
-try {
-    // Fetch all customers from the Customers table
-    $sql = "SELECT * FROM Customers";
-    $result = $db->query($sql);
-} catch (Exception $e) {
-    echo $sql . "<br>" . $e->getMessage();
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Handle form submissions 
 }
+
+$customers = $admin->getAllCustomers();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 </head>
+
 <body>
     <div class="container">
         <div class="table-wrapper">
@@ -44,19 +44,19 @@ try {
                 </thead>
                 <tbody>
                     <?php
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
+                    if (!empty($customers)) {
+                        foreach ($customers as $customer) {
                             echo "<tr>";
-                            echo "<td>" . $row["customer_id"] . "</td>";
-                            echo "<td>" . $row["user_id"] . "</td>";
-                            echo "<td>" . $row["nickname"] . "</td>";
-                            echo "<td>" . $row["gender"] . "</td>";
-                            echo "<td>" . $row["date_of_birth"] . "</td>";
-                            echo "<td>" . $row["first_name"] . "</td>";
-                            echo "<td>" . $row["last_name"] . "</td>";
-                            echo "<td>" . $row["image_path"] . "</td>";
-                            echo "<td>" . $row["address"] . "</td>";
-                            echo "<td>" . $row["mobile"] . "</td>";
+                            echo "<td>" . $customer["customer_id"] . "</td>";
+                            echo "<td>" . $customer["user_id"] . "</td>";
+                            echo "<td>" . $customer["nickname"] . "</td>";
+                            echo "<td>" . $customer["gender"] . "</td>";
+                            echo "<td>" . $customer["date_of_birth"] . "</td>";
+                            echo "<td>" . $customer["first_name"] . "</td>";
+                            echo "<td>" . $customer["last_name"] . "</td>";
+                            echo "<td>" . $customer["image_path"] . "</td>";
+                            echo "<td>" . $customer["address"] . "</td>";
+                            echo "<td>" . $customer["mobile"] . "</td>";
                             echo "</tr>";
                         }
                     } else {

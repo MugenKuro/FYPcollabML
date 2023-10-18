@@ -1,30 +1,17 @@
 <?php
-include __DIR__ . "/../entity/db.php"; // Include the db.php file
+include "Admin.php"; // Include the Admin class
 include "admin_header.php";
 
-// Create a new Db instance
-$db = new Db();
+$admin = new Admin();
 
 // Check if the "Deactivate" button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["deactivate"])) {
     $sellerID = $_POST["seller_id"];
-
-    // Update the status to "inactive" for the selected seller
-    $updateSql = "UPDATE sellers SET status = 'inactive' WHERE seller_id = ?";
-    $stmt = $db->prepare($updateSql);
-    $stmt->bind_param("i", $sellerID);
-    $stmt->execute();
+    $admin->deactivateSeller($sellerID);
 }
 
-try {
-    // Fetch sellers with "pending deactivation" status
-    $sql = "SELECT * FROM sellers WHERE status = 'pending deactivation'";
-    $result = $db->query($sql);
-} catch (Exception $e) {
-    echo $sql . "<br>" . $e->getMessage();
-}
+$result = $admin->viewDeactivationRequests();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -127,7 +127,7 @@
                 <li><a href="view_category.php">View Categories</a></li>
                 <li><a href="view_registration_request.php">Registration Requests</a></li>
                 <li><a href="view_deactivation_request.php">Deactivation Requests</a></li>
-                <li><a href="view_category_request.php">Category Requests</a></li>
+                <li><a href="handle_category_request.php">Category Requests</a></li>
             </ul>
         </div>
     </nav>

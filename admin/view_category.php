@@ -1,17 +1,13 @@
 <?php
-include __DIR__ . "/../entity/db.php"; // Include the db.php file using the correct relative path
+include "Admin.php"; // Include the Admin class
 include "admin_header.php";
-// Create a new Db instance
-$db = new Db();
 
-try {
-    $sql = "SELECT * FROM categories";
-    $result = $db->query($sql);
-} catch (Exception $e) {
-    echo $sql . "<br>" . $e->getMessage();
-}
+$admin = new Admin();
+
+$result = $admin->viewAllCategories();
 ?>
 <!DOCTYPE html>
+<html lang="en">
 <head>
 <style>
     .btn-add-category {

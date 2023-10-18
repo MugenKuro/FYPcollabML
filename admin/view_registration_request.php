@@ -1,33 +1,17 @@
 <?php
-include __DIR__ . "/../entity/db.php"; // Include the db.php file
+include "Admin.php"; // Include the Admin class
 include "admin_header.php";
 
-// Create a new Db instance
-$db = new Db();
+$admin = new Admin();
 
 // Check if the "Approve" button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["approve"])) {
     $sellerID = $_POST["seller_id"];
-
-    // Update the status to "active" for the selected seller
-    $updateSql = "UPDATE sellers SET status = 'active' WHERE seller_id = ?";
-    $stmt = $db->prepare($updateSql);
-    $stmt->bind_param("i", $sellerID);
-    $stmt->execute();
+    $admin->approveSeller($sellerID);
 }
 
-try {
-    // Fetch pending approval sellers with additional details from individual and business sellers
-    $sql = "SELECT s.*, i.passport, b.uen, b.ACRA_filepath FROM sellers s
-            LEFT JOIN individualsellers i ON s.seller_id = i.seller_id
-            LEFT JOIN businesssellers b ON s.seller_id = b.seller_id
-            WHERE s.status = 'pending approval'";
-    $result = $db->query($sql);
-} catch (Exception $e) {
-    echo $sql . "<br>" . $e->getMessage();
-}
+$result = $admin->viewRegistrationRequests();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

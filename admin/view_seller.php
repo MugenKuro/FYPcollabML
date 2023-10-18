@@ -1,13 +1,10 @@
 <?php
-// Include the database connection using the Db class
-include __DIR__ . "/../entity/db.php"; // Adjust the path as needed
+include "Admin.php"; // Include the Admin class
 include "admin_header.php";
-// Create a new Db instance
-$db = new Db();
 
-// Fetch all sellers from the Sellers table
-$sql = "SELECT * FROM Sellers";
-$result = $db->query($sql); // Use the query method of the Db class
+$admin = new Admin();
+
+$result = $admin->viewAllSellers();
 ?>
 
 <!DOCTYPE html>
