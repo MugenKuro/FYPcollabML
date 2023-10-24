@@ -102,10 +102,10 @@ class Admin
                 
                 $approveQuery = "UPDATE CategoryRequests SET status = 'approved' WHERE request_id = ?";
                 $this->db->query($approveQuery, [$request_id]);
-
+    
                 $selectQuery = "SELECT category_name FROM CategoryRequests WHERE request_id = ?";
                 $category_name = $this->db->query($selectQuery, [$request_id])->fetch_assoc()["category_name"];
-
+    
                 $insertQuery = "INSERT INTO Categories (category_name, status) VALUES (?, 'active')";
                 $this->db->query($insertQuery, [$category_name]);
             } elseif (isset($_POST["disapprove"])) {
@@ -115,17 +115,17 @@ class Admin
                 $this->db->query($disapproveQuery, [$request_id]);
             }
         }
-
+    
         try {
             $selectRequestsQuery = "SELECT request_id, seller_id, category_name FROM CategoryRequests WHERE status = 'pending'";
             $result = $this->db->query($selectRequestsQuery);
-
+    
             $additionalDetailsQuery = "SELECT Sellers.seller_name, CategoryRequests.description FROM Sellers
                                         INNER JOIN CategoryRequests ON Sellers.seller_id = CategoryRequests.seller_id
                                         WHERE CategoryRequests.request_id = ?";
             
             $modal = "";
-
+    
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $modal .= "<tr>";
@@ -133,26 +133,24 @@ class Admin
                     $modal .= "<td>" . $row["seller_id"] . "</td>";
                     $modal .= "<td>" . $row["category_name"] . "</td>";
                     $modal .= "<td>
-                                <button class='btn btn-primary' data-toggle='modal' data-target='#viewModal" . $row["request_id"] . "'>View</button>
+                                <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#viewModal" . $row["request_id"] . "'>View</button>
                                 </td>";
                     $modal .= "</tr>";
-
+    
                     // View Modal
                     $modal .= "<div class='modal fade' id='viewModal" . $row["request_id"] . "' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>";
                     $modal .= "<div class='modal-dialog' role='document'>";
                     $modal .= "<div class='modal-content'>";
                     $modal .= "<div class='modal-header'>";
                     $modal .= "<h5 class='modal-title' id='exampleModalLabel'>Request Details</h5>";
-                    $modal .= "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>";
-                    $modal .= "<span aria-hidden='true'>&times;</span>";
-                    $modal .= "</button>";
+                    $modal .= "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                     $modal .= "</div>";
                     $modal .= "<div class='modal-body'>";
                     $modal .= "<p><strong>Request ID:</strong> " . $row["request_id"] . "</p>";
                     $modal .= "<p><strong>Seller ID:</strong> " . $row["seller_id"] . "</p>";
-
+    
                     $additionalDetails = $this->db->query($additionalDetailsQuery, [$row["request_id"]])->fetch_assoc();
-
+    
                     $modal .= "<p><strong>Seller Name:</strong> " . $additionalDetails["seller_name"] . "</p>";
                     $modal .= "<p><strong>Category Name:</strong> " . $row["category_name"] . "</p>";
                     $modal .= "<p><strong>Description:</strong> " . $additionalDetails["description"] . "</p>";
@@ -160,7 +158,7 @@ class Admin
                     $modal .= "<div class='modal-footer'>";
                     $modal .= "<form method='post'>";
                     $modal .= "<input type='hidden' name='request_id' value='" . $row["request_id"] . "'>";
-                    $modal .= "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>";
+                    $modal .= "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>";
                     $modal .= "<button type='submit' name='approve' class='btn btn-success'>Approve</button>";
                     $modal .= "<button type='submit' name='disapprove' class='btn btn-danger'>Disapprove</button>";
                     $modal .= "</form>";
@@ -175,9 +173,10 @@ class Admin
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
-
+    
         return $modal;
     }
+    
 
     // Function to view all categories
     public function viewAllCategories() {

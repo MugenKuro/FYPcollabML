@@ -4,135 +4,142 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>System Admin</title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        background: #f5f5f5;
-        color: #333;
-    }
+    <!-- JS -->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.7.1.min.js"></script>
 
-    .table-wrapper {
-        background: #fff;
-        padding: 20px;
-        margin: 30px 0;
-        border-radius: 3px;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    }
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../css/fontawesome.min.css">
 
-    .table-title {
-        padding-bottom: 15px;
-        background: #435d7d;
-        color: #fff;
-        padding: 10px 20px;
-        border-radius: 3px 3px 0 0;
-    }
 
-    .table-title h2 {
-        margin: 0;
-        font-size: 24px;
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background: #f5f5f5;
+            color: #333;
+        }
 
-    table.table {
-        width: 100%;
-        border-collapse: collapse;
-        border-spacing: 0;
-    }
+        .table-wrapper {
+            background: #fff;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
 
-    table.table th,
-    table.table td {
-        padding: 10px;
-        vertical-align: middle;
-        text-align: left;
-    }
+        .table-title {
+            padding-bottom: 15px;
+            background: #435d7d;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 3px 3px 0 0;
+        }
 
-    table.table th:first-child,
-    table.table td:first-child {
-        width: 60px;
-    }
+        .table-title h2 {
+            margin: 0;
+            font-size: 24px;
+        }
 
-    table.table th:last-child,
-    table.table td:last-child {
-        width: 100px;
-    }
+        table.table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
 
-    table.table-striped tbody tr:nth-of-type(odd) {
-        background-color: #f2f2f2;
-    }
+        table.table th,
+        table.table td {
+            padding: 10px;
+            vertical-align: middle;
+            text-align: left;
+        }
 
-    table.table-striped.table-hover tbody tr:hover {
-        background: #e0e0e0;
-    }
+        table.table th:first-child,
+        table.table td:first-child {
+            width: 60px;
+        }
 
-    table.table th i {
-        font-size: 16px;
-        margin: 0 5px;
-        cursor: pointer;
-    }
+        table.table th:last-child,
+        table.table td:last-child {
+            width: 100px;
+        }
 
-    table.table td:last-child i {
-        opacity: 0.9;
-        font-size: 18px;
-    }
+        table.table-striped tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
 
-    table.table td a {
-        font-weight: bold;
-        color: #007bff;
-        text-decoration: none;
-        outline: none !important;
-    }
+        table.table-hover tbody tr:hover {
+            background: #e0e0e0;
+        }
 
-    table.table td a:hover {
-        color: #0056b3;
-    }
+        table.table th i {
+            font-size: 16px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
 
-    table.table td a.edit {
-        color: #ffc107;
-    }
+        table.table td:last-child i {
+            opacity: 0.9;
+            font-size: 18px;
+        }
 
-    table.table td a.delete {
-        color: #f44336;
-    }
+        table.table td a {
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+            outline: none !important;
+        }
 
-    table.table td i {
-        font-size: 18px;
-    }
+        table.table td a:hover {
+            color: #0056b3;
+        }
 
-    table.table .avatar {
-        border-radius: 50%;
-        vertical-align: middle;
-        margin-right: 10px;
-        width: 32px;
-        height: 32px;
-    } 
+        table.table td a.edit {
+            color: #ffc107;
+        }
 
-</style>
+        table.table td a.delete {
+            color: #f44336;
+        }
+
+        table.table td i {
+            font-size: 18px;
+        }
+
+        table.table .avatar {
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 10px;
+            width: 32px;
+            height: 32px;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="">System Admin</a>
+            <a class="navbar-brand" href="#">System Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="view_seller.php">View Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="view_customer.php">View Customers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="view_category.php">View Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="view_registration_request.php">Registration Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="view_deactivation_request.php">Deactivation Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="handle_category_request.php">Category Requests</a></li>
+                </ul>
             </div>
-            <ul class="nav navbar-nav">
-                <li><a href="view_seller.php">View Sellers</a></li>
-                <li><a href="view_customer.php">View Customers</a></li>
-                <li><a href="view_category.php">View Categories</a></li>
-                <li><a href="view_registration_request.php">Registration Requests</a></li>
-                <li><a href="view_deactivation_request.php">Deactivation Requests</a></li>
-                <li><a href="handle_category_request.php">Category Requests</a></li>
-            </ul>
         </div>
     </nav>
 </body>
-
+</html>
 
 
 

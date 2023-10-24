@@ -10,13 +10,16 @@ $modal = $adminController->handleCategoryRequests();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Pending Category Requests</title>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-12">
                         <h2><b>View Pending Category Requests</b></h2>
                     </div>
                 </div>

@@ -9,20 +9,10 @@ $result = $adminController->viewAllCategories();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-    <style>
-        .btn-add-category {
-            float: right;
-            padding: 5px 10px;
-            font-size: 15px;
-            margin-right: 5px;
-        }
-        .btn-add-category .glyphicon {
-            vertical-align: middle;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>System Admin</title>
 </head>
-
 <body>
     <div class="container">
         <div class="table-wrapper">
@@ -32,7 +22,7 @@ $result = $adminController->viewAllCategories();
                         <h2><b>View All Categories</b></h2>
                     </div>
                     <div class="col-sm-6">
-                        <a href="add_category.php" class="btn btn-success btn-add-category"><span class="glyphicon glyphicon-plus"></span> <span>Add New Category</span></a>
+                        <a href="add_category.php" class="btn btn-success float-end"><span>Add New Category</span></a>
                     </div>
                 </div>
             </div>
@@ -54,21 +44,20 @@ $result = $adminController->viewAllCategories();
                                 echo "<td>" . $row["category_name"] . "</td>";
                                 echo "<td>" . $row["status"] . "</td>";
                                 echo "<td>
-                                        <a href='update_category.php?category_id=" . $row["category_id"] . "' class='btn btn-warning' data-toggle='tooltip' title='Edit'><span class='glyphicon glyphicon-pencil'></span></a>
-                                        <a href='delete_category.php?category_id=" . $row["category_id"] . "' class='btn btn-danger' data-toggle='tooltip' title='Delete'><span class='glyphicon glyphicon-trash'></span></a>
+                                        <div class='btn-group'>
+                                            <a href='update_category.php?category_id=" . $row["category_id"] . "' class='btn btn-warning btn-update' data-bs-toggle='tooltip' title='Edit'>Update</a>
+                                            <a href='delete_category.php?category_id=" . $row["category_id"] . "' class='btn btn-danger btn-delete' data-bs-toggle='tooltip' title='Delete'>Delete</a>
+                                        </div>
                                       </td>";
                                 echo "</tr>";
                             }
                         } else {
-                            echo "0 results";
+                            echo "<tr><td colspan='4'>0 results</td></tr>";
                         }
                     ?>
                 </tbody>
             </table>
         </div>
     </div>
-    <!-- Bootstrap JS and jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

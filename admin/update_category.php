@@ -39,27 +39,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title"><b>Update Category</b></h2>
-                </div>
-                <div class="panel-body">
-                    <form method="POST" action="update_category.php?category_id=<?php echo $categoryId; ?>">
-                        <div class="form-group">
-                            <label for="category_name">Category Name:</label>
-                            <input type="text" class="form-control" id="category_name" name="category_name" value="<?php echo $categoryData["category_name"]; ?>">
-                            <span class="text-danger"><?php echo $categoryNameErr; ?></span>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="active" name="active" <?php if ($categoryData["status"] === "Active") echo "checked"; ?>> Active
-                                </label>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><b>Update Category</b></h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="update_category.php?category_id=<?php echo $categoryId; ?>">
+                            <div class="mb-3">
+                                <label for="category_name" class="form-label">Category Name:</label>
+                                <input type="text" class="form-control" id="category_name" name="category_name" value="<?php echo $categoryData["category_name"]; ?>">
+                                <span class="text-danger"><?php echo $categoryNameErr; ?></span>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-success">Update Category</button>
-                    </form>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="active" name="active" <?php if ($categoryData["status"] === "Active") echo "checked"; ?>>
+                                <label class="form-check-label" for="active">Active</label>
+                            </div>
+                            <button type="submit" class="btn btn-success mt-3">Update Category</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
