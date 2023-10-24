@@ -1,16 +1,16 @@
 <?php
-include "Admin.php";
+include __DIR__ . "/../controller/AdminController.php";
 
-$admin = new Admin();
+$adminController = new AdminController();
 
 if (isset($_GET["category_id"]) && is_numeric($_GET["category_id"])) {
     $categoryID = $_GET["category_id"];
 
-    // Check for confirmation (you can customize this logic)
-    $confirmation = $admin->confirmDeletion();
+    // Check for confirmation
+    $confirmation = $adminController->confirmDeletion();
 
     if ($confirmation) {
-        if ($admin->deleteCategory($categoryID)) {
+        if ($adminController->deleteCategory($categoryID)) {
             header("Location: view_category.php");
             exit();
         } else {

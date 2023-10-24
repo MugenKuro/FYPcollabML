@@ -1,16 +1,17 @@
 <?php
-include "Admin.php"; // Include the Admin class
 include "admin_header.php";
+include __DIR__ . "/../controller/AdminController.php";
 
-$admin = new Admin();
+// Create an instance of the AdminController class
+$adminController = new AdminController();
 
 // Check if the "Deactivate" button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["deactivate"])) {
     $sellerID = $_POST["seller_id"];
-    $admin->deactivateSeller($sellerID);
+    $adminController->deactivateSeller($sellerID);
 }
 
-$result = $admin->viewDeactivationRequests();
+$result = $adminController->viewDeactivationRequests();
 ?>
 <!DOCTYPE html>
 <html lang="en">

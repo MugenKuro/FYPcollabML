@@ -1,10 +1,11 @@
 <?php
-include "Admin.php"; // Include the Admin class
 include "admin_header.php";
+include __DIR__ . "/../controller/AdminController.php";
 
-$admin = new Admin();
+// Create an instance of the AdminController class
+$adminController = new AdminController();
 
-$result = $admin->viewAllSellers();
+$result = $adminController->viewAllSellers();
 ?>
 
 <!DOCTYPE html>

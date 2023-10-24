@@ -1,15 +1,11 @@
 <?php
 include "admin_header.php";
-include "Admin.php"; 
+include __DIR__ . "/../controller/AdminController.php";
 
-// Create an instance of the Admin class
-$admin = new Admin();
+// Create an instance of the AdminController class
+$adminController = new AdminController();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Handle form submissions 
-}
-
-$customers = $admin->getAllCustomers();
+$customers = $adminController->getAllCustomers();
 ?>
 
 <!DOCTYPE html>

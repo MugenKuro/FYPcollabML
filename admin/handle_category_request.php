@@ -1,10 +1,10 @@
 <?php
-include "Admin.php"; // Include the Admin class
+include __DIR__ . "/../controller/AdminController.php";
 include "admin_header.php";
 
-$admin = new Admin();
+$adminController = new AdminController();
 
-$modal = $admin->handleCategoryRequests();
+$modal = $adminController->handleCategoryRequests();
 
 ?>
 <!DOCTYPE html>

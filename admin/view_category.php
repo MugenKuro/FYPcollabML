@@ -1,25 +1,26 @@
 <?php
-include "Admin.php"; // Include the Admin class
+include __DIR__ . "/../controller/AdminController.php";
 include "admin_header.php";
 
-$admin = new Admin();
+$adminController = new AdminController();
 
-$result = $admin->viewAllCategories();
+$result = $adminController->viewAllCategories();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-    .btn-add-category {
-        float: right;
-        padding: 5px 10px;
-        font-size: 15px;
-        margin-right: 5px;
-    }
-    .btn-add-category .material-icons {
-        vertical-align: middle;
-    }
-</style>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <style>
+        .btn-add-category {
+            float: right;
+            padding: 5px 10px;
+            font-size: 15px;
+            margin-right: 5px;
+        }
+        .btn-add-category .glyphicon {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,7 +32,7 @@ $result = $admin->viewAllCategories();
                         <h2><b>View All Categories</b></h2>
                     </div>
                     <div class="col-sm-6">
-                        <a href="add_category.php" class="btn btn-success btn-add-category"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a>
+                        <a href="add_category.php" class="btn btn-success btn-add-category"><span class="glyphicon glyphicon-plus"></span> <span>Add New Category</span></a>
                     </div>
                 </div>
             </div>
@@ -52,8 +53,10 @@ $result = $admin->viewAllCategories();
                                 echo "<td>" . $row["category_id"] . "</td>";
                                 echo "<td>" . $row["category_name"] . "</td>";
                                 echo "<td>" . $row["status"] . "</td>";
-                                echo "<td><a class='edit' href='update_category.php?category_id=" . $row["category_id"] . "'><i class='material-icons' data-toggle='tooltip' title='Edit'>&#xE254;</i></a>";
-                                echo "<a class='delete' href='delete_category.php?category_id=" . $row["category_id"] . "'><i class='material-icons' data-toggle='tooltip' title='Delete'>&#xE872;</i></a></td>";
+                                echo "<td>
+                                        <a href='update_category.php?category_id=" . $row["category_id"] . "' class='btn btn-warning' data-toggle='tooltip' title='Edit'><span class='glyphicon glyphicon-pencil'></span></a>
+                                        <a href='delete_category.php?category_id=" . $row["category_id"] . "' class='btn btn-danger' data-toggle='tooltip' title='Delete'><span class='glyphicon glyphicon-trash'></span></a>
+                                      </td>";
                                 echo "</tr>";
                             }
                         } else {
@@ -64,5 +67,8 @@ $result = $admin->viewAllCategories();
             </table>
         </div>
     </div>
+    <!-- Bootstrap JS and jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

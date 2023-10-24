@@ -1,15 +1,18 @@
 <?php
-include "Admin.php";
+include __DIR__ . "/../controller/AdminController.php";
+include "admin_header.php";
 
 $categoryId = $_GET["category_id"];
-$admin = new Admin();
+$adminController = new AdminController();
 
-$categoryData = $admin->getCategoryById($categoryId);
+$categoryData = $adminController->getCategoryById($categoryId);
 
 if (!$categoryData) {
     echo "Category not found.";
     exit();
 }
+
+$categoryNameErr = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryName = htmlspecialchars($_POST["category_name"]);
@@ -20,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($categoryNameErr)) {
-        if ($admin->updateCategory($categoryId, $categoryName, $status)) {
+        if ($adminController->updateCategory($categoryId, $categoryName, $status)) {
             header("Location: view_category.php");
             exit();
         } else {
@@ -28,8 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-include "admin_header.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -65,4 +66,3 @@ include "admin_header.php";
     </div>
 </body>
 </html>
-?>

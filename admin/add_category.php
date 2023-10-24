@@ -1,8 +1,8 @@
 <?php
-include "Admin.php";
+include __DIR__ . "/../controller/AdminController.php";
 include "admin_header.php";
 
-$admin = new Admin();
+$adminController = new AdminController();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryName = $_POST["category_name"];
@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if the 'active' checkbox is selected
     $status = isset($_POST["active"]) ? "Active" : "Inactive";
 
-    if ($admin->addCategory($categoryName, $status)) {
+    if ($adminController->addCategory($categoryName, $status)) {
         header("Location: view_category.php");
         exit();
     } else {
@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>

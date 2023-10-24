@@ -1,16 +1,17 @@
 <?php
-include "Admin.php"; // Include the Admin class
 include "admin_header.php";
+include __DIR__ . "/../controller/AdminController.php";
 
-$admin = new Admin();
+// Create an instance of the AdminController class
+$adminController = new AdminController();
 
 // Check if the "Approve" button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["approve"])) {
     $sellerID = $_POST["seller_id"];
-    $admin->approveSeller($sellerID);
+    $adminController->approveSeller($sellerID);
 }
 
-$result = $admin->viewRegistrationRequests();
+$result = $adminController->viewRegistrationRequests();
 ?>
 <!DOCTYPE html>
 <html lang="en">
