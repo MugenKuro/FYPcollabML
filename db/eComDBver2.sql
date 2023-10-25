@@ -112,6 +112,14 @@ CREATE TABLE `BusinessSellers` (
   `ACRA_filepath` VARCHAR(255)
 );
 
+CREATE TABLE CategoryRequests (
+  request_id INT PRIMARY KEY AUTO_INCREMENT,
+  seller_id INT,
+  category_name VARCHAR(255),,
+  description VARCHAR(255),
+  status VARCHAR(25) DEFAULT 'pending',
+);
+
 ALTER TABLE `Sellers` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`);
 
 ALTER TABLE `Customers` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`);
@@ -142,6 +150,7 @@ ALTER TABLE `IndividualSellers` ADD FOREIGN KEY (`seller_id`) REFERENCES `Seller
 
 ALTER TABLE `BusinessSellers` ADD FOREIGN KEY (`seller_id`) REFERENCES `Sellers` (`seller_id`);
 
+ALTER TABLE CategoryRequests ADD FOREIGN KEY (seller_id) REFERENCES Sellers (seller_id`);
 
 -- Inserting data into the Users table
 INSERT INTO Users (username, password, account_type, email, status)
