@@ -169,7 +169,7 @@
             $sellerfetch = $sellersql->fetch_assoc();
             $sellerIDString = $sellerfetch["seller_id"];
             */
-			$userQuery = "SELECT * FROM items `item_name` LIKE '%$search%'";
+			$userQuery = "SELECT * FROM items WHERE `item_name` LIKE '%$search%'";
 			
 			$result = $this->db->query($userQuery);
 			
