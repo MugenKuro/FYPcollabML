@@ -1,3 +1,17 @@
+<?php
+// Include file
+require_once('auth.php');
+require_once dirname(__FILE__) . '\controller\categoriesController.php';
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
+
+// Processing form data when form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -54,11 +68,16 @@
                         style="background-color: #10a4e3; border-color:#10a4e3">All Category
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">T-shirt</a>
-                        <a class="dropdown-item" href="#">Jean</a>
-                        <a class="dropdown-item" href="#">Skirt</a>
+                        <?php
+                        $category = new viewAllCategories();
+                        $data = json_decode($category->viewAllCategories());
+                        foreach ($data as $category) {
+                            echo '<a class="dropdown-item" href="#">' . $category->category_name . '</a>';
+                        }
+                        ?>
                     </div>
                 </div>
+
                 <div class="search">
                     <!-- Another variation with a button -->
                     <div class="input-group">
@@ -71,10 +90,12 @@
                         </div>
                     </div>
                 </div>
-
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="logout.php"><img src="images/user.svg"></a></li>
-                    <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
+                    <li><span class="nav-link">Welcome,
+                            <?php echo htmlspecialchars($_SESSION["username"]); ?>
+                        </span></li>
+                    <li><a class="nav-link" href="logout.php"><img src="images/user.svg"><span> log out</span></a></li>
+                    <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"><span> cart</span></a></li>
                 </ul>
             </div>
         </div>
