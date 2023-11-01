@@ -37,7 +37,7 @@
         $db = new Db();
         
         // Execute the Python script to get recommendations
-        $output = shell_exec("python ../python/customer_recommender.py 2>&1");
+        $output = shell_exec("/usr/bin/python3 ../python/customer_recommender.py 2>&1");
         echo $output;
         // Parse the JSON output
         $recommendations = json_decode($output);
