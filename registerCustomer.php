@@ -46,16 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!isset($_SESSION['flashdata']) || ($_SESSION['flashdata']['type'] != 'danger' && empty($_SESSION['flashdata']['msg']))) {
         $customerRegister = new registerController();
         // If there are no errors, upload the file to the desired file path
-        $target_dir = dirname(__FILE__) . '/images/cust_profile/'; // Set the target directory
+        $target_dir = dirname(__FILE__) . '/images/Prof_pic/'; // Set the target directory
         $target_file = $target_dir . basename($_FILES["image"]["name"]); // Get the filename of the uploaded file
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION)); // Get the file extension
 
         // Generate a unique filename to prevent conflicts
         $filename = uniqid() . "." . $imageFileType;
-        $image_path = '/images/cust_profile/' . $filename;
+        $image_path = '/images/Prof_pic/' . $filename;
 
         extract($_POST);
-        $combinedAddress = $address1 . ', ' . $address2 . ', ' . $address3;
+        $combinedAddress = $address1 . ',' . $address2 . ',' . $address3;
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $filename)) {
             $register = json_decode($customerRegister->customerRegister($email, $username, $password, $nickname, $gender, $dob, $firstname, $lastname, $image_path, $mobile, $combinedAddress));
@@ -113,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <?php unset($_SESSION['flashdata']) ?>
                             <?php endif; ?>
+                            
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label">Email</label>
                                 <div class="col-sm-8">
@@ -216,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="address2" class="col-sm-4 col-form-label">Address 2</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="address2" name="address2" class="form-control"
-                                        placeholder="BLK 123, #01-99"
+                                        placeholder="BLK 123 #01-99"
                                         value="<?= isset($_POST['address2']) ? $_POST['address2'] : '' ?>" required>
                                 </div>
                             </div>

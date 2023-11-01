@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image_path_profimage = '/images/seller_profile/' . $filename_profimage;
 
         extract($_POST);
-        $combinedAddress = $address1 . ', ' . $address2 . ', ' . $address3;
-        $combinedPAddress = $paddress1 . ', ' . $paddress2 . ', ' . $paddress3;
+        $combinedAddress = $address1 . ',' . $address2 . ',' . $address3;
+        $combinedPAddress = $paddress1 . ',' . $paddress2 . ',' . $paddress3;
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir_profimage . $filename_profimage)) {
             $register = json_decode($indSellerRegister->indSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $bankname, $bankno,
@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="address2" class="col-sm-4 col-form-label">Home Address 2</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="address2" name="address2" class="form-control"
-                                        placeholder="BLK 123, #01-99"
+                                        placeholder="BLK 123 #01-99"
                                         value="<?= isset($_POST['address2']) ? $_POST['address2'] : '' ?>" required>
                                 </div>
                             </div>
@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="address2" class="col-sm-4 col-form-label">Item Pick-up Address 2</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="paddress2" name="paddress2" class="form-control"
-                                        placeholder="BLK 123, #01-99"
+                                        placeholder="BLK 123 #01-99"
                                         value="<?= isset($_POST['paddress2']) ? $_POST['paddress2'] : '' ?>" required>
                                 </div>
                             </div>

@@ -101,8 +101,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div>
         <?php
-        
+        $userSettings = new viewAccountSettings();
+        $userData = json_decode($userSettings->getUserDetails($_SESSION['user_id']));
 
+        if (!empty($userData)) {
+            $username = $userData[0]->username;
+            $email = $userData[0]->email;
+        } else {
+            // Handle the case where user data is empty or an error occurred
+            $username = $_SESSION['getUserDetails']['error'];
+            $email = $_SESSION['getUserDetails']['error'];
+        }
+        $customerData = json_decode($userSettings->getCustomerDetails($_SESSION['user_id']));
+        if (!empty($customerData)) {
+            $nickname = $customerData[0]->nickname;
+            $firstName = $customerData[0]->first_name;
+            $lastName = $customerData[0]->last_name;
+            $gender = $customerData[0]->gender;
+            $dateOfBirth = $customerData[0]->date_of_birth;
+            $mobile = $customerData[0]->mobile;
+            $address = $customerData[0]->address;
+            $imagePath = $customerData[0]->image_path;
+        } else {
+            // Handle the case where customer data is empty or an error occurred
+            $nickname = $_SESSION['getCustomerDetails']['error'];
+            $firstName = $_SESSION['getCustomerDetails']['error'];
+            $lastName = $_SESSION['getCustomerDetails']['error'];
+            $gender = $_SESSION['getCustomerDetails']['error'];
+            $dateOfBirth = $_SESSION['getCustomerDetails']['error'];
+            $mobile = $_SESSION['getCustomerDetails']['error'];
+            $address = $_SESSION['getCustomerDetails']['error'];
+            $imagePath = "./images/default_user.jpg";
+        }
+
+        $current_folder = basename(__DIR__);
+        $dir = "/" . $current_folder;
         ?>
         <div class="user-account-setting-container">
             <div class="user-account-setting-container01">
@@ -116,12 +149,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="user-account-setting-container04">
                     <form class="user-account-setting-form">
                         <div class="user-account-setting-container05">
-                            <span class="user-account-setting-text03">
+                            <span class="user-account-setting-text06">
                                 <span>Profile Image</span>
                                 <br />
                             </span>
                             <div class="user-account-setting-container06">
-                                <img src="./images/default_user.jpg" alt="image" class="user-account-setting-image" />
+                                <img src="<?php echo $dir . $imagePath; ?>" alt="image"
+                                    class="user-account-setting-image" />
                             </div>
                         </div>
                         <div class="user-account-setting-container07">
@@ -130,7 +164,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text09">
-                                <span>Janelle331</span>
+                                <span>
+                                    <?php echo $nickname; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -140,7 +176,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text15">
-                                <span>Janelle</span>
+                                <span>
+                                    <?php echo $firstName; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -150,7 +188,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text21">
-                                <span>Lee</span>
+                                <span>
+                                    <?php echo $lastName; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -160,7 +200,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text27">
-                                <span>Female</span>
+                                <span>
+                                    <?php echo $gender; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -170,7 +212,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text33">
-                                <span>12/02/1999</span>
+                                <span>
+                                    <?php echo $dateOfBirth; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -180,21 +224,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text39">
-                                <span>88854123</span>
+                                <span>
+                                    <?php echo $mobile; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
-                        <div class="user-account-setting-container13">
+                        <div class="user-account-setting-container14">
                             <span class="user-account-setting-text42">
                                 <span>Address</span>
                                 <br />
                             </span>
-                            <span class="user-account-setting-text45">
-                                <span>Jurong west street 81,</span>
-                                <br />
-                                <span>BLK 812 #04-12,</span>
-                                <br />
-                                <span>Singapore 640812</span>
+                            <span class="user-account-setting-text55">
+                                <span>
+                                    <?php echo $address; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -204,7 +248,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text55">
-                                <span>Janelle22</span>
+                                <span>
+                                    <?php echo $username; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -214,20 +260,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <span class="user-account-setting-text61">
-                                <span>Janelle22@gmail.com</span>
+                                <span>
+                                    <?php echo $email; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
                         <div class="user-account-setting-container16">
-                            <button type="button" class="user-account-setting-button button" onclick="window.location='settings.php'">
+                            <button type="button" class="user-account-setting-button button"
+                                onclick="window.location='settings.php'">
                                 <span class="user-account-setting-text64">
                                     <span>Edit login Details</span>
                                     <br />
                                 </span>
                             </button>
-                            <button type="button" class="user-account-setting-button1 button" onclick="window.location='index.php'">
+                            <button type="button" class="user-account-setting-button1 button"
+                                onclick="window.location='index.php'">
                                 <span class="user-account-setting-text67">
                                     <span class="user-account-setting-text68">Cancel</span>
+                                    <br />
+                                </span>
+                            </button>
+                            <button type="button" class="user-account-setting-button2 button" onclick="window.location='index.php'">
+                                <span class="settings-text18">
+                                    <span>Deactive account</span>
                                     <br />
                                 </span>
                             </button>

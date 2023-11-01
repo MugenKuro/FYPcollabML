@@ -2056,6 +2056,7 @@ a.more {
     align-items: center;
     flex-direction: column;
     justify-content: flex-start;
+    
 }
 
 .settings-container01 {
@@ -2120,7 +2121,7 @@ a.more {
     border-radius: 4px;
     margin-bottom: 30px;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .settings-form {
@@ -2132,197 +2133,14 @@ a.more {
     justify-content: flex-start;
 }
 
-.settings-container05 {
-    width: 388px;
-    height: 89px;
-    display: flex;
-    margin-top: 20px;
-    align-items: center;
-    border-color: rgba(120, 120, 120, 0.4);
-    border-style: hidden;
-    border-width: 2px;
-    margin-bottom: 20px;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.settings-text03 {
-    font-size: 20px;
-}
-
-.settings-container06 {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.settings-textinput {
-    height: auto;
-    margin-top: 10px;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.settings-container07 {
-    width: 388px;
-    height: 89px;
-    display: flex;
-    margin-top: 20px;
-    align-items: center;
-    border-color: rgba(120, 120, 120, 0.4);
-    border-style: hidden;
-    border-width: 2px;
-    margin-bottom: 20px;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.settings-text06 {
-    font-size: 20px;
-}
-
-.settings-container08 {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.settings-textinput1 {
-    height: auto;
-    margin-top: 10px;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.settings-container09 {
-    width: 388px;
-    height: 89px;
-    display: flex;
-    margin-top: 20px;
-    align-items: center;
-    border-color: rgba(120, 120, 120, 0.4);
-    border-style: hidden;
-    border-width: 2px;
-    margin-bottom: 20px;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.settings-text09 {
-    font-size: 20px;
-}
-
-.settings-container10 {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.settings-textinput2 {
-    height: auto;
-    margin-top: 10px;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.settings-container11 {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.settings-button {
-    width: 166px;
-    height: 42px;
+.update-form {
     align-self: center;
-    margin-top: 20px;
-    transition: 0.3s;
-    margin-left: 20px;
-    border-style: hidden;
-    margin-right: 20px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    background-color: #1ebb7e;
+}
+.custom-button-submit-settings {
+    margin-right: 10px; /* Adjust the value to control the gap size */
 }
 
-.settings-button:hover {
-    border-style: solid;
-    background-color: #9be0c3;
-}
 
-.settings-text12 {
-    color: rgb(255, 255, 255);
-    border-color: var(--dl-color-gray-black);
-    border-style: hidden;
-    border-width: 1px;
-}
-
-.settings-button1 {
-    width: 166px;
-    height: 42px;
-    align-self: center;
-    margin-top: 20px;
-    transition: 0.3s;
-    margin-left: 20px;
-    border-color: #000000;
-    border-style: solid;
-    margin-right: 20px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    background-color: #ffffff;
-}
-
-.settings-button1:hover {
-    border-color: #ff0000;
-    background-color: #b8bbba;
-}
-
-.settings-text15 {
-    color: rgb(255, 255, 255);
-    border-color: var(--dl-color-gray-black);
-    border-style: hidden;
-    border-width: 1px;
-}
-
-.settings-text16 {
-    color: #000000;
-}
-
-.settings-button2 {
-    width: 191px;
-    height: 49px;
-    align-self: center;
-    margin-top: 20px;
-    transition: 0.3s;
-    margin-left: 20px;
-    border-style: hidden;
-    margin-right: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    background-color: #bb1e35;
-}
-
-.settings-button2:hover {
-    color: #000000;
-    border-style: solid;
-    background-color: #ffffff;
-}
-
-.settings-text18 {
-    color: rgb(0, 0, 0);
-    border-color: var(--dl-color-gray-black);
-    border-style: hidden;
-    border-width: 1px;
-}
 
 
 /*2fa */
@@ -7333,6 +7151,26 @@ a.more {
 .user-account-setting-button1:hover {
     border-color: #ff0000;
     background-color: #b8bbba;
+}
+
+.user-account-setting-button2 {
+    width: 166px;
+    height: 42px;
+    align-self: center;
+    margin-top: 20px;
+    transition: 0.3s;
+    margin-left: 20px;
+    border-style: hidden;
+    margin-right: 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    background-color: #bb1e35;
+}
+
+.user-account-setting-button2:hover {
+    color: #000000;
+    border-style: solid;
+    background-color: #ffffff;
 }
 
 .user-account-setting-text67 {

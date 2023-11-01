@@ -94,12 +94,12 @@ class Users
         // Start a transaction
         $db->begin_transaction();
 
-        $check = $db->query("SELECT * FROM `users` WHERE `email` = '$email'")->num_rows;
+        $check = $db->query("SELECT * FROM `users` WHERE `username` = '$username'")->num_rows;
 
         if ($check > 0) {
             $resp['status'] = 'failed';
             $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Email already exists.';
+            $_SESSION['flashdata']['msg'] = 'username already exists.';
         } else {
             // Insert into 'users' table
             $sql = "INSERT INTO `users` (`username`, `password`, `account_type`, `email`, `status`) 
@@ -181,12 +181,12 @@ class Users
         // Start a transaction
         $db->begin_transaction();
 
-        $check = $db->query("SELECT * FROM `users` WHERE `email` = '$email'")->num_rows;
+        $check = $db->query("SELECT * FROM `users` WHERE `username` = '$username'")->num_rows;
 
         if ($check > 0) {
             $resp['status'] = 'failed';
             $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Email already exists.';
+            $_SESSION['flashdata']['msg'] = 'Username already exists.';
         } else {
             // Insert into 'users' table
             $sql = "INSERT INTO `users` (`username`, `password`, `account_type`, `email`, `status`) 
@@ -271,12 +271,12 @@ class Users
         // Start a transaction
         $db->begin_transaction();
 
-        $check = $db->query("SELECT * FROM `users` WHERE `email` = '$email'")->num_rows;
+        $check = $db->query("SELECT * FROM `users` WHERE `username` = '$username'")->num_rows;
 
         if ($check > 0) {
             $resp['status'] = 'failed';
             $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Email already exists.';
+            $_SESSION['flashdata']['msg'] = 'Username already exists.';
         } else {
             // Insert into 'users' table
             $sql = "INSERT INTO `users` (`username`, `password`, `account_type`, `email`, `status`) 
@@ -577,6 +577,52 @@ class Users
         return json_encode($resp);
     }
 
+
+    //view account settings
+    public function getUserDetails($user_id) {
+        $sql = "SELECT username, email FROM `users` where user_id = ?";
+        $db = new Db();
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $data = array(); // Initialize an empty array to store category data
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row; // Add each category row to the $data array
+            }
+        } else {
+            $_SESSION['getUserDetails']['error'] = 'Unable to fetch any details.';
+        }
+    
+        return json_encode($data);
+    }
+
+    public function updateUser($user_id, $username, $password, $email) {
+        $db = new Db();
+        $check = $db->query("SELECT * FROM `users` WHERE `username` = '$username'")->num_rows;
+
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $_SESSION['flashdata']['type'] = 'danger';
+            $_SESSION['flashdata']['msg'] = 'Username already exists.';
+        } else {
+            $sql = "UPDATE `users`
+            SET `username` = $username,
+            `password` = $password,
+            `email` = $email,
+            WHERE `user_id` = $user_id";
+            
+            $save = $db->query($sql);
+
+            if ($save) {
+                // Get the use
+            }
+        }
+
+    }
 
 
 }

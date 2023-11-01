@@ -2,6 +2,7 @@
 
 // Include file
 require_once dirname(__FILE__) . '\..\entity\users.php';
+require_once dirname(__FILE__) . '\..\entity\customers.php';
 
 class registerController{
     
@@ -58,6 +59,28 @@ class loginController{
     }
 }
 
+class viewAccountSettings {
+    public function getUserDetails($user_id) {
+        $user = new users();
+        $settings = json_decode($user->getUserDetails($user_id));
+
+        return json_encode($settings);
+    }
+
+    public function getCustomerDetails($user_id) {
+        $customer = new customers();
+        $settings = json_decode($customer->getCustomerDetails($user_id));
+
+        return json_encode($settings);
+
+    }
+
+}
+
+class updateAccountDetails {
+    
+
+}
 
 
 

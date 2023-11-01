@@ -70,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image_path_acra = '/files/ACRA/' . $filename_acra;
 
         extract($_POST);
-        $combinedAddress = $address1 . ', ' . $address2 . ', ' . $address3;
-        $combinedPAddress = $paddress1 . ', ' . $paddress2 . ', ' . $paddress3;
+        $combinedAddress = $address1 . ',' . $address2 . ',' . $address3;
+        $combinedPAddress = $paddress1 . ',' . $paddress2 . ',' . $paddress3;
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir_profimage . $filename_profimage) 
         && move_uploaded_file($_FILES["acra"]["tmp_name"], $target_dir_acra . $filename_acra) ) {
