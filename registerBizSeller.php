@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!isset($_SESSION['flashdata']) || ($_SESSION['flashdata']['type'] != 'danger' && empty($_SESSION['flashdata']['msg']))) {
         $bizSellerRegister = new registerController();
         // If there are no errors, upload the file to the desired file path
-        $target_dir_profimage = dirname(__FILE__) . '/images/seller_profile/';
+        $target_dir_profimage = dirname(__FILE__) . '/images/SellerLogo/';
         $target_file_profimage = $target_dir_profimage . basename($_FILES["image"]["name"]);
         $imageFileType_profimage = strtolower(pathinfo($target_file_profimage, PATHINFO_EXTENSION));
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Generate a unique filename to prevent conflicts
         $filename_profimage = uniqid() . "." . $imageFileType_profimage;
-        $image_path_profimage = '/images/seller_profile/' . $filename_profimage;
+        $image_path_profimage = '/images/SellerLogo/' . $filename_profimage;
 
         $filename_acra = uniqid() . "." . $imageFileType_acra;
         $image_path_acra = '/files/ACRA/' . $filename_acra;
