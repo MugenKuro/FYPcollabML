@@ -36,8 +36,12 @@
         // Create an instance of the Db class
         $db = new Db();
         
+        $currentDirectory = getcwd();
+
+        $command = escapeshellcmd('/usr/bin/python3 ' . $currentDirectory . '/python/customer_recommender.py');
+        
         // Execute the Python script to get recommendations
-        $output = shell_exec("/usr/bin/python3 ../python/customer_recommender.py 2>&1");
+        $output = shell_exec($command);
         echo $output;
         // Parse the JSON output
         $recommendations = json_decode($output);
