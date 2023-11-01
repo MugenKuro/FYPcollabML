@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
                     <input type="date" name="end_date" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <input type="hidden" name="seller_id" value="1">
+                    <input type="hidden" name="seller_id" value="101">
                 </div> 
                 <div class="form-group col-md-2" style="text-align: left;">
                     <button type="submit" name="generate" class="btn btn-primary btn-generate">Generate Report</button>

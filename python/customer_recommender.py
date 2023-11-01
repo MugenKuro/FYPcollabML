@@ -34,7 +34,7 @@ except pymysql.MySQLError as e:
 
 try:
     with connection.cursor() as cursor:
-        customer_user_id = 1  # Replace with the actual customer's user ID
+        customer_user_id = 5  # Replace with the actual customer's user ID
         
         # Query item ratings from the database
         cursor.execute(

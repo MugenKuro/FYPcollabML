@@ -36,7 +36,7 @@ except pymysql.MySQLError as e:
 try:
     with connection.cursor() as cursor:
         # Define the seller's user ID (replace with the actual seller's user ID)
-        seller_user_id = 1  # Replace with the actual seller's user ID
+        seller_user_id = 141  # Replace with the actual seller's user ID
         
         # Query the items sold by the seller
         cursor.execute(

@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Customer Recommendations</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
         body {
             padding: 20px;
