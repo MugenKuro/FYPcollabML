@@ -31,8 +31,9 @@ $result = $adminController->viewAllSellers();
                         <th>Seller Type</th>
                         <th>Seller Name</th>
                         <th>Description</th>
-                        <th>Profile Image</th>
-                        <th>Payment QR</th>
+                        <!-- <th>Profile Image</th> -->
+                        <th>Bank</th>
+                        <th>Bank Acc No.</th>
                         <th>Pickup Address</th>
                     </tr>
                 </thead>
@@ -46,8 +47,9 @@ $result = $adminController->viewAllSellers();
                             echo "<td>" . $row["seller_type"] . "</td>";
                             echo "<td>" . $row["seller_name"] . "</td>";
                             echo "<td>" . $row["description"] . "</td>";
-                            echo "<td>" . $row["profile_image"] . "</td>";
-                            echo "<td>" . $row["payment_QR"] . "</td>";
+                            // echo "<td>" . $row["profile_image"] . "</td>";
+                            echo "<td>" . $row["bank_name"] . "</td>";
+                            echo "<td>" . $row["bank_account_no"] . "</td>";
                             echo "<td>" . $row["pick_up_address"] . "</td>";
                             echo "</tr>";
                         }

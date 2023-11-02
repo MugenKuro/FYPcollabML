@@ -32,19 +32,22 @@ except pymysql.MySQLError as e:
     print(e)
     sys.exit(1)
 
-
 try:
     with connection.cursor() as cursor:
-        # Define the seller's user ID (replace with the actual seller's user ID)
-        seller_user_id = 141  # Replace with the actual seller's user ID
+        # Get the seller's user ID from the command-line arguments
+        if len(sys.argv) > 1:
+            seller_user_id = int(sys.argv[1])
+        else:
+            print("Error: User ID not provided.")
+            sys.exit(1)
         
-        # Query the items sold by the seller
+        # Fetch the preferred category of the seller
         cursor.execute(
-            "SELECT item_id FROM Items WHERE seller_id = %s",
+            "SELECT preferred_category FROM Sellers WHERE user_id = %s",
             (seller_user_id,)
         )
-        seller_items = [row[0] for row in cursor.fetchall()]
-        
+        preferred_category = cursor.fetchone()[0]
+
         # Query item ratings from the database
         cursor.execute(
             "SELECT customer_id, item_id, rating_value FROM ItemRatings"
@@ -58,27 +61,30 @@ try:
         reader = Reader(rating_scale=(1, 5))
         dataset = Dataset.load_from_df(df[['customer_id', 'item_id', 'rating_value']], reader)
         
-        # Build a train set and a test set
-        trainset, testset = train_test_split(dataset, test_size=0.2)
+        # Build a train set
+        trainset = dataset.build_full_trainset()
         
-        # Build and train an SVD (Singular Value Decomposition) model
+        # Build and train an SVD model
         model = SVD()
         model.fit(trainset)
         
-        # Get a list of all item IDs
-        all_item_ids = list(set(df['item_id'].unique()))
+        # Get a list of all item IDs from the preferred category
+        cursor.execute(
+            "SELECT item_id FROM Items WHERE category_id = %s",
+            (preferred_category,)
+        )
+        preferred_category_items = [row[0] for row in cursor.fetchall()]
         
-        # Predict ratings for unsold items
+        # Predict ratings for items from the preferred category
         predicted_ratings = {}
-        for item_id in all_item_ids:
-            if item_id not in seller_items:
-                prediction = model.predict(seller_user_id, item_id)
-                predicted_ratings[item_id] = prediction.est
+        for item_id in preferred_category_items:
+            prediction = model.predict(seller_user_id, item_id)
+            predicted_ratings[item_id] = prediction.est
         
         # Sort items by predicted rating (highest to lowest)
         sorted_predicted_items = sorted(predicted_ratings.items(), key=lambda x: x[1], reverse=True)
         
-        # Display the top recommended items
+        # Display the top recommended items from the preferred category
         top_recommendations = [item_id for item_id, rating in sorted_predicted_items[:5]]
         recommended_items = []
         for item_id in top_recommendations:

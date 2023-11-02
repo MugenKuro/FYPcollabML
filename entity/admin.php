@@ -100,29 +100,30 @@ class Admin
             if (isset($_POST["approve"])) {
                 $request_id = $_POST["request_id"];
                 
-                $approveQuery = "UPDATE CategoryRequests SET status = 'approved' WHERE request_id = ?";
+                $approveQuery = "UPDATE CategoryRequests SET status = 'Active' WHERE request_id = ?";
                 $this->db->query($approveQuery, [$request_id]);
     
                 $selectQuery = "SELECT category_name FROM CategoryRequests WHERE request_id = ?";
                 $category_name = $this->db->query($selectQuery, [$request_id])->fetch_assoc()["category_name"];
     
-                $insertQuery = "INSERT INTO Categories (category_name, status) VALUES (?, 'active')";
+                $insertQuery = "INSERT INTO Categories (category_name, status) VALUES (?, 'Active')";
                 $this->db->query($insertQuery, [$category_name]);
             } elseif (isset($_POST["disapprove"])) {
                 $request_id = $_POST["request_id"];
-                
-                $disapproveQuery = "UPDATE CategoryRequests SET status = 'disapproved' WHERE request_id = ?";
-                $this->db->query($disapproveQuery, [$request_id]);
+    
+                // Delete the CategoryRequest instead of updating its status
+                $deleteQuery = "DELETE FROM CategoryRequests WHERE request_id = ?";
+                $this->db->query($deleteQuery, [$request_id]);
             }
         }
     
         try {
-            $selectRequestsQuery = "SELECT request_id, seller_id, category_name FROM CategoryRequests WHERE status = 'pending'";
+            $selectRequestsQuery = "SELECT request_id, seller_id, category_name FROM CategoryRequests WHERE status = 'Pending'";
             $result = $this->db->query($selectRequestsQuery);
     
             $additionalDetailsQuery = "SELECT Sellers.seller_name, CategoryRequests.description FROM Sellers
                                         INNER JOIN CategoryRequests ON Sellers.seller_id = CategoryRequests.seller_id
-                                        WHERE CategoryRequests.request_id = ?";
+                                        WHERE CategoryRequests.request_id = ";
             
             $modal = "";
     
@@ -149,7 +150,7 @@ class Admin
                     $modal .= "<p><strong>Request ID:</strong> " . $row["request_id"] . "</p>";
                     $modal .= "<p><strong>Seller ID:</strong> " . $row["seller_id"] . "</p>";
     
-                    $additionalDetails = $this->db->query($additionalDetailsQuery, [$row["request_id"]])->fetch_assoc();
+                    $additionalDetails = $this->db->query($additionalDetailsQuery . $row["request_id"])->fetch_assoc();
     
                     $modal .= "<p><strong>Seller Name:</strong> " . $additionalDetails["seller_name"] . "</p>";
                     $modal .= "<p><strong>Category Name:</strong> " . $row["category_name"] . "</p>";
@@ -177,6 +178,7 @@ class Admin
         return $modal;
     }
     
+    
 
     // Function to view all categories
     public function viewAllCategories() {
@@ -192,19 +194,19 @@ class Admin
     //Functions to view deactivation requests
     public function viewDeactivationRequests() {
         try {
-            // Fetch sellers with "pending deactivation" status
-            $sql = "SELECT * FROM sellers WHERE status = 'pending deactivation'";
+            $sql = "SELECT u.*, s.seller_id FROM Users u
+                    LEFT JOIN Sellers s ON u.user_id = s.user_id
+                    WHERE u.status = 'Pending deactivation' AND u.account_type = 'Seller'";
             $result = $this->db->query($sql);
             return $result;
         } catch (Exception $e) {
             echo $sql . "<br>" . $e->getMessage();
         }
     }
-
+    
     public function deactivateSeller($sellerID) {
         try {
-            // Update the status to "inactive" for the selected seller
-            $updateSql = "UPDATE sellers SET status = 'inactive' WHERE seller_id = ?";
+            $updateSql = "UPDATE Users SET status = 'Inactive' WHERE user_id = ? AND account_type = 'Seller'";
             $stmt = $this->db->prepare($updateSql);
             $stmt->bind_param("i", $sellerID);
             $stmt->execute();
@@ -212,26 +214,24 @@ class Admin
             echo $updateSql . "<br>" . $e->getMessage();
         }
     }
-
-    // Functions to view registration requests
+    
     public function viewRegistrationRequests() {
         try {
-            // Fetch pending approval sellers with additional details from individual and business sellers
-            $sql = "SELECT s.*, i.passport, b.uen, b.ACRA_filepath FROM sellers s
-                    LEFT JOIN individualsellers i ON s.seller_id = i.seller_id
-                    LEFT JOIN businesssellers b ON s.seller_id = b.seller_id
-                    WHERE s.status = 'pending approval'";
+            $sql = "SELECT u.*, s.seller_id, i.passport, b.uen, b.ACRA_filepath FROM Users u
+                    LEFT JOIN Sellers s ON u.user_id = s.user_id
+                    LEFT JOIN IndividualSellers i ON s.seller_id = i.seller_id
+                    LEFT JOIN BusinessSellers b ON s.seller_id = b.seller_id
+                    WHERE u.status = 'Pending approval' AND u.account_type = 'Seller'";
             $result = $this->db->query($sql);
             return $result;
         } catch (Exception $e) {
             echo $sql . "<br>" . $e->getMessage();
         }
     }
-
+    
     public function approveSeller($sellerID) {
         try {
-            // Update the status to "active" for the selected seller
-            $updateSql = "UPDATE sellers SET status = 'active' WHERE seller_id = ?";
+            $updateSql = "UPDATE Users SET status = 'Active' WHERE user_id = ? AND account_type = 'Seller'";
             $stmt = $this->db->prepare($updateSql);
             $stmt->bind_param("i", $sellerID);
             $stmt->execute();
@@ -239,6 +239,7 @@ class Admin
             echo $updateSql . "<br>" . $e->getMessage();
         }
     }
+    
 
     // Function to view all sellers
     public function viewAllSellers() {

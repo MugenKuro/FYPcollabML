@@ -1,3 +1,13 @@
+<?php
+// Initialize the session
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$_SESSION["user_id"] = 1;
+$_SESSION["username"] = "admin#1";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +24,7 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../css/fontawesome.min.css">
-
+    <link rel="stylesheet" href="../css/style.css">
 
     <style>
         body {
@@ -118,26 +128,34 @@
             height: 32px;
         }
     </style>
+
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
         <div class="container">
-            <a class="navbar-brand" href="#">System Admin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="view_seller.php">View Sellers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="view_customer.php">View Customers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="view_category.php">View Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="view_registration_request.php">Registration Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="view_deactivation_request.php">Deactivation Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="handle_category_request.php">Category Requests</a></li>
+            <a class="navbar-brand" href="">iCloth</a>
+            <div class="collapse navbar-collapse">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    <li>
+                        <a class="nav-link" href="view_seller.php">View Sellers</a>
+                        <a class="nav-link" href="view_customer.php">View Customers</a>
+                        <a class="nav-link" href="view_category.php">View Categories</a>
+                        <a class="nav-link" href="view_registration_request.php">Registration Requests</a>
+                        <a class="nav-link" href="view_deactivation_request.php">Deactivation Requests</a>
+                        <a class="nav-link" href="handle_category_request.php">Category Requests</a>
+                    </li>
+                </ul>
+                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                    <li><span class="nav-link">Welcome,
+                            <?php echo htmlspecialchars($_SESSION["username"]); ?>
+                        </span></li>
+                    <li><a class="nav-link" href="logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
                 </ul>
             </div>
         </div>
     </nav>
+<!-- End Header/Navigation -->
 </body>
 </html>
 
