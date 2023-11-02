@@ -32,6 +32,22 @@
         <?php
         require_once('../entity/db.php');
         $db = new Db();
+        session_start();
+        $_SESSION['user_id'] = 10;            // Change this once we have a login system
+        if(isset($_SESSION['user_id'])) {
+            $customer_user_id = $_SESSION['user_id'];
+        } else {
+            die("User ID not found.");
+        }
+
+        // Get the path to the python3 interpreter
+        $pythonPath = shell_exec("which python3");
+        $pythonPath = trim($pythonPath);
+        $scriptPath = getcwd() . "/../python/customer_recommender.py";
+        $command = "{$pythonPath} {$scriptPath} {$customer_user_id} 2>&1";
+
+        $output = shell_exec($command);
+        $recommendations = json_decode($output, true);
         
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
