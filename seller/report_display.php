@@ -3,6 +3,7 @@
 <head>
     <title>Seller Orders Report</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
         .container {
             padding: 20px;
@@ -39,6 +40,7 @@
     <div class="container">
         <!-- <h1 class="mt-4">Seller Orders Report</h1> -->
         <?php
+        
         // Include the report data from generate_report.php
         if (isset($reportData)) {
             $startFormatted = date('d F Y', strtotime($reportData['startDate']));

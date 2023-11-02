@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Customer Recommendations</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <style>
         body {
             padding: 20px;
@@ -30,71 +30,67 @@
 <body>
     <div class="container">
         <?php
-        // Include db.php to access the Db class
         require_once('../entity/db.php');
         
-        // Create an instance of the Db class
         $db = new Db();
-        
-        $currentDirectory = getcwd();
+        session_start();
+        $_SESSION['user_id'] = 10;            // Change this once we have a login system
+        if(isset($_SESSION['user_id'])) {
+            $customer_user_id = $_SESSION['user_id'];
+        } else {
+            die("User ID not found.");
+        }
 
-        $command = escapeshellcmd('/usr/bin/python3 ' . $currentDirectory . '/python/customer_recommender.py');
-        
-        // Execute the Python script to get recommendations
+        // Get the path to the python3 interpreter
+        $pythonPath = shell_exec("which python3");
+        $pythonPath = trim($pythonPath);
+        $scriptPath = getcwd() . "/../python/customer_recommender.py";
+        $command = "{$pythonPath} {$scriptPath} {$customer_user_id} 2>&1";
+
         $output = shell_exec($command);
-        echo $output;
-        // Parse the JSON output
-        $recommendations = json_decode($output);
-    
-        // Display recommendations
-        if ($recommendations) {
-            echo '<h1 class="mt-5 text-center">Trending items just for you</h1>';
+        $recommendations = json_decode($output, true);
+        
+        if ($recommendations && json_last_error() == JSON_ERROR_NONE) {
+            displayItems($db, $recommendations, "Trending items just for you");
+        } else {
+            $query = "SELECT Items.item_id, item_name, item_image_path, AVG(rating_value) as avg_rating FROM ItemRatings JOIN Items ON ItemRatings.item_id = Items.item_id GROUP BY Items.item_id ORDER BY avg_rating DESC LIMIT 5";
+            $result = $db->query($query);
+            $popularItems = [];
+            
+            while ($row = $result->fetch_assoc()) {
+                $popularItems[] = $row['item_id'];
+            }
+
+            displayItems($db, $popularItems, "Most Popular Items");
+        }
+
+        function displayItems($db, $itemIds, $title) {
+            echo "<h1 class='mt-5 text-center'>{$title}</h1>";
             echo '<div class="row justify-content-center">';
             
-            // Use the Db class to execute queries
-            foreach ($recommendations as $item_id) {
-                // Retrieve item details including the image path from the database
+            foreach ($itemIds as $item_id) {
                 $query = "SELECT item_name, item_image_path FROM Items WHERE item_id = ?";
                 $result = $db->query($query, [$item_id]);
                 
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
                     $item_name = $row['item_name'];
-                    $item_image_path = $row['item_image_path'];
+                    $item_image_path = file_exists($row['item_image_path']) ? $row['item_image_path'] : 'item_images/default.jpg';
                     
-                    // Check if the image path exists
-                    if (file_exists($item_image_path)) {
-                        // Display item details with a clickable image as a Bootstrap card
-                        echo '<div class="col-md-2 item-card">';
-                        echo '<div class="card">';
-                        echo '<a href="item_details.php?item_id=' . $item_id . '">';
-                        echo '<img src="' . $item_image_path . '" alt="' . $item_name . '" class="card-img-top">';
-                        echo '</a>';
-                        echo '<div class="card-body">';
-                        echo '<h5 class="card-title">' . $item_name . '</h5>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                    } else {
-                        // Display item details with a default image
-                        $default_image_path = 'item_images/default.jpg';
-                        echo '<div class="col-md-2 item-card">';
-                        echo '<div class="card">';
-                        echo '<a href="item_details.php?item_id=' . $item_id . '">';
-                        echo '<img src="' . $default_image_path . '" alt="' . $item_name . '" class="card-img-top">';
-                        echo '</a>';
-                        echo '<div class="card-body">';
-                        echo '<h5 class="card-title">' . $item_name . '</h5>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
+                    echo '<div class="col-md-2 item-card">';
+                    echo '<div class="card">';
+                    echo '<a href="item_details.php?item_id=' . $item_id . '">';
+                    echo '<img src="' . $item_image_path . '" alt="' . $item_name . '" class="card-img-top">';
+                    echo '</a>';
+                    echo '<div class="card-body">';
+                    echo '<h5 class="card-title">' . $item_name . '</h5>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
                 }
             }
             
             echo '</div>';
-        } else {
-            echo '<p class="mt-3 text-center">No recommendations available.</p>';
         }
         ?>
     </div>

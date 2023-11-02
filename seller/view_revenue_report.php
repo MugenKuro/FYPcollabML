@@ -2,6 +2,11 @@
 // Include db.php to access the Db class
 require_once('../entity/db.php');
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+$_SESSION['user_id'] = 43;    // Change this once we have a login system
+$_SESSION['username'] = "Faustine";           // Change this once we have a login system
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     $startDate = $_POST['start_date'];
@@ -76,8 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 <head>
     <title>Seller Orders Report</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
-        .container {
+        .a {
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -119,7 +125,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
+
+        <div class="container">
+            <a class="navbar-brand" href="">iCloth</a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    <li>
+                        <a class="nav-link" href="">Account Setting</a>
+                        <a class="nav-link" href="">Category Requests</a>
+                        <a class="nav-link" href="">Item Listings</a>
+                        <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
+                        <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
+                    </li>
+                </ul>
+                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                    <li><span class="nav-link">Welcome,
+                            <?php echo htmlspecialchars($_SESSION["username"]); ?>
+                        </span></li>
+                        <li><a class="nav-link" href="logout.php"><img src="images/user.svg"><span> log out</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+    <!-- End Header/Navigation -->
+    <div class="container a">
         <p><u><strong>ENTER DATE RANGE FOR REPORT</strong></u></p>
         <form method="post" class="mt-4">
             <div class="form-row">
@@ -132,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
                     <input type="date" name="end_date" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <input type="hidden" name="seller_id" value="101">
+                    <input type="hidden" name="seller_id" value="<?php echo htmlspecialchars($_SESSION['user_id'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div> 
                 <div class="form-group col-md-2" style="text-align: left;">
                     <button type="submit" name="generate" class="btn btn-primary btn-generate">Generate Report</button>
