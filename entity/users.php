@@ -346,11 +346,10 @@ class Users
     public function login()
     {
         extract($_POST);
-        $sql = "SELECT * FROM `users` where `username` = ? AND `status` = ?";
+        $sql = "SELECT * FROM `users` where `username` = ?";
         $db = new Db();
-        $status = "Active";
         $stmt = $db->prepare($sql);
-        $stmt->bind_param('ss', $username, $status);
+        $stmt->bind_param('s', $username);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
@@ -371,7 +370,7 @@ class Users
                     $_SESSION['flashdata']['type'] = 'danger';
                     $_SESSION['flashdata']['msg'] = 'Your account is currently getting verified. Please try again later.';
 
-                } elseif ($update_otp) {
+                } elseif ($update_otp && $data['status'] == 'Active') {
                     $has_code = true;
                     $resp['status'] = 'success';
                     $_SESSION['otp_verify_user_id'] = $data['user_id'];
