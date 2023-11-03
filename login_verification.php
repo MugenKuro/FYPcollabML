@@ -21,8 +21,15 @@ if (isset($_GET['resend']) && $_GET['resend'] == 'true') {
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $verify = json_decode($user->otp_verify());
+
     if ($verify->status == 'success') {
-        echo "<script>location.replace('./');</script>";
+        if (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'System Admin') {
+            echo "<script>location.replace('./admin/view_seller.php');</script>";
+        } elseif (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'Customer') {
+            echo "<script>location.replace('./index.php');</script>";
+        } elseif (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'Seller')  {
+            echo "<script>location.replace('./sellerHomepage.php');</script>";
+        }
     }
 }
 ?>

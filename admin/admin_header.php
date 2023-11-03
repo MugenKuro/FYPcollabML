@@ -4,8 +4,25 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-$_SESSION["user_id"] = 1;
-$_SESSION["username"] = "admin#1";
+// Check if the user is logged in and their role matches the allowed roles for this page
+if (isset($_SESSION['accountType'])) {
+    $userRole = $_SESSION['accountType'];
+
+    // Define the allowed roles for this page
+    $allowedRoles = array("System Admin");
+
+    // Check if the user's role is allowed
+    if (!in_array($userRole, $allowedRoles)) {
+        // User has access, continue with the page
+        header("location: ../login.php"); // You can create an "access_denied.php" page
+        exit;
+    }
+} else {
+    // User is not logged in, redirect them to the login page
+    header("location: ../login.php");
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -150,7 +167,7 @@ $_SESSION["username"] = "admin#1";
                     <li><span class="nav-link">Welcome,
                             <?php echo htmlspecialchars($_SESSION["username"]); ?>
                         </span></li>
-                    <li><a class="nav-link" href="logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
+                    <li><a class="nav-link" href="../logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
                 </ul>
             </div>
         </div>
