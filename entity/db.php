@@ -108,6 +108,23 @@ class Db {
     public function prepare($sql) {
         return $this->connection->prepare($sql);
     }
+
+    public function begin_transaction() {
+        return $this->connection->begin_transaction();
+    }
+
+    public function commit() {
+        return $this->connection->commit();
+    }
+
+    public function rollback() {
+        return $this->connection->rollback();
+    }
+    
+    public function end_transaction() {
+        // You can use the same method as commit to end a transaction
+        return $this->commit();
+    }
 }
 
 ?>

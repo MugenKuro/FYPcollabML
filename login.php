@@ -1,14 +1,19 @@
 <?php
 // Include file
 require_once dirname(__FILE__) . '\entity\users.php';
+require_once dirname(__FILE__) . '\controller\userController.php';
 require_once('auth.php');
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user = new users();
+    $user = new loginController();
     $login = json_decode($user->login());
     if ($login->status == 'success') {
         echo "<script>location.replace('./login_verification.php');</script>";
+    } elseif ($login->status == 'verify') {
+        echo "<script>location.replace('./emailVerify.php');</script>";
     }
 }
 ?>
@@ -67,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     </div>
                                 </div>
-                                <?php unset($_SESSION['flashdata']) ?>
+                            <?php unset($_SESSION['flashdata']) ?>
                             <?php endif; ?>
                             <div class="form group login-container3">
                                 <span class="login-text1">Username:</span>
@@ -93,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </span>
                                 </button>
                             </div>
-                            <p class="login-text3">Don't have an account? <a href="registerCustomer.php">Sign up
+                            <p class="login-text3">Don't have an account? <a href="register.php">Sign up
                                     now</a>.</p>
                         </form>
                     </div>

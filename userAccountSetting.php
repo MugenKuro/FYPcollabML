@@ -1,3 +1,55 @@
+<?php
+// Include file
+require_once('auth.php');
+require_once dirname(__FILE__) . '\controller\categoriesController.php';
+require_once dirname(__FILE__) . '\controller\userController.php';
+
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
+
+// Check if the user is logged in and their role matches the allowed roles for this page
+if (isset($_SESSION['accountType'])) {
+    $userRole = $_SESSION['accountType'];
+
+    // Define the allowed roles for this page
+    $allowedRoles = array("Customer");
+
+    // Check if the user's role is allowed
+    if (!in_array($userRole, $allowedRoles)) {
+        // User has access, continue with the page
+        header("location: login.php"); // You can create an "access_denied.php" page
+        exit;
+    }
+} else {
+    // User is not logged in, redirect them to the login page
+    header("location: login.php");
+    exit;
+}
+
+// Processing form data when form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $user = new deactivateCustomerAccount();
+    $deactivateUser = json_decode($user->deactivateCustAcc($_SESSION['user_id']));
+    if (isset($deactivateUser->status)) {
+        if ($deactivateUser->status == 'success') {
+            $_SESSION['flashdata']['type'] = 'success';
+            $_SESSION['flashdata']['msg'] = 'account deactivated successfully.';
+
+            // Perform the redirect
+            header('Location: logout.php');
+        } elseif ($deactivateUser->status == 'nothing') {
+            $_SESSION['flashdata']['type'] = 'danger';
+            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+        } else {
+            $_SESSION['flashdata']['type'] = 'danger';
+            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+        }
+    }
+
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -18,65 +70,75 @@
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
+
     <title>iCloth</title>
+
+    <script>
+        function confirmAction() {
+            if (confirm("Are you sure you want to deactivate your account?")) {
+                // User clicked OK, proceed with the action
+                return true;
+            } else {
+                // User clicked Cancel, do nothing
+                return false;
+            }
+        }
+    </script>
+
+
 </head>
 
 <body>
 
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
+    <?php
+    include dirname(__FILE__) . ('/custNavBar.php');
+    ?>
 
-        <div class="container">
-            <a class="navbar-brand" href="index.php">iCloth</a>
-
-            <div class="collapse navbar-collapse">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li>
-                        <a class="nav-link" href="index.php">Home</a>
-                        <a class="nav-link" href="purchaseHistory.php">Purchase history</a>
-                        <a class="nav-link" href="userAccountSetting.php">settings</a>
-                    </li>
-                </ul>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="background-color: #10a4e3; border-color:#10a4e3">All Category
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">T-shirt</a>
-                        <a class="dropdown-item" href="#">Jean</a>
-                        <a class="dropdown-item" href="#">Skirt</a>
-                    </div>
-                </div>
-                <div class="search">
-                    <!-- Another variation with a button -->
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"
-                                style="background-color: #10a4e3; border-color:#10a4e3 ">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="login.php"><img src="images/user.svg"></a></li>
-                    <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </nav>
-    <!-- End Header/Navigation -->
 
     <div>
+        <?php
+        $userSettings = new viewAccountSettings();
+        $userData = json_decode($userSettings->getUserDetails($_SESSION['user_id']));
+
+        if (!empty($userData)) {
+            $username = $userData[0]->username;
+            $email = $userData[0]->email;
+        } else {
+            // Handle the case where user data is empty or an error occurred
+            $username = $_SESSION['getUserDetails']['error'];
+            $email = $_SESSION['getUserDetails']['error'];
+        }
+        $customerData = json_decode($userSettings->getCustomerDetails($_SESSION['user_id']));
+        if (!empty($customerData)) {
+            $nickname = $customerData[0]->nickname;
+            $firstName = $customerData[0]->first_name;
+            $lastName = $customerData[0]->last_name;
+            $gender = $customerData[0]->gender;
+            $dateOfBirth = $customerData[0]->date_of_birth;
+            $mobile = $customerData[0]->mobile;
+            $address = $customerData[0]->address;
+            $imagePath = $customerData[0]->image_path;
+        } else {
+            // Handle the case where customer data is empty or an error occurred
+            $nickname = $_SESSION['getCustomerDetails']['error'];
+            $firstName = $_SESSION['getCustomerDetails']['error'];
+            $lastName = $_SESSION['getCustomerDetails']['error'];
+            $gender = $_SESSION['getCustomerDetails']['error'];
+            $dateOfBirth = $_SESSION['getCustomerDetails']['error'];
+            $mobile = $_SESSION['getCustomerDetails']['error'];
+            $address = $_SESSION['getCustomerDetails']['error'];
+            $imagePath = "./images/default_user.jpg";
+        }
+
+        $current_folder = basename(__DIR__);
+        $dir = "/" . $current_folder;
+        ?>
         <div class="user-account-setting-container">
             <div class="user-account-setting-container01">
                 <div class="user-account-setting-container02">
@@ -87,14 +149,15 @@
                 </div>
                 <div class="user-account-setting-container03"></div>
                 <div class="user-account-setting-container04">
-                    <form class="user-account-setting-form">
+                    <div class="user-account-setting-form">
                         <div class="user-account-setting-container05">
-                            <span class="user-account-setting-text03">
+                            <span class="user-account-setting-text06">
                                 <span>Profile Image</span>
                                 <br />
                             </span>
                             <div class="user-account-setting-container06">
-                                <img src="./images/default_user.jpg" alt="image" class="user-account-setting-image" />
+                                <img src="<?php echo $dir . $imagePath; ?>" alt="image"
+                                    class="user-account-setting-image" />
                             </div>
                         </div>
                         <div class="user-account-setting-container07">
@@ -103,7 +166,9 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text09">
-                                <span>Janelle331</span>
+                                <span>
+                                    <?php echo $nickname; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -113,7 +178,9 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text15">
-                                <span>Janelle</span>
+                                <span>
+                                    <?php echo $firstName; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -123,7 +190,9 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text21">
-                                <span>Lee</span>
+                                <span>
+                                    <?php echo $lastName; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -133,7 +202,9 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text27">
-                                <span>Female</span>
+                                <span>
+                                    <?php echo $gender; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -143,7 +214,9 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text33">
-                                <span>12/02/1999</span>
+                                <span>
+                                    <?php echo $dateOfBirth; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -153,21 +226,21 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text39">
-                                <span>88854123</span>
+                                <span>
+                                    <?php echo $mobile; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
-                        <div class="user-account-setting-container13">
+                        <div class="user-account-setting-container14">
                             <span class="user-account-setting-text42">
                                 <span>Address</span>
                                 <br />
                             </span>
-                            <span class="user-account-setting-text45">
-                                <span>Jurong west street 81,</span>
-                                <br />
-                                <span>BLK 812 #04-12,</span>
-                                <br />
-                                <span>Singapore 640812</span>
+                            <span class="user-account-setting-text55">
+                                <span>
+                                    <?php echo $address; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -177,7 +250,9 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text55">
-                                <span>Janelle22</span>
+                                <span>
+                                    <?php echo $username; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
@@ -187,25 +262,57 @@
                                 <br />
                             </span>
                             <span class="user-account-setting-text61">
-                                <span>Janelle22@gmail.com</span>
+                                <span>
+                                    <?php echo $email; ?>
+                                </span>
                                 <br />
                             </span>
                         </div>
+                        <?php
+                        if (isset($_SESSION['flashdata'])):
+                            ?>
+                            <div
+                                class="dynamic_alert alert alert-<?php echo $_SESSION['flashdata']['type'] ?> my-2 rounded-0">
+                                <div class="d-flex align-items-center">
+                                    <div class="col-11">
+                                        <?php echo $_SESSION['flashdata']['msg'] ?>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <div class="float-end"><a href="javascript:void(0)"
+                                                class="text-dark text-decoration-none"
+                                                onclick="$(this).closest('.dynamic_alert').hide('slow').remove()">x</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php unset($_SESSION['flashdata']) ?>
+                        <?php endif; ?>
                         <div class="user-account-setting-container16">
-                            <button type="button" class="user-account-setting-button button" onclick="window.location='settings.php'">
+                            <button type="button" class="user-account-setting-button button"
+                                onclick="window.location='settings.php'">
                                 <span class="user-account-setting-text64">
                                     <span>Edit login Details</span>
                                     <br />
                                 </span>
                             </button>
-                            <button type="button" class="user-account-setting-button1 button" onclick="window.location='index.php'">
+                            <button type="button" class="user-account-setting-button1 button"
+                                onclick="window.location='index.php'">
                                 <span class="user-account-setting-text67">
                                     <span class="user-account-setting-text68">Cancel</span>
                                     <br />
                                 </span>
                             </button>
+                            <form class="deactivate-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
+                                method="post" enctype="multipart/form-data" onsubmit="return confirmAction()">
+                                <button type="submit" class="user-account-setting-button2 button">
+                                    <span class="settings-text18">
+                                        <span>Deactivate account</span>
+                                    </span>
+                                </button>
+                            </form>
+
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

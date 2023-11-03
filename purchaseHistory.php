@@ -1,3 +1,55 @@
+<?php
+// Include file
+require_once('auth.php');
+require_once dirname(__FILE__) . '\controller\categoriesController.php';
+require_once dirname(__FILE__) . '\controller\userController.php';
+
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
+
+// Check if the user is logged in and their role matches the allowed roles for this page
+if (isset($_SESSION['accountType'])) {
+    $userRole = $_SESSION['accountType'];
+
+    // Define the allowed roles for this page
+    $allowedRoles = array("Customer");
+
+    // Check if the user's role is allowed
+    if (!in_array($userRole, $allowedRoles)) {
+        // User has access, continue with the page
+        header("location: login.php"); // You can create an "access_denied.php" page
+        exit;
+    }
+} else {
+    // User is not logged in, redirect them to the login page
+    header("location: login.php");
+    exit;
+}
+
+// Processing form data when form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $user = new deactivateCustomerAccount();
+    $deactivateUser = json_decode($user->deactivateCustAcc($_SESSION['user_id']));
+    if (isset($deactivateUser->status)) {
+        if ($deactivateUser->status == 'success') {
+            $_SESSION['flashdata']['type'] = 'success';
+            $_SESSION['flashdata']['msg'] = 'account deactivated successfully.';
+
+            // Perform the redirect
+            header('Location: login.php');
+        } elseif ($deactivateUser->status == 'nothing') {
+            $_SESSION['flashdata']['type'] = 'danger';
+            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+        } else {
+            $_SESSION['flashdata']['type'] = 'danger';
+            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+        }
+    }
+
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -24,58 +76,35 @@
 
 
     <title>iCloth</title>
+
+    <style>
+        .wrap-text {
+            white-space: nowrap;
+            /* Prevent text from wrapping to the next line */
+            overflow: hidden;
+            /* Hide overflowing text */
+            text-overflow: ellipsis;
+            /* Add ellipsis (...) when text overflows */
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
+    <?php
+    include dirname(__FILE__) . ('/custNavBar.php');
+    ?>
 
-        <div class="container">
-            <a class="navbar-brand" href="index.php">iCloth</a>
-
-            <div class="collapse navbar-collapse">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li>
-                        <a class="nav-link" href="index.php">Home</a>
-                        <a class="nav-link" href="purchaseHistory.php">Purchase history</a>
-                        <a class="nav-link" href="userAccountSetting.php">settings</a>
-                    </li>
-                </ul>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="background-color: #10a4e3; border-color:#10a4e3">All Category
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">T-shirt</a>
-                        <a class="dropdown-item" href="#">Jean</a>
-                        <a class="dropdown-item" href="#">Skirt</a>
-                    </div>
-                </div>
-                <div class="search">
-                    <!-- Another variation with a button -->
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"
-                                style="background-color: #10a4e3; border-color:#10a4e3 ">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="login.php"><img src="images/user.svg"></a></li>
-                    <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </nav>
-    <!-- End Header/Navigation -->
     <div>
+        <?php
+        $userPurchaseHistory = new viewPurchaseHistory();
+        $data = json_decode($userPurchaseHistory->viewPurchasesHistory($_SESSION['user_id']));
+
+        $current_folder = basename(__DIR__);
+        $dir = "/" . $current_folder;
+
+
+        ?>
         <div class="purchase-history-container">
             <div class="purchase-history-container1">
                 <h1 class="purchase-history-text">Purchase History</h1>
@@ -100,40 +129,40 @@
                             </span>
                         </div>
                     </div>
-                    <div class="purchase-history-container5" onclick="window.location='rateItem.php'">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="purchase-history-image" />
-                        <span class="purchase-history-text13">
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <div class="purchase-history-container6">
-                            <span class="purchase-history-text16">
-                                <span>$40</span>
-                                <br />
-                            </span>
-                            <span class="purchase-history-text19">
-                                <span>23/09/23  13:42:55</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="purchase-history-container7" onclick="window.location='rateItem.php'">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="purchase-history-image1" />
-                        <span class="purchase-history-text22">
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <div class="purchase-history-container8">
-                            <span class="purchase-history-text25">
-                                <span>$100</span>
-                                <br />
-                            </span>
-                            <span class="purchase-history-text28">
-                                <span>23/09/23  13:42:55</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
+                    <?php
+                    // Check if data is not empty
+                    if (!empty($data)) {
+                        foreach ($data as $purchase) {
+                            $item_id = $purchase->item_id;
+                            $customer_id = $purchase->customer_id;
+                            $image = $purchase->item_image_path;
+                            $name = $purchase->item_name;
+                            $price = $purchase->price;
+                            $date = $purchase->order_date;
+                            // Add more fields as needed
+                            // You can repeat the HTML block for each purchase
+                            echo '<div class="purchase-history-container5" onclick="window.location=\'rateItem.php?item_id=' . $item_id . '&customer_id=' . $customer_id . '\'">';
+                            echo '<div class="col-sm-4">';
+                            echo '<img alt="image" src="' . $dir . $image . '" class="purchase-history-image" />';
+                            echo '</div>';
+                            echo '<div class="col-sm-3">';
+                            echo '<span class="purchase-history-text19 style="text-align: left;"><span>' . $name . '</span></span>';
+                            echo '</div>';
+                            echo '<div class="purchase-history-container6">';
+                            echo '<div class="col-sm-3.5">';
+                            echo '<span class="purchase-history-text16"><span>$' . $price . '</span></span>';
+                            echo '</div>';
+                            echo '<div class="col-sm-8">';
+                            echo '<span class="purchase-history-text19"><span>' . $date . '</span></span>';
+                            echo '</div>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                    } else {
+                        // Handle the case where purchase history data is empty
+                    
+                    }
+                    ?>
                 </div>
             </div>
         </div>

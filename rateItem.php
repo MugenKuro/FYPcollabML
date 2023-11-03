@@ -1,3 +1,54 @@
+<?php
+// Include file
+require_once('auth.php');
+require_once dirname(__FILE__) . '\controller\categoriesController.php';
+require_once dirname(__FILE__) . '\controller\userController.php';
+
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
+
+// Check if the user is logged in and their role matches the allowed roles for this page
+if (isset($_SESSION['accountType'])) {
+    $userRole = $_SESSION['accountType'];
+
+    // Define the allowed roles for this page
+    $allowedRoles = array("Customer");
+
+    // Check if the user's role is allowed
+    if (!in_array($userRole, $allowedRoles)) {
+        // User has access, continue with the page
+        header("location: login.php"); // You can create an "access_denied.php" page
+        exit;
+    }
+} else {
+    // User is not logged in, redirect them to the login page
+    header("location: login.php");
+    exit;
+}
+
+// request data
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (!isset($_GET["item_id"]) || !isset($_GET["customer_id"])) {
+        header("location: purchaseHistory.php");
+        exit;
+    }
+    $_SESSION["item_id"] = $_GET["item_id"];
+    ;
+    $_SESSION["customer_id"] = $_GET["customer_id"];
+    ;
+
+} else {
+    $rate = new ratePurchasedItem();
+    extract($_POST);
+    $rating = json_decode($rate->addItemRating($_SESSION["customer_id"], $_SESSION["item_id"], $rating, $review));
+    if ($rating->status == 'success') {
+        $_SESSION['flashdata']['type'] = 'success';
+        $_SESSION['flashdata']['msg'] = 'Review added successfully.';
+    }
+
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -28,57 +79,14 @@
 
 <body>
 
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
-
-        <div class="container">
-            <a class="navbar-brand" href="index.php">iCloth</a>
-
-            <div class="collapse navbar-collapse">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li>
-                        <a class="nav-link" href="index.php">Home</a>
-                        <a class="nav-link" href="purchaseHistory.php">Purchase history</a>
-                        <a class="nav-link" href="userAccountSetting.php">settings</a>
-                    </li>
-                </ul>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="background-color: #10a4e3; border-color:#10a4e3">All Category
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">T-shirt</a>
-                        <a class="dropdown-item" href="#">Jean</a>
-                        <a class="dropdown-item" href="#">Skirt</a>
-                    </div>
-                </div>
-                <div class="search">
-                    <!-- Another variation with a button -->
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"
-                                style="background-color: #10a4e3; border-color:#10a4e3 ">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="login.php"><img src="images/user.svg"></a></li>
-                    <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </nav>
-    <!-- End Header/Navigation -->
+    <?php
+    include dirname(__FILE__) . ('/custNavBar.php');
+    ?>
 
     <div>
         <div class="rate-item-container">
             <div class="rate-item-container1">
+
                 <div class="rate-item-container2">
                     <span class="rate-item-text">
                         <span>How was your experience?</span>
@@ -87,7 +95,27 @@
                 </div>
                 <div class="rate-item-container3"></div>
                 <div class="rate-item-container4">
-                    <form class="rate-item-form">
+                    <form class="update-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
+                        method="post" enctype="multipart/form-data">
+                        <?php
+                        if (isset($_SESSION['flashdata'])):
+                            ?>
+                            <div
+                                class="dynamic_alert alert alert-<?php echo $_SESSION['flashdata']['type'] ?> my-2 rounded-0">
+                                <div class="d-flex align-items-center">
+                                    <div class="col-11">
+                                        <?php echo $_SESSION['flashdata']['msg'] ?>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <div class="float-end"><a href="javascript:void(0)"
+                                                class="text-dark text-decoration-none"
+                                                onclick="$(this).closest('.dynamic_alert').hide('slow').remove()">x</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php unset($_SESSION['flashdata']) ?>
+                        <?php endif; ?>
                         <div class="rate-item-container5">
                             <span class="rate-item-text03">
                                 <span>Rate</span>
@@ -95,31 +123,36 @@
                                 <span>product</span>
                                 <br />
                             </span>
-                            <select class="rate-item-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
+                            <select id="rating" name="rating" class="form-control rate-item-select" required>
+                                <option value="1" <?php if (isset($_POST['rating']) && $_POST['rating'] === '1')
+                                    echo 'selected'; ?>>1</option>
+                                <option value="2" <?php if (isset($_POST['rating']) && $_POST['rating'] === '2')
+                                    echo 'selected'; ?>>2</option>
+                                <option value="3" <?php if (isset($_POST['rating']) && $_POST['rating'] === '3')
+                                    echo 'selected'; ?>>3</option>
+                                <option value="4" <?php if (isset($_POST['rating']) && $_POST['rating'] === '4')
+                                    echo 'selected'; ?>>4</option>
+                                <option value="5" <?php if (isset($_POST['rating']) && $_POST['rating'] === '5')
+                                    echo 'selected'; ?>>5</option>
                             </select>
                         </div>
                         <div class="rate-item-container6">
-                            <span class="rate-item-text08">
-                                <span>Review</span>
-                                <br />
-                            </span>
-                            <textarea placeholder="Share about your experience on this product"
-                                class="rate-item-textarea textarea"></textarea>
+
+                            <label class="rate-item-text08" for="review">Your Review</label>
+                            <textarea id="review" name="review" class="form-control"
+                                placeholder="Share about your experience on this product" rows="4"
+                                required><?= isset($_POST['review']) ? $_POST['review'] : '' ?></textarea>
                         </div>
                         <div class="rate-item-container7">
                             <div class="rate-item-container8">
-                                <button type="button" class="rate-item-button button" onclick="window.location='purchaseHistory.php'">
+                                <button type="submit" class="rate-item-button button">
                                     <span class="rate-item-text11">
                                         <span>Submit</span>
                                         <br />
                                     </span>
                                 </button>
-                                <button type="button" class="rate-item-button1 button" onclick="window.location='purchaseHistory.php'">
+                                <button type="button" class="rate-item-button1 button"
+                                    onclick="window.location='purchaseHistory.php'">
                                     <span class="rate-item-text14">
                                         <span class="rate-item-text15">Cancel</span>
                                         <br />
