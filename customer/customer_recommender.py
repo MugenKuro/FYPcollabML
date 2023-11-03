@@ -1,5 +1,4 @@
 import sys
-print(sys.path)
 print(sys.executable)
 from surprise import Dataset, Reader
 from surprise.model_selection import train_test_split
