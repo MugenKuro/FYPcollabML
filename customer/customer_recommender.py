@@ -1,11 +1,15 @@
+import sys
+print(sys.path)
+print(sys.executable)
 from surprise import Dataset, Reader
 from surprise.model_selection import train_test_split
 from surprise import SVD
 import pymysql
 import json
 import pandas as pd
-import sys
+
 import os
+
 
 # Determine the current script directory
 script_dir = os.path.dirname(os.path.abspath(__file__))
