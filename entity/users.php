@@ -157,7 +157,7 @@ class Users
 
     }
 
-    public function indSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $bankname, $bankno, $description, 
+    public function indSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $prefCategory, $bankname, $bankno, $description, 
     $fullname, $dob, $mobile, $passport, $combinedAddress, $combinedPAddress) {
         $db = new Db();
 
@@ -166,6 +166,7 @@ class Users
         $password = $db->escape($password);
         $sellername = $db->escape($sellername);
         $image_path_profimage = $db->escape($image_path_profimage);
+        $prefCategory = $db->escape($prefCategory);
         $bankname = $db->escape($bankname);
         $bankno = $db->escape($bankno);
         $description = $db->escape($description);
@@ -199,13 +200,14 @@ class Users
                 $_SESSION['otp_verify_user_id'] = $user_id;
 
                 $sellerSql = "INSERT INTO `sellers` (`user_id`, `seller_type`, `seller_name`, `description`, `profile_image`, `bank_name`, `bank_account_no`,
-                 `pick_up_address`) 
-                               VALUES ('$user_id', '$sellerType', '$sellername', '$description', '$image_path_profimage', '$bankname', '$bankno', '$combinedPAddress')";
+                 `pick_up_address`, `preferred_category`) 
+                VALUES ('$user_id', '$sellerType', '$sellername', '$description', '$image_path_profimage', '$bankname', '$bankno', '$combinedPAddress', 
+                '$prefCategory')";
                 $saveSeller = $db->query($sellerSql);
 
                 $sellerId = $db->getLastInsertedId();
                 $indSellerSql = "INSERT INTO `individualsellers` (`seller_id`, `full_name`, `date_of_birth`, `phone`, `address`, `passport`) 
-                                VALUES ('$sellerId', '$fullname', '$dob', '$mobile', '$combinedAddress', '$passport')";
+                            VALUES ('$sellerId', '$fullname', '$dob', '$mobile', '$combinedAddress', '$passport')";
                 $saveIndSeller = $db->query($indSellerSql);
 
                 if ($saveSeller && $saveIndSeller) {
@@ -248,7 +250,7 @@ class Users
         return json_encode($resp);
 
     }
-    public function bizSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $bankname, $bankno, $description, 
+    public function bizSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $prefCategory, $bankname, $bankno, $description, 
     $businessname, $uen, $combinedAddress, $combinedPAddress, $image_path_acra) {
         $db = new Db();
 
@@ -257,6 +259,7 @@ class Users
         $password = $db->escape($password);
         $sellername = $db->escape($sellername);
         $image_path_profimage = $db->escape($image_path_profimage);
+        $prefCategory = $db->escape($prefCategory);
         $bankname = $db->escape($bankname);
         $bankno = $db->escape($bankno);
         $description = $db->escape($description);
@@ -289,8 +292,9 @@ class Users
                 $_SESSION['otp_verify_user_id'] = $user_id;
 
                 $sellerSql = "INSERT INTO `sellers` (`user_id`, `seller_type`, `seller_name`, `description`, `profile_image`, `bank_name`, `bank_account_no`,
-                 `pick_up_address`) 
-                               VALUES ('$user_id', '$sellerType', '$sellername', '$description', '$image_path_profimage', '$bankname', '$bankno', '$combinedPAddress')";
+                 `pick_up_address`, `preferred_category`) 
+                               VALUES ('$user_id', '$sellerType', '$sellername', '$description', '$image_path_profimage', '$bankname', '$bankno', 
+                               '$combinedPAddress', '$prefCategory')";
                 $saveSeller = $db->query($sellerSql);
 
                 $sellerId = $db->getLastInsertedId();
@@ -342,10 +346,11 @@ class Users
     public function login()
     {
         extract($_POST);
-        $sql = "SELECT * FROM `users` where `username` = ? ";
+        $sql = "SELECT * FROM `users` where `username` = ? AND `status` = ?";
         $db = new Db();
+        $status = "Active";
         $stmt = $db->prepare($sql);
-        $stmt->bind_param('s', $username);
+        $stmt->bind_param('ss', $username, $status);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
@@ -361,7 +366,7 @@ class Users
                     $resp['status'] = 'verify';
                     $_SESSION['otp_verify_user_id'] = $data['user_id'];
                     $this->send_mail_confirm($data['email'], $otp);
-                } elseif ($data['status'] == 'Pending') {
+                } elseif ($data['status'] == 'Pending Approval') {
                     $resp['status'] = 'pending';
                     $_SESSION['flashdata']['type'] = 'danger';
                     $_SESSION['flashdata']['msg'] = 'Your account is currently getting verified. Please try again later.';
@@ -372,6 +377,7 @@ class Users
                     $_SESSION['otp_verify_user_id'] = $data['user_id'];
                     $_SESSION['user_id'] = $data['user_id'];
                     $_SESSION["username"] = $data["username"];
+                    $_SESSION["accountType"] = $data["account_type"];
                     $this->send_mail($data['email'], $otp);
                 } else {
                     $resp['status'] = 'failed';
@@ -564,7 +570,7 @@ class Users
         if ($result->num_rows > 0) {
             $data = $result->fetch_array();
             if ($data['account_type'] == 'Seller') {
-                $db->query("UPDATE `users` set otp = NULL, otp_expiration = NULL, status = 'Pending' where user_id = '{$user_id}'");
+                $db->query("UPDATE `users` set otp = NULL, otp_expiration = NULL, status = 'Pending Approval' where user_id = '{$user_id}'");
             } else {
                 $db->query("UPDATE `users` set otp = NULL, otp_expiration = NULL, status = 'Active' where user_id = '{$user_id}'");
             }
@@ -600,31 +606,66 @@ class Users
         return json_encode($data);
     }
 
-    public function updateUser($user_id, $username, $password, $email) {
+    public function updateUser($user_id, $username_change, $username, $password = NULL, $email) {
         $db = new Db();
-        $check = $db->query("SELECT * FROM `users` WHERE `username` = '$username'")->num_rows;
+        if ($username_change) {
+            $check = $db->query("SELECT * FROM `users` WHERE `username` = '$username'")->num_rows;
+        } else {
+            $check = 0;
+        }
+        
 
         if ($check > 0) {
             $resp['status'] = 'failed';
             $_SESSION['flashdata']['type'] = 'danger';
             $_SESSION['flashdata']['msg'] = 'Username already exists.';
         } else {
-            $sql = "UPDATE `users`
-            SET `username` = $username,
-            `password` = $password,
-            `email` = $email,
-            WHERE `user_id` = $user_id";
-            
-            $save = $db->query($sql);
-
-            if ($save) {
-                // Get the use
+            if (is_null($password)) {
+                $sql = "UPDATE `users`
+                SET `username` = '$username',
+                `email` = '$email'
+                WHERE `user_id` = '$user_id'";
+            } else {
+                $sql = "UPDATE `users`
+                SET `username` = '$username',
+                `password` = '$password',
+                `email` = '$email'
+                WHERE `user_id` = '$user_id'";
             }
+            $save = $db->query($sql);
+    
+            if ($save > 0) {
+                $resp['status'] = 'success';
+            } else if ($save == 0) {
+                $resp['status'] = 'nothing';
+            } else {
+                $resp['status'] = 'error';
+            }
+
         }
 
+        return json_encode($resp);
     }
 
+    public function deactivateUser($user_id) {
+        $db = new Db();
 
+        $sql = "UPDATE `users`
+        SET `status` = 'Inactive'
+        WHERE `user_id` = '$user_id'";
+
+        $save = $db->query($sql);
+
+        if ($save > 0) {
+            $resp['status'] = 'success';
+        } else if ($save == 0) {
+            $resp['status'] = 'nothing';
+        } else {
+            $resp['status'] = 'error';
+        }
+        return json_encode($resp);
+    }
+    
 }
 
 
