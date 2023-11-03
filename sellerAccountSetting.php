@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en">
+<?php
+include '.\entity\Db.php';
+include 'viewSellerController.php';
 
+$sellerEntity = new sellerView();
+$result = $sellerEntity->showSettings();
+?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,142 +34,85 @@
 
 <body>
 
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
+       <!-- Start Header/Navigation -->
+<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
 
-        <div class="container">
-            <a class="navbar-brand" href="sellerIndex.php">iCloth</a>
+<div class="container">
+<a class="navbar-brand" href="sellerHomepage.php">iCloth</a>
 
-            <div class="collapse navbar-collapse">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li>
-                        <a class="nav-link" href="sellerIndex.php">Home</a>
-                        <a class="nav-link" href="requestCategory.php">Request new category</a>
-                        <a class="nav-link" href="sellerAccountSetting.php">settings</a>
-                    </li>
-                </ul>
-
-                <div class="search">
-                    <!-- Another variation with a button -->
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"
-                                style="background-color: #10a4e3; border-color:#10a4e3 ">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="login.php"><img src="images/user.svg"></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </nav>
-    <!-- End Header/Navigation -->
+<div class="collapse navbar-collapse">
+    <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+        <li>
+        <a class="nav-link" href="sellerHomepage.php">Item Listings</a>
+            <a class="nav-link" href="addItem.php">Add Items</a>
+            <a class="nav-link" href="sellerAccountSetting.php">Account Setting</a>
+            <a class="nav-link" href="sellerRequestCategory.php">Category Requests</a>
+            <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
+            <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
+        </li>
+    </ul>
+    <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+        <li><span class="nav-link">Welcome,
+                <?php echo htmlspecialchars("seller"); ?>
+            </span></li>
+            <li><a class="nav-link" href="logout.php"><img src="images/user.svg"><span> log out</span></a></li>
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Header/Navigation -->
+    <?php
+    $row = $result->fetch_assoc();
+    ?>
     <div>
-        <div class="account-setting-container">
-            <div class="account-setting-container01">
-                <div class="account-setting-container02">
-                    <span class="account-setting-text">
-                        <span>Account Setting</span>
-                        <br />
-                    </span>
-                </div>
-                <div class="account-setting-container03"></div>
-                <div class="account-setting-container04">
-                    <form class="account-setting-form">
-                        <div class="account-setting-container05">
-                            <span class="account-setting-text03">
-                                <span>Profile Image</span>
-                                <br />
-                            </span>
-                            <div class="account-setting-container06">
-                                <img alt="image" src="./images/seller_profile.jpg" class="account-setting-image" />
-                            </div>
-                        </div>
-                        <div class="account-setting-container07">
-                            <span class="account-setting-text06">
-                                <span>Seller Name</span>
-                                <br />
-                            </span>
-                            <span class="account-setting-text09">
-                                <span>HyperSeller</span>
-                                <br />
-                            </span>
-                        </div>
-                        <div class="account-setting-container08">
-                            <span class="account-setting-text12">
-                                <span>Description</span>
-                                <br />
-                            </span>
-                            <span class="account-setting-text15">
-                                <span>
-                                    Best Clothes seller, cheap and affordable, buy from me and you
-                                    won&apos;t regret guarentee.
-                                </span>
-                                <br />
-                            </span>
-                        </div>
-                        <div class="account-setting-container09">
-                            <span class="account-setting-text18">
-                                <span>Pick-up Address</span>
-                                <br />
-                            </span>
-                            <span class="account-setting-text21">
-                                <span>Jurong west street 81,</span>
-                                <br />
-                                <span>BLK 812 #04-12,</span>
-                                <br />
-                                <span>Singapore 640812</span>
-                                <br />
-                            </span>
-                        </div>
-                        <div class="account-setting-container10">
-                            <span class="account-setting-text28">
-                                <span>Payment QR</span>
-                                <br />
-                            </span>
-                            <img alt="image" src="./images/paynow_qr_1.jpg" class="account-setting-image1" />
-                        </div>
-                        <div class="account-setting-container11">
-                            <span class="account-setting-text31">
-                                <span>Username</span>
-                                <br />
-                            </span>
-                            <span class="account-setting-text34">
-                                <span>hyper112</span>
-                                <br />
-                            </span>
-                        </div>
-                        <div class="account-setting-container12">
-                            <span class="account-setting-text37">
-                                <span>Email</span>
-                                <br />
-                            </span>
-                            <span class="account-setting-text40">
-                                <span>hyper112@gmail.com</span>
-                                <br />
-                            </span>
-                        </div>
-                        <div class="account-setting-container13">
-                            <button type="button" class="account-setting-button button"  onclick="window.location='sellerSettings.php'">
-                                <span class="account-setting-text43">
-                                    <span>Edit login Details</span>
-                                    <br />
-                                </span>
-                            </button>
-                            <button type="button" class="account-setting-button1 button" onclick="window.location='sellerIndex.php'">
-                                <span class="account-setting-text46">
-                                    <span class="account-setting-text47">Cancel</span>
-                                    <br />
-                                </span>
-                            </button>
-                        </div>
-                    </form>
+        <div class="seller-container">
+        <div class="seller-container01">
+                <div class= "centering-div">
+                        <span class= "seller-setting-header">Account Setting</span>
+                        <span class= "seller-setting-name">Profile Image</span>
+                        <img alt="no image found " src=".<?php echo $row["profile_image"] ?>" class="seller-setting-image" />
+                        <table class ="seller-setting-table">
+                            <tr>
+                                <td class ="seller-setting-table-td"><span>Seller Name</span></td>
+                                <td class ="seller-setting-table-td"><?php echo $row["seller_name"] ?></td>
+                                <td class ="seller-setting-table-td">Username</td>
+                                <td class ="seller-setting-table-td"><?php echo $row["username"] ?></td>
+                            </tr>
+                            <tr>
+                                <td class ="seller-setting-table-td">Email</td>
+                                <td class ="seller-setting-table-td"><?php echo $row["email"] ?></td>
+                                <td class ="seller-setting-table-td">Pick-up Address</td>
+                                <td class ="seller-setting-table-td"><?php echo $row["pick_up_address"] ?>
+                            </tr>
+                            <tr>
+                                <td class ="seller-setting-table-td">Description</td>
+                                <td class ="seller-setting-table-td"><?php echo $row["description"] ?></td>
+                                <td class ="seller-setting-table-td">Preferred Category</td>
+                            <?php 
+                                $category_name = $sellerEntity->getCategoryName($row["preferred_category"]);
+                                $categoryQuery = $category_name->fetch_assoc();
+                                $categoryString = $categoryQuery["category_name"];
+                            ?>
+                                <td class ="seller-setting-table-td"><?php echo $categoryString ?></td>
+                            </tr>
+
+                            <tr>
+                                <td class ="seller-setting-table-td">Bank Name</td>
+                                <td class ="seller-setting-table-td"><?php echo $row["bank_name"] ?></td>
+                                <td class ="seller-setting-table-td">Bank Number</td>
+                                <td class ="seller-setting-table-td"><?php echo $row["bank_account_no"] ?></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="seller-setting-button-td">
+                                    <button type="button" class="seller-setting-button button"  onclick="window.location='sellerEditSettings.php'">
+                                    <span>Edit login Details</span></td>
+                                <td class="seller-setting-button-td">
+                                    <button type="button" class="seller-setting-button1 button" onclick="window.location='sellerHomepage.php'">
+                                    <span>Cancel</span></button>
+                                </td>
+                            </tr>
+                        </table>
                 </div>
             </div>
         </div>

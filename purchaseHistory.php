@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                     } else {
                         // Handle the case where purchase history data is empty
-                    
+                        echo 'Nothing to see';
                     }
                     ?>
                 </div>
