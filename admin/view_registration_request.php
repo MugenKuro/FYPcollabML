@@ -16,6 +16,12 @@ $result = $adminController->viewRegistrationRequests();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .table td {
+            overflow: hidden;
+            text-overflow: ellipsis; 
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -35,13 +41,13 @@ $result = $adminController->viewRegistrationRequests();
                         <th>Seller Type</th>
                         <th>Seller Name</th>
                         <th>Description</th>
-                        <th>Profile Image</th>
-                        <th>Payment QR</th>
+                        <th>Bank Name</th>
+                        <th>Bank Account No</th>
                         <th>Pickup Address</th>
-                        <th>Status</th>
                         <th>Passport (Individual)</th>
                         <th>UEN (Business)</th>
                         <th>ACRA (Business)</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -55,10 +61,9 @@ $result = $adminController->viewRegistrationRequests();
                             echo "<td>" . $row["seller_type"] . "</td>";
                             echo "<td>" . $row["seller_name"] . "</td>";
                             echo "<td>" . $row["description"] . "</td>";
-                            echo "<td>" . $row["profile_image"] . "</td>";
-                            echo "<td>" . $row["payment_QR"] . "</td>";
+                            echo "<td>" . $row["bank_name"] . "</td>";
+                            echo "<td>" . $row["bank_account_no"] . "</td>";
                             echo "<td>" . $row["pick_up_address"] . "</td>";
-                            echo "<td>" . $row["status"] . "</td>";
                             if (!empty($row["passport"])) {
                                 echo "<td>" . $row["passport"] . "</td>";
                             } else {
@@ -75,6 +80,8 @@ $result = $adminController->viewRegistrationRequests();
                             } else {
                                 echo "N/A";
                             }
+                            echo "</td>";
+                            echo "<td>" . $row["status"] . "</td>";
                             echo "<td>";
                             echo "<form method='POST'>";
                             echo "<input type='hidden' name='seller_id' value='" . $row["seller_id"] . "'>";

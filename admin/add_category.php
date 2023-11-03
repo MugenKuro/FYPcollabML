@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . "/../controller/AdminController.php";
-include "admin_header.php";
+
 
 $adminController = new AdminController();
 
@@ -12,17 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($adminController->addCategory($categoryName, $status)) {
         header("Location: view_category.php");
-        exit();
     } else {
         echo "Error: Category not added";
     }
 }
+include "admin_header.php";
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add New Category</title>
 </head>
 <body>
 <div class="container">

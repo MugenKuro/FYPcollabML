@@ -12,7 +12,14 @@ $customers = $adminController->getAllCustomers();
 <html lang="en">
 <head>
 </head>
-
+    <style>
+        .table td {
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            max-width: 200px; 
+        }
+    </style>
 <body>
     <div class="container">
         <div class="table-wrapper">

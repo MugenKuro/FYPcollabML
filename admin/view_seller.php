@@ -12,6 +12,14 @@ $result = $adminController->viewAllSellers();
 <html>
 <head>
     <title>View All Sellers</title>
+    <style>
+        .table td {
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            max-width: 200px; 
+        }
+    </style>
 </head>
 <body>
     <div class="container">

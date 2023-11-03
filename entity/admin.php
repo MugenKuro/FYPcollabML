@@ -191,25 +191,33 @@ class Admin
         }
     }
 
-    //Functions to view deactivation requests
+    // Function to view deactivation requests
     public function viewDeactivationRequests() {
         try {
-            $sql = "SELECT u.*, s.seller_id FROM Users u
-                    LEFT JOIN Sellers s ON u.user_id = s.user_id
-                    WHERE u.status = 'Pending deactivation' AND u.account_type = 'Seller'";
+            $sql = "SELECT s.seller_id, u.user_id, s.seller_type, s.seller_name, s.description, s.bank_name, s.bank_account_no, s.pick_up_address, u.status FROM Sellers s
+                    LEFT JOIN Users u ON s.user_id = u.user_id
+                    WHERE u.status = 'Pending Deactivation' AND u.account_type = 'Seller'";
             $result = $this->db->query($sql);
             return $result;
         } catch (Exception $e) {
             echo $sql . "<br>" . $e->getMessage();
         }
     }
-    
+
+    // Function to deactivate a seller
     public function deactivateSeller($sellerID) {
         try {
-            $updateSql = "UPDATE Users SET status = 'Inactive' WHERE user_id = ? AND account_type = 'Seller'";
+            // Update the status of the seller in the Sellers table
+            $updateSql = "UPDATE Sellers SET status = 'Inactive' WHERE seller_id = ?";
             $stmt = $this->db->prepare($updateSql);
             $stmt->bind_param("i", $sellerID);
             $stmt->execute();
+
+            // Update the status of the user in the Users table
+            $updateUserSql = "UPDATE Users SET status = 'Inactive' WHERE user_id = (SELECT user_id FROM Sellers WHERE seller_id = ?)";
+            $stmtUser = $this->db->prepare($updateUserSql);
+            $stmtUser->bind_param("i", $sellerID);
+            $stmtUser->execute();
         } catch (Exception $e) {
             echo $updateSql . "<br>" . $e->getMessage();
         }
@@ -217,11 +225,11 @@ class Admin
     
     public function viewRegistrationRequests() {
         try {
-            $sql = "SELECT u.*, s.seller_id, i.passport, b.uen, b.ACRA_filepath FROM Users u
+            $sql = "SELECT u.status, s.user_id, s.seller_id, s.seller_name, s.seller_type, s.description, s.bank_name, s.bank_account_no, s.pick_up_address, i.passport, b.uen, b.ACRA_filepath FROM  Users u
                     LEFT JOIN Sellers s ON u.user_id = s.user_id
                     LEFT JOIN IndividualSellers i ON s.seller_id = i.seller_id
                     LEFT JOIN BusinessSellers b ON s.seller_id = b.seller_id
-                    WHERE u.status = 'Pending approval' AND u.account_type = 'Seller'";
+                    WHERE u.status = 'Pending Approval' AND u.account_type = 'Seller'";
             $result = $this->db->query($sql);
             return $result;
         } catch (Exception $e) {
@@ -231,15 +239,23 @@ class Admin
     
     public function approveSeller($sellerID) {
         try {
-            $updateSql = "UPDATE Users SET status = 'Active' WHERE user_id = ? AND account_type = 'Seller'";
+            // Update the 'Users' table based on 'seller_id' by joining with 'Sellers'
+            $updateSql = "UPDATE Users u
+                          JOIN Sellers s ON u.user_id = s.user_id
+                          SET u.status = 'Active'
+                          WHERE s.seller_id = ? AND u.account_type = 'Seller'";
             $stmt = $this->db->prepare($updateSql);
             $stmt->bind_param("i", $sellerID);
-            $stmt->execute();
+    
+            if ($stmt->execute()) {
+                echo "Seller approved successfully";
+            } else {
+                echo "Failed to approve seller";
+            }
         } catch (Exception $e) {
-            echo $updateSql . "<br>" . $e->getMessage();
+            echo "Error: " . $e->getMessage();
         }
     }
-    
 
     // Function to view all sellers
     public function viewAllSellers() {

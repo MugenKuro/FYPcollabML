@@ -16,6 +16,14 @@ $result = $adminController->viewDeactivationRequests();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .table td {
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            max-width: 200px; 
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -35,8 +43,8 @@ $result = $adminController->viewDeactivationRequests();
                         <th>Seller Type</th>
                         <th>Seller Name</th>
                         <th>Description</th>
-                        <th>Profile Image</th>
-                        <th>Payment QR</th>
+                        <th>Bank Name</th>
+                        <th>Bank Account No</th>
                         <th>Pickup Address</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -52,8 +60,8 @@ $result = $adminController->viewDeactivationRequests();
                             echo "<td>" . $row["seller_type"] . "</td>";
                             echo "<td>" . $row["seller_name"] . "</td>";
                             echo "<td>" . $row["description"] . "</td>";
-                            echo "<td>" . $row["profile_image"] . "</td>";
-                            echo "<td>" . $row["payment_QR"] . "</td>";
+                            echo "<td>" . $row["bank_name"] . "</td>";
+                            echo "<td>" . $row["bank_account_no"] . "</td>";
                             echo "<td>" . $row["pick_up_address"] . "</td>";
                             echo "<td>" . $row["status"] . "</td>";
                             echo "<td>";

@@ -1,6 +1,5 @@
 <?php
 include __DIR__ . "/../controller/AdminController.php";
-include "admin_header.php";
 
 $categoryId = $_GET["category_id"];
 $adminController = new AdminController();
@@ -31,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+include "admin_header.php";
 ?>
 <!DOCTYPE html>
 <html>
