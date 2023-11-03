@@ -13,4 +13,6 @@ if ((strpos($link, 'login_verification.php') || strpos($link, 'emailVerify.php')
 if (strpos($link, 'login.php') > -1 && isset($_SESSION['user_login'])) {
     echo "<script>location.replace('./');</script>";
 }
+
+
 ?>

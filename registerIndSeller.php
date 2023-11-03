@@ -1,6 +1,7 @@
 <?php
 // Include file
-require_once dirname(__FILE__) . '\entity\users.php';
+require_once dirname(__FILE__) . '\controller\userController.php';
+require_once dirname(__FILE__) . '\controller\categoriesController.php';
 require_once('auth.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -21,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (!preg_match('/^\+?[0-9]+$/', trim($_POST["mobile"]))) {
         $_SESSION['flashdata']['type'] = 'danger';
         $_SESSION['flashdata']['msg'] = 'Mobile can only contain numbers, optionally with a plus sign at the beginning.';
-    } 
-    
+    }
+
     if (isset($_FILES['image']) && $_FILES["image"]["error"] == 0) {
         // Check if the file is an image
         $file_type = $_FILES['image']['type'];
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['flashdata']['msg'] = 'Please select an image to upload.';
     }
 
-    
+
     if (!isset($_SESSION['flashdata']) || ($_SESSION['flashdata']['type'] != 'danger' && empty($_SESSION['flashdata']['msg']))) {
         $indSellerRegister = new registerController();
 
@@ -58,8 +59,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $combinedPAddress = $paddress1 . ',' . $paddress2 . ',' . $paddress3;
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir_profimage . $filename_profimage)) {
-            $register = json_decode($indSellerRegister->indSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $bankname, $bankno,
-            $description, $fullname, $dob, $mobile, $passport, $combinedAddress, $combinedPAddress));
+            $register = json_decode($indSellerRegister->indSellerRegister(
+                $email,
+                $username,
+                $password,
+                $sellername,
+                $image_path_profimage,
+                $prefcat,
+                $bankname,
+                $bankno,
+                $description,
+                $fullname,
+                $dob,
+                $mobile,
+                $passport,
+                $combinedAddress,
+                $combinedPAddress
+            )
+            );
             if ($register->status == 'success') {
                 $_SESSION['flashdata']['type'] = 'success';
                 $_SESSION['flashdata']['msg'] = ' Account has been registered successfully.';
@@ -121,36 +138,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label">Email</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="email" name="email" class="form-control" placeholder="example@example.com"
-                                    value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" autofocus required>
+                                    <input type="text" id="email" name="email" class="form-control"
+                                        placeholder="example@example.com"
+                                        value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" autofocus required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="username" class="col-sm-4 col-form-label">Username</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="username" name="username" class="form-control" placeholder="your username use to login(jack123)"
-                                    value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>" required>
+                                    <input type="text" id="username" name="username" class="form-control"
+                                        placeholder="your username use to login(jack123)"
+                                        value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="password" class="col-sm-4 col-form-label">Password</label>
                                 <div class="col-sm-8">
-                                    <input type="password" id="password" name="password" class="form-control" placeholder="password"
-                                    value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>" required>
+                                    <input type="password" id="password" name="password" class="form-control"
+                                        placeholder="password"
+                                        value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="retypePassword" class="col-sm-4 col-form-label">Re-type Password</label>
                                 <div class="col-sm-8">
-                                    <input type="password" id="retypePassword" name="confirm_password" class="form-control" placeholder="password confirmation"
-                                    value="<?= isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '' ?>" required>
+                                    <input type="password" id="retypePassword" name="confirm_password"
+                                        class="form-control" placeholder="password confirmation"
+                                        value="<?= isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '' ?>"
+                                        required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="sellerName" class="col-sm-4 col-form-label">Seller Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="sellerName" name="sellername" class="form-control" placeholder="Seller name"
-                                    value="<?= isset($_POST['sellername']) ? $_POST['sellername'] : '' ?>" required>
+                                    <input type="text" id="sellerName" name="sellername" class="form-control"
+                                        placeholder="Seller name"
+                                        value="<?= isset($_POST['sellername']) ? $_POST['sellername'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -162,17 +185,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="prefCategory" class="col-sm-4 col-form-label">Preferred Category</label>
+                                <div class="col-sm-8">
+                                    <select id="prefCategory" name="prefcat" class="form-control">
+                                        <?php
+                                        $category = new viewAllCategories();
+                                        $data = json_decode($category->viewAllCategories());
+
+                                        foreach ($data as $category) {
+                                            echo '<option value="' . $category->category_id . '"';
+                                            if (isset($_POST['prefcat']) && $_POST['prefcat'] === $category->category_id) {
+                                                echo ' selected';
+                                            }
+                                            echo '>' . $category->category_name . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="bankName" class="col-sm-4 col-form-label">Bank Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="bankName" name="bankname" class="form-control" placeholder="DBS"
-                                    value="<?= isset($_POST['bankname']) ? $_POST['bankname'] : '' ?>" required>
+                                    <input type="text" id="bankName" name="bankname" class="form-control"
+                                        placeholder="DBS"
+                                        value="<?= isset($_POST['bankname']) ? $_POST['bankname'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="bankNo" class="col-sm-4 col-form-label">Bank Account No.</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="bankNo" name="bankno" class="form-control" placeholder="182123994"
-                                    value="<?= isset($_POST['bankno']) ? $_POST['bankno'] : '' ?>" required>
+                                    <input type="text" id="bankNo" name="bankno" class="form-control"
+                                        placeholder="182123994"
+                                        value="<?= isset($_POST['bankno']) ? $_POST['bankno'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -180,35 +224,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-sm-8">
                                     <input type="text" id="description" name="description" class="form-control"
                                         placeholder="Description of seller"
-                                        value="<?= isset($_POST['description']) ? $_POST['description'] : '' ?>" required>
+                                        value="<?= isset($_POST['description']) ? $_POST['description'] : '' ?>"
+                                        required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="fullName" class="col-sm-4 col-form-label">Full Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="fullName" name="fullname" class="form-control" placeholder="Full name"
-                                    value="<?= isset($_POST['fullname']) ? $_POST['fullname'] : '' ?>" required>
+                                    <input type="text" id="fullName" name="fullname" class="form-control"
+                                        placeholder="Full name"
+                                        value="<?= isset($_POST['fullname']) ? $_POST['fullname'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="dateOfBirth" class="col-sm-4 col-form-label">Date of Birth</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="dateOfBirth" name="dob" class="form-control" placeholder="yyyy-mm-dd"
-                                    value="<?= isset($_POST['dob']) ? $_POST['dob'] : '' ?>" required>
+                                    <input type="text" id="dateOfBirth" name="dob" class="form-control"
+                                        placeholder="yyyy-mm-dd"
+                                        value="<?= isset($_POST['dob']) ? $_POST['dob'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="mobile" class="col-sm-4 col-form-label">Mobile</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="mobile" name="mobile" class="form-control" placeholder="98765432"
-                                    value="<?= isset($_POST['mobile']) ? $_POST['mobile'] : '' ?>" required>
+                                    <input type="text" id="mobile" name="mobile" class="form-control"
+                                        placeholder="98765432"
+                                        value="<?= isset($_POST['mobile']) ? $_POST['mobile'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="passport" class="col-sm-4 col-form-label">Passport</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="passport" name="passport" class="form-control" placeholder="passport no."
-                                    value="<?= isset($_POST['passport']) ? $_POST['passport'] : '' ?>" required>
+                                    <input type="text" id="passport" name="passport" class="form-control"
+                                        placeholder="passport no."
+                                        value="<?= isset($_POST['passport']) ? $_POST['passport'] : '' ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">

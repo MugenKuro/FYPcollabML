@@ -1,6 +1,7 @@
 <?php
 // Include file
-require_once dirname(__FILE__) . '\entity\users.php';
+require_once dirname(__FILE__) . '\controller\userController.php';
+require_once dirname(__FILE__) . '\controller\categoriesController.php';
 require_once('auth.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validate confirm password whether empty / same as password
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir_profimage . $filename_profimage) 
         && move_uploaded_file($_FILES["acra"]["tmp_name"], $target_dir_acra . $filename_acra) ) {
-            $register = json_decode($bizSellerRegister->bizSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $bankname, $bankno, 
+            $register = json_decode($bizSellerRegister->bizSellerRegister($email, $username, $password, $sellername, $image_path_profimage, $prefcat, $bankname, $bankno, 
             $description, $businessname, $uen, $combinedAddress, $combinedPAddress, $image_path_acra));
             if ($register->status == 'success') {
                 $_SESSION['flashdata']['type'] = 'success';
@@ -174,6 +175,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="custom-file">
                                         <input type="file" id="image" name="image" class="form-control-file" required>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="prefCategory" class="col-sm-4 col-form-label">Preferred Category</label>
+                                <div class="col-sm-8">
+                                    <select id="prefCategory" name="prefcat" class="form-control">
+                                        <?php
+                                        $category = new viewAllCategories();
+                                        $data = json_decode($category->viewAllCategories());
+
+                                        foreach ($data as $category) {
+                                            echo '<option value="' . $category->category_id . '"';
+                                            if (isset($_POST['prefcat']) && $_POST['prefcat'] === $category->category_id) {
+                                                echo ' selected';
+                                            }
+                                            echo '>' . $category->category_name . '</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">

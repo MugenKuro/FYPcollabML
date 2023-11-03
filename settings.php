@@ -7,10 +7,29 @@ require_once dirname(__FILE__) . '\controller\userController.php';
 if (session_status() === PHP_SESSION_NONE)
     session_start();
 
+// Check if the user is logged in and their role matches the allowed roles for this page
+if (isset($_SESSION['accountType'])) {
+    $userRole = $_SESSION['accountType'];
+
+    // Define the allowed roles for this page
+    $allowedRoles = array("Customer");
+
+    // Check if the user's role is allowed
+    if (!in_array($userRole, $allowedRoles)) {
+        // User has access, continue with the page
+        header("location: login.php"); // You can create an "access_denied.php" page
+        exit;
+    }
+} else {
+    // User is not logged in, redirect them to the login page
+    header("location: login.php");
+    exit;
+}
+
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $_SESSION['password_change'] = $_SESSION['image_change'] = false;
+    $_SESSION['password_change'] = $_SESSION['image_change'] = $username_change = false;
     // Validate confirm password whether empty / same as password
     $password = trim($_POST["password"]);
     $confirm_password = trim($_POST["confirm_password"]);
@@ -59,46 +78,119 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $target_dir = dirname(__FILE__) . '/images/Prof_pic/'; // Set the target directory
             $target_file = $target_dir . basename($_FILES["image"]["name"]); // Get the filename of the uploaded file
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION)); // Get the file extension
-    
+
             // Generate a unique filename to prevent conflicts
             $filename = uniqid() . "." . $imageFileType;
             $image_path = '/images/Prof_pic/' . $filename;
         }
-        $customerRegister = new registerController();
+        $updateAccountDetails = new updateAccountDetails();
 
         extract($_POST);
-        $combinedAddress = $address1 . ',' . $address2 . ',' . $address3;
-
-        if ($_SESSION['$password_changed'] && $_SESSION['image_change'] && move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $filename)) {
-            $register = json_decode($customerRegister->customerRegister($email, $username, $password, $nickname, $gender, $dob, $firstname, $lastname, $image_path, $mobile, $combinedAddress));
-            if ($register->status == 'success') {
-                $_SESSION['flashdata']['type'] = 'success';
-                $_SESSION['flashdata']['msg'] = ' Account has been registered successfully.';
-                echo "<script>location.href = './emailVerify.php';</script>";
-                exit;
-            } else {
-                unlink($target_dir . $filename);
-                echo "<script>console.error(" . json_encode($register) . ");</script>";
-            }
-        } elseif ($_SESSION['password_changed'] && !$_SESSION['image_change']) {
-            $register = json_decode($customerRegister->customerRegister($email, $username, $password, $nickname, $gender, $dob, $firstname, $lastname, $image_path, $mobile, $combinedAddress));
-            if ($register->status == 'success') {
-                $_SESSION['flashdata']['type'] = 'success';
-                $_SESSION['flashdata']['msg'] = ' Account has been registered successfully.';
-                echo "<script>location.href = './emailVerify.php';</script>";
-                exit;
-            } else {
-                unlink($target_dir . $filename);
-                echo "<script>console.error(" . json_encode($register) . ");</script>";
-            }
-        } elseif (!$_SESSION['password_changed'] && $_SESSION['image_change'] && move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $filename)) {
-
-        } elseif (!$_SESSION['password_changed'] && !$_SESSION['image_change']) {
-
+        if ($_SESSION['current_username'] != $username) {
+            $username_change = true;
         }
 
-    }
+        $combinedAddress = $address1 . ',' . $address2 . ',' . $address3;
 
+        if ($_SESSION['password_change'] && $_SESSION['image_change'] && move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $filename)) {
+            $updateUser = json_decode(
+                $updateAccountDetails->updateAccDetails(
+                    $_SESSION['user_id'],
+                    $username_change,
+                    $username,
+                    $password,
+                    $email,
+                    $nickname,
+                    $gender,
+                    $dob,
+                    $firstname,
+                    $lastname,
+                    $image_path,
+                    $combinedAddress,
+                    $mobile
+                )
+            );
+
+        } elseif ($_SESSION['password_change'] && !$_SESSION['image_change']) {
+            $image_path = NULL;
+            $updateUser = json_decode(
+                $updateAccountDetails->updateAccDetails(
+                    $_SESSION['user_id'],
+                    $username_change,
+                    $username,
+                    $password,
+                    $email,
+                    $nickname,
+                    $gender,
+                    $dob,
+                    $firstname,
+                    $lastname,
+                    $image_path,
+                    $combinedAddress,
+                    $mobile
+                )
+            );
+
+        } elseif (!$_SESSION['password_change'] && $_SESSION['image_change'] && move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $filename)) {
+            $password = NULL;
+            $updateUser = json_decode(
+                $updateAccountDetails->updateAccDetails(
+                    $_SESSION['user_id'],
+                    $username_change,
+                    $username,
+                    $password,
+                    $email,
+                    $nickname,
+                    $gender,
+                    $dob,
+                    $firstname,
+                    $lastname,
+                    $image_path,
+                    $combinedAddress,
+                    $mobile
+                )
+            );
+        } elseif (!$_SESSION['password_change'] && !$_SESSION['image_change']) {
+            $image_path = NULL;
+            $password = NULL;
+            $updateUser = json_decode(
+                $updateAccountDetails->updateAccDetails(
+                    $_SESSION['user_id'],
+                    $username_change,
+                    $username,
+                    $password,
+                    $email,
+                    $nickname,
+                    $gender,
+                    $dob,
+                    $firstname,
+                    $lastname,
+                    $image_path,
+                    $combinedAddress,
+                    $mobile
+                )
+            );
+        }
+
+        if (isset($updateUser->status)) {
+            if ($updateUser->status == 'success') {
+                $_SESSION['flashdata']['type'] = 'success';
+                $_SESSION['flashdata']['msg'] = 'Details updated successfully.';
+                if ($username_change) {
+                    $_SESSION["username"] = $username;
+                }
+            } elseif ($updateUser->status == 'nothing') {
+                $_SESSION['flashdata']['type'] = 'success';
+                $_SESSION['flashdata']['msg'] = 'Nothing was updated.';
+            } else {
+                if (isset($target_dir) && isset($filename)) {
+                    unlink($target_dir . $filename);
+                }
+                $_SESSION['flashdata']['type'] = 'danger';
+                $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+            }
+        }
+    }
 
 }
 ?>
@@ -134,70 +226,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
-
-        <div class="container">
-            <a class="navbar-brand" href="index.php">iCloth</a>
-
-            <div class="collapse navbar-collapse">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li>
-                        <a class="nav-link" href="index.php">Home</a>
-                        <a class="nav-link" href="purchaseHistory.php">Purchase history</a>
-                        <a class="nav-link" href="userAccountSetting.php">settings</a>
-                    </li>
-                </ul>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="background-color: #10a4e3; border-color:#10a4e3">All Category
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <?php
-                        $category = new viewAllCategories();
-                        $data = json_decode($category->viewAllCategories());
-                        foreach ($data as $category) {
-                            echo '<a class="dropdown-item" href="#">' . $category->category_name . '</a>';
-                        }
-                        ?>
-                    </div>
-                </div>
-
-                <div class="search">
-                    <!-- Another variation with a button -->
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"
-                                style="background-color: #10a4e3; border-color:#10a4e3 ">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><span class="nav-link">Welcome,
-                            <?php echo htmlspecialchars($_SESSION["username"]); ?>
-                        </span></li>
-                    <li><a class="nav-link" href="logout.php"><img src="images/user.svg"><span> log out</span></a></li>
-                    <li><a class="nav-link" href="cart.php"><img src="images/cart.svg"><span> cart</span></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </nav>
-    <!-- End Header/Navigation -->
+    <?php
+    include dirname(__FILE__) . ('/custNavBar.php');
+    ?>
 
 
     <div>
         <?php
         $userSettings = new viewAccountSettings();
         $userData = json_decode($userSettings->getUserDetails($_SESSION['user_id']));
+        $_SESSION['current_username'] = '';
 
         if (!empty($userData)) {
             $username = $userData[0]->username;
+            $_SESSION['current_username'] = $userData[0]->username;
             $email = $userData[0]->email;
         } else {
             // Handle the case where user data is empty or an error occurred
@@ -299,7 +341,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label for="password">Password</label>
                                 <input type="password" id="password" name="password" class="form-control"
                                     placeholder="leave it empty if you not changing password"
-                                    value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>" >
+                                    value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>">
                             </div>
                             <div class="col-sm-3">
                                 <label for="userImage">User Image</label>
@@ -316,8 +358,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label for="retypePassword">Re-type Password</label>
                                 <input type="password" id="retypePassword" name="confirm_password" class="form-control"
                                     placeholder="leave it empty if you not changing password"
-                                    value="<?= isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '' ?>"
-                                    >
+                                    value="<?= isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '' ?>">
                             </div>
                             <div class="col-sm-6">
                                 <label for="mobile">Mobile</label>
@@ -376,7 +417,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <div class="form-group row">
                             <div class="col-sm-12 mt-4 d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary custom-button-submit-settings">Submit</button>
+                                <button type="submit"
+                                    class="btn btn-primary custom-button-submit-settings">Submit</button>
                                 <button type="button" class="btn btn-secondary ml-2"
                                     onclick="window.location='userAccountSetting.php'">Cancel</button>
                             </div>
