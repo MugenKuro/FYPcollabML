@@ -1,4 +1,4 @@
-<?php
+ <!-- #region --><?php
 // Include db.php to access the Db class
 require_once('../entity/db.php');
 

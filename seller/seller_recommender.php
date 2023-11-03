@@ -25,10 +25,10 @@
             exit;
         }
 
-        // $output = shell_exec("python ../python/seller_recommender.py $seller_user_id 2>&1");
+        $output = shell_exec("python ../python/seller_recommender.py $seller_user_id 2>&1");
 
         // uncomment below code and comment above code for deployment on Azure 
-        $output = shell_exec("PYTHONPATH=/home/.local/lib/python3.9/site-packages /usr/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $customer_user_id 2>&1");
+        // $output = shell_exec("python3 site/wwwroot/python/seller_recommender.py $seller_user_id 2>&1");
 
         // Parse the JSON output
         $recommendations = json_decode($output, true);
