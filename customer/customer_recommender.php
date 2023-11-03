@@ -19,35 +19,37 @@
             object-fit: cover; 
         }
 
+        .card-title {
+            height: 40px;           
+            overflow: hidden;       
+            text-overflow: ellipsis;
+            white-space: nowrap;    
+        }
+
         .center-content {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
         <?php
         require_once('../entity/db.php');
-        
         $db = new Db();
-        session_start();
-        $_SESSION['user_id'] = 10;            // Change this once we have a login system
-        if(isset($_SESSION['user_id'])) {
-            $customer_user_id = $_SESSION['user_id'];
-        } else {
-            die("User ID not found.");
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
+        $_SESSION['user_id'] = 10;               // remove this once we have a login system
+        $customer_user_id = $_SESSION['user_id'];
 
-        // Get the path to the python3 interpreter
-        $pythonPath = shell_exec("which python3");
-        $pythonPath = trim($pythonPath);
-        $scriptPath = getcwd() . "/../python/customer_recommender.py";
-        $command = "{$pythonPath} {$scriptPath} {$customer_user_id} 2>&1";
-
-        $output = shell_exec($command);
+        $output = shell_exec("python ../python/customer_recommender.py $customer_user_id 2>&1");
+        // uncomment below code and comment above code for deployment on Azure
+        // $output = shell_exec("python3 site/wwwroot/python/customer_recommender.py $customer_user_id 2>&1");
+        
         $recommendations = json_decode($output, true);
         
         if ($recommendations && json_last_error() == JSON_ERROR_NONE) {
@@ -75,12 +77,12 @@
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
                     $item_name = $row['item_name'];
-                    $item_image_path = file_exists($row['item_image_path']) ? $row['item_image_path'] : 'item_images/default.jpg';
+                    $item_image_path = $row['item_image_path'];
                     
                     echo '<div class="col-md-2 item-card">';
                     echo '<div class="card">';
                     echo '<a href="item_details.php?item_id=' . $item_id . '">';
-                    echo '<img src="' . $item_image_path . '" alt="' . $item_name . '" class="card-img-top">';
+                    echo '<img src="../' . $item_image_path . '" alt="' . $item_name . '" class="card-img-top">';
                     echo '</a>';
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">' . $item_name . '</h5>';
