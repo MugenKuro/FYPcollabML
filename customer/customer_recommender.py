@@ -1,11 +1,13 @@
 import sys
+import os
+os.environ['SURPRISE_DATA_FOLDER'] = '/home/site/wwwroot/surprise'
 from surprise import Dataset, Reader
 from surprise.model_selection import train_test_split
 from surprise import SVD
 import pymysql
 import json
 import pandas as pd
-import os
+
 
 
 # Determine the current script directory
