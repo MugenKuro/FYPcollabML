@@ -11,7 +11,7 @@ $_SESSION['username'] = "Faustine";           // Remove this once we have a logi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     $startDate = $_POST['start_date'];
     $endDate = $_POST['end_date'];
-    $userId = $_POST['user_id'];
+    $userID = $_SESSION['user_id'];
 
     // Create an instance of the Db class
     $db = new Db();
@@ -21,60 +21,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
         die("Connection failed: " . $db->getConnectError());
     }
 
-    // Fetch orders for the seller within the date range
-    $sql = "SELECT OrderHistory.order_id, OrderHistory.order_date, Items.item_name, CartItems.quantity, Items.price
-            FROM OrderHistory
-            INNER JOIN ShoppingCarts ON OrderHistory.cart_id = ShoppingCarts.cart_id
-            INNER JOIN CartItems ON ShoppingCarts.cart_id = CartItems.cart_id
-            INNER JOIN Items ON CartItems.item_id = Items.item_id
-            INNER JOIN Sellers ON Items.seller_id = Sellers.seller_id
-            INNER JOIN Users ON Sellers.user_id = Users.user_id
-            WHERE Users.user_id = ? AND OrderHistory.order_date BETWEEN ? AND ?";
-
-
-    // Execute the query using prepared statements
-    $params = [$userId, $startDate, $endDate];
-    $result = $db->query($sql, $params);
-
-    // Initialize variables for total revenue and sales
-    $totalRevenue = 0;
-    $totalSales = 0;
-
-    // Initialize an array to store order details
-    $orders = [];
-
-    // Loop through the query result
-    while ($row = $result->fetch_assoc()) {
-        $orderDate = $row['order_date'];
-        $itemName = $row['item_name'];
-        $quantity = $row['quantity'];
-        $price = $row['price'];
-        $revenue = $quantity * $price;
-
-        // Store order details in the array
-        $orders[] = [
-            'order_date' => $orderDate,
-            'item_name' => $itemName,
-            'quantity' => $quantity,
-            'price' => $price,
-            'revenue' => $revenue,
-        ];
-
-        // Update total revenue and sales
-        $totalRevenue += $revenue;
-        $totalSales += $quantity;
+    // Get the user ID from the session
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
     }
+    $userID = $_SESSION['user_id'];
 
+    // Fetch seller details based on the user ID
+    $sellerQuery = "SELECT seller_id FROM Sellers WHERE user_id = ?";
+    $sellerParams = [$userID];
+    $sellerResult = $db->query($sellerQuery, $sellerParams);
 
-    // Return the report data as an array
-    $reportData = [
-        'startDate' => $startDate,
-        'endDate' => $endDate,
-        'orders' => $orders,
-        'total_revenue' => $totalRevenue,
-        'total_sales' => $totalSales,
-    ];
+    if ($sellerResult) {
+        $sellerRow = $sellerResult->fetch_assoc();
+        $sellerID = $sellerRow['seller_id'];
 
+        // Fetch orders for the seller within the date range
+        $sql = "SELECT OrderHistory.order_id, OrderHistory.order_date, Items.item_name, CartItems.quantity, Items.price
+                FROM OrderHistory
+                INNER JOIN ShoppingCarts ON OrderHistory.cart_id = ShoppingCarts.cart_id
+                INNER JOIN CartItems ON ShoppingCarts.cart_id = CartItems.cart_id
+                INNER JOIN Items ON CartItems.item_id = Items.item_id
+                WHERE Items.seller_id = ? AND OrderHistory.order_date BETWEEN ? AND ?";
+        $params = [$sellerID, $startDate, $endDate];
+
+        // Execute the query using prepared statements
+        $result = $db->query($sql, $params);
+
+        // Initialize variables for total revenue and sales
+        $totalRevenue = 0;
+        $totalSales = 0;
+
+        // Initialize an array to store order details
+        $orders = [];
+
+        // Loop through the query result
+        while ($row = $result->fetch_assoc()) {
+            $orderDate = $row['order_date'];
+            $itemName = $row['item_name'];
+            $quantity = $row['quantity'];
+            $price = $row['price'];
+            $revenue = $quantity * $price;
+
+            // Store order details in the array
+            $orders[] = [
+                'order_date' => $orderDate,
+                'item_name' => $itemName,
+                'quantity' => $quantity,
+                'price' => $price,
+                'revenue' => $revenue,
+            ];
+
+            // Update total revenue and sales
+            $totalRevenue += $revenue;
+            $totalSales += $quantity;
+        }
+
+        // Return the report data as an array
+        $reportData = [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'orders' => $orders,
+            'total_revenue' => $totalRevenue,
+            'total_sales' => $totalSales,
+        ];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -135,11 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
             <div class="collapse navbar-collapse">
                 <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                     <li>
-                        <a class="nav-link" href="">Account Setting</a>
-                        <a class="nav-link" href="">Category Requests</a>
-                        <a class="nav-link" href="">Item Listings</a>
-                        <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
-                        <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
+                    <a class="nav-link" href="sellerHomepage.php">Account Setting</a>
+                    <a class="nav-link" href="addItem.php">Category Requests</a>
+                    <a class="nav-link" href="sellerAccountSetting.php">Item Listings</a>
+                    <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
+                    <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
                     </li>
                 </ul>
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
@@ -152,11 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
         </div>
 
     </nav>
+    <!-- End Header/Navigation -->
 <?php
     // Load the content into another page for display (e.g., report_display.php)
     include('report_display.php'); // Create report_display.php to display the content
 ?>
-    <!-- End Header/Navigation -->
     <div class="container a">
         <p><u><strong>ENTER DATE RANGE FOR REPORT</strong></u></p>
         <form method="post" class="mt-4">

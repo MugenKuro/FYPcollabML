@@ -26,10 +26,10 @@ try:
         db=db_name,
         ssl_ca=db_ssl
     )
-    print("SUCCESS: Connection to Remote MySQL instance succeeded")
+    #print("SUCCESS: Connection to Remote MySQL instance succeeded")
 except pymysql.MySQLError as e:
-    print("ERROR: Unexpected error: Could not connect to MySQL instance.")
-    print(e)
+    #print("ERROR: Unexpected error: Could not connect to MySQL instance.")
+    #print(e)
     sys.exit(1)
 
 try:

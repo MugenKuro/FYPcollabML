@@ -72,9 +72,9 @@ try {
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Inventory Management</title>
-                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                    <link rel="stylesheet" href="../css/bootstrap.min.css">
                     <link rel="stylesheet" href="../css/style.css">
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="../js/jquery-3.7.1.min.js"></script>
                 </head>
                 <body>
                 <!-- Start Header/Navigation -->
@@ -85,9 +85,9 @@ try {
                         <div class="collapse navbar-collapse">
                             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                                 <li>
-                                    <a class="nav-link" href="">Account Setting</a>
-                                    <a class="nav-link" href="">Category Requests</a>
-                                    <a class="nav-link" href="">Item Listings</a>
+                                    <a class="nav-link" href="sellerHomepage.php">Account Setting</a>
+                                    <a class="nav-link" href="addItem.php">Category Requests</a>
+                                    <a class="nav-link" href="sellerAccountSetting.php">Item Listings</a>
                                     <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
                                     <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
                                 </li>
@@ -178,8 +178,7 @@ try {
           </body>
         </html>';
 
-        // Include Bootstrap JavaScript file at the end of the HTML
-        echo '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>';
+        echo '<script src="../js/bootstrap.min.js"></script>';
     } else {
         echo 'You have no inventory records.';
     }
