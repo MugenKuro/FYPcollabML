@@ -1,9 +1,3 @@
-DROP DATABASE IF EXISTS eComDB;
-CREATE DATABASE eComDB;
-USE eComDB;
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-
 CREATE TABLE `Users` (
   `user_id` INT PRIMARY KEY AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
@@ -24,7 +18,7 @@ CREATE TABLE `Sellers` (
   `description` TEXT,
   `profile_image` VARCHAR(255),
   `bank_name` VARCHAR(255),
-  `bank_account_no` VARCHAR(100),
+  `bank_account_no` INT,
   `pick_up_address` TEXT,
   `preferred_category` INT NOT NULL
 );
@@ -92,7 +86,7 @@ CREATE TABLE `ShoppingCarts` (
   `cart_id` INT PRIMARY KEY AUTO_INCREMENT,
   `customer_id` INT,
   `total_price` DECIMAL(10, 2) NOT NULL,
-  `delivery_address` TEXT,
+  `delivery_address` TEXT NOT NULL,
   `status` VARCHAR(50) NOT NULL
 );
 
@@ -121,15 +115,12 @@ CREATE TABLE `BusinessSellers` (
   `ACRA_filepath` VARCHAR(255)
 );
 
-
 CREATE TABLE `CategoryRequests` (
   `request_id` INT PRIMARY KEY AUTO_INCREMENT,
   `seller_id` INT,
   `category_name` VARCHAR(255),
   `description` VARCHAR(255),
   `status` VARCHAR(25) DEFAULT "pending"
-
-
 );
 
 ALTER TABLE `Sellers` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`);
@@ -166,22 +157,6 @@ ALTER TABLE `IndividualSellers` ADD FOREIGN KEY (`seller_id`) REFERENCES `Seller
 
 ALTER TABLE `BusinessSellers` ADD FOREIGN KEY (`seller_id`) REFERENCES `Sellers` (`seller_id`);
 
+ALTER TABLE `OrderHistory` ADD FOREIGN KEY (`customer_id`) REFERENCES `OrderHistory` (`cart_id`);
 
 ALTER TABLE `CategoryRequests` ADD FOREIGN KEY (`seller_id`) REFERENCES `Sellers` (`seller_id`);
-
-
-
--- Inserting data into the Users table
-INSERT INTO Users (username, password, account_type, email, status)
-VALUES
-    -- pass123
-  ('kaibutsu', '$2y$10$iExRjtQNHAJ2rG1bT4.PE.ZXIBGI/TQsg/AEDM8xn2SJhK5JQ93DG', 'Customer', 'kaibutsu740@gmail.com', 'Active'),
-    -- passadmin123
-  ('admin', '$2y$10$MxrJ1oXQvqyHI2/qHeZRIudv.w3Lr15Y0c3YKLTKg48LFazFR7UMy', 'System Admin', 'admin@example.com', 'Active');
-
--- Inserting data into the Customers table
-INSERT INTO Customers (user_id, nickname, gender, date_of_birth, first_name, last_name, image_path, address, mobile)
-VALUES
-  (1, 'johndoe123', 'Male', '1990-05-15', 'John', 'Doe', '/images/Prof_pic/john_doe.jpg', 'blk812 789 Oak St,#02-43,singapore 640812', '+1234567890');
-
-

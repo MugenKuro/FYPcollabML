@@ -17,4 +17,14 @@ class viewAllCategories
     }
 }
 
+class viewCatById {
+    public function viewCategoryById($category_id)
+    {
+        $category = new categories();
+        $data = json_decode($category->viewCategoryById($category_id));
+
+        return json_encode($data);
+    }
+}
+
 ?>
