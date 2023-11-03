@@ -56,16 +56,6 @@ require_once('../sellerAuth.php');
 
 	
 	?>
-    <div class="search">
-			<form action="searchItem.php" method="GET" class="input-group">
-				<input type="text" class="form-control" placeholder="Search" name="search" value="<?php if(isset($_GET['search'])) {echo $_GET['search']; }?>">
-				<div class="input-group-append">
-					<button class="btn btn-secondary" type="submit" style="background-color: #10a4e3; border-color:#10a4e3 ">
-						<i class="fa fa-search"></i>
-					</button>
-				</div>
-			</form>
-		</div>
     <div class = "tableScroll">
 	        <div class="seller-container">
             <div class="seller-container01">
@@ -79,7 +69,7 @@ require_once('../sellerAuth.php');
     ?>
         <a class= "seller-listing-container" href="sellerItemDetails.php?item_id=<?php echo $row['item_id']; ?> ">
         <div >
-		    <span><img class = "seller-listing-container-image" src=".<?php echo $row['item_image_path']?>" width="300" height="300" ></span>
+		    <span><img class = "seller-listing-container-image" src="..<?php echo $row['item_image_path']?>" width="300" height="300" ></span>
             <p class ="seller-listing-container-text"><?=$row['item_name'] ?> </p>
             <p class ="seller-listing-container-text">$<?=$row['price'] ?></p>
         </div>
