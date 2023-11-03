@@ -51,6 +51,23 @@ class categories {
         return json_encode($data);
     }
     
+    public function viewCategoryById($category_id) {
+        $sql = "SELECT * FROM `categories` WHERE category_id = $category_id";
+        $db = new Db();
+        $result = $db->query($sql);
+    
+        $data = array(); // Initialize an empty array to store category data
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row; // Add each category row to the $data array
+            }
+        } else {
+            $_SESSION['category']['error'] = 'Unable to fetch categories.';
+        }
+    
+        return json_encode($data);
+    }
 
 
 }

@@ -92,6 +92,45 @@ class customers {
         return json_encode($data);
     }
     
+    public function updateCustomer($user_id, $nickname, $gender, $date_of_birth, $first_name, $last_name, $image_path=NULL, $address, $mobile) {
+        $db = new Db();
+
+        $address = $db->escape($address);
+
+        if (is_null($image_path)) {
+            $sql = "UPDATE `customers`
+            SET `nickname` = '$nickname',
+            `gender` = '$gender',
+            `date_of_birth` = '$date_of_birth',
+            `first_name` = '$first_name',
+            `last_name` = '$last_name',
+            `address` = '$address',
+            `mobile` = '$mobile'
+            WHERE `user_id` = '$user_id'";
+        } else {
+            $sql = "UPDATE `customers`
+            SET `nickname` = '$nickname',
+            `gender` = '$gender',
+            `date_of_birth` = '$date_of_birth',
+            `first_name` = '$first_name',
+            `last_name` = '$last_name',
+            `image_path` = '$image_path',
+            `address` = '$address',
+            `mobile` = '$mobile'
+            WHERE `user_id` = '$user_id'";
+        }
+        $save = $db->query($sql);
+
+        if ($save > 0) {
+            $resp['status'] = 'success';
+        } else if ($save == 0) {
+            $resp['status'] = 'nothing';
+        } else {
+            $resp['status'] = 'error';
+        }
+
+        return json_encode($resp);
+    }
 
 
 }
