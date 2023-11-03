@@ -29,23 +29,64 @@ class Db {
             die("ERROR: Could not connect. " . $this->connection->connect_error);
         }
     }
-
-    public function query($sql) {
-        $result = $this->connection->query($sql);
-        if (!$result) {
-            die("ERROR: Query failed. " . $this->connection->error);
-        }
+    /////////////// original code /////////////// 
+    // public function query($sql) {
+    //     $result = $this->connection->query($sql);
+    //     if (!$result) {
+    //         die("ERROR: Query failed. " . $this->connection->error);
+    //     }
         
-        if ($result === true) {
-            // non-SELECT statement
-            $result = $this->connection->affected_rows;
+    //     if ($result === true) {
+    //         // non-SELECT statement
+    //         $result = $this->connection->affected_rows;
 
-            return $result;
+    //         return $result;
+    //     } else {
+    //         // SELECT statement
+    //         return $result;
+    //     }
+    // }
+
+    // new function to be able handle sql statements with placeholders
+    public function query($sql, $params = []) {
+        // If parameters are provided, use prepared statements
+        if (!empty($params)) {
+            $stmt = $this->connection->prepare($sql);
+            if (!$stmt) {
+                die("ERROR: Preparing failed. " . $this->connection->error);
+            }
+    
+            $stmt->bind_param(str_repeat('s', count($params)), ...$params);
+    
+            $executed = $stmt->execute();
+            if (!$executed) {
+                die("ERROR: Execution failed. " . $stmt->error);
+            }
+    
+            // For SELECT statements
+            if ($result = $stmt->get_result()) {
+                return $result;
+            } else {
+                // For non-SELECT statements
+                return $stmt->affected_rows;
+            }
         } else {
-            // SELECT statement
-            return $result;
+            // Original code for non-prepared statements
+            $result = $this->connection->query($sql);
+            if (!$result) {
+                die("ERROR: Query failed. " . $this->connection->error);
+            }
+            
+            if ($result === true) {
+                // non-SELECT statement
+                return $this->connection->affected_rows;
+            } else {
+                // SELECT statement
+                return $result;
+            }
         }
     }
+    
 
     //prevent sql injection
     public function escape($value) {

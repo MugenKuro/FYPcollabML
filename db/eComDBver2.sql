@@ -121,12 +121,15 @@ CREATE TABLE `BusinessSellers` (
   `ACRA_filepath` VARCHAR(255)
 );
 
+
 CREATE TABLE `CategoryRequests` (
   `request_id` INT PRIMARY KEY AUTO_INCREMENT,
   `seller_id` INT,
   `category_name` VARCHAR(255),
   `description` VARCHAR(255),
   `status` VARCHAR(25) DEFAULT "pending"
+
+
 );
 
 ALTER TABLE `Sellers` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`);
@@ -162,6 +165,7 @@ ALTER TABLE `CartItems` ADD FOREIGN KEY (`item_id`) REFERENCES `Items` (`item_id
 ALTER TABLE `IndividualSellers` ADD FOREIGN KEY (`seller_id`) REFERENCES `Sellers` (`seller_id`);
 
 ALTER TABLE `BusinessSellers` ADD FOREIGN KEY (`seller_id`) REFERENCES `Sellers` (`seller_id`);
+
 
 ALTER TABLE `CategoryRequests` ADD FOREIGN KEY (`seller_id`) REFERENCES `Sellers` (`seller_id`);
 
