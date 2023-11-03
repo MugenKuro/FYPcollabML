@@ -48,7 +48,7 @@
 
         // $output = shell_exec("python ../python/customer_recommender.py $customer_user_id 2>&1");
         // uncomment below code and comment above code for deployment on Azure
-        $output = shell_exec("python3 site/wwwroot/customer_recommender.py $customer_user_id 2>&1");
+        $output = shell_exec("python3 customer_recommender.py $customer_user_id 2>&1");
         
         $recommendations = json_decode($output, true);
         
