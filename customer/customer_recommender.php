@@ -46,9 +46,9 @@
         $_SESSION['user_id'] = 10;               // remove this once we have a login system
         $customer_user_id = $_SESSION['user_id'];
 
-        $output = shell_exec("python ../python/customer_recommender.py $customer_user_id 2>&1");
+        // $output = shell_exec("python ../python/customer_recommender.py $customer_user_id 2>&1");
         // uncomment below code and comment above code for deployment on Azure
-        // $output = shell_exec("python3 site/wwwroot/python/customer_recommender.py $customer_user_id 2>&1");
+        $output = shell_exec("python3 site/wwwroot/python/customer_recommender.py $customer_user_id 2>&1");
         
         $recommendations = json_decode($output, true);
         
