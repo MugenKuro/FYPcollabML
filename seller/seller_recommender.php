@@ -12,25 +12,25 @@
 <body>
     <div class="container">
         <?php
-
-        if (session_status() == PHP_SESSION_NONE) {
+        if (session_status() == PHP_SESSION_NONE){
             session_start();
         }
-        $_SESSION['user_id'] = 10;    // Change this once we have a login system
-        if (isset($_SESSION['user_id'])) {
-            $seller_user_id = $_SESSION['user_id'];
-        } else {
-            // Handle the case where seller_user_id isn't set
-            die("User ID not found.");
+        $_SESSION['user_id'] = 43;           // remove this once we have a login system
+        
+        // Assume the seller's user ID is stored in a session. Fetch it.
+        $seller_user_id = $_SESSION['user_id'];
+
+        if (!$seller_user_id) {
+            echo '<p class="mt-3">Error: Seller user ID not found.</p>';
+            exit;
         }
 
-        // Get the path to the python3 interpreter
-        $pythonPath = shell_exec("which python3");
-        $pythonPath = trim($pythonPath);
-        $scriptPath = getcwd() . "/../python/seller_recommender.py";
-        $command = "{$pythonPath} {$scriptPath} {$seller_user_id} 2>&1";
+        // $output = shell_exec("python ../python/seller_recommender.py $seller_user_id 2>&1");
 
-        $output = shell_exec($command);
+        // uncomment below code and comment above code for deployment on Azure 
+        $output = shell_exec("python3 site/wwwroot/python/seller_recommender.py $seller_user_id 2>&1");
+
+        // Parse the JSON output
         $recommendations = json_decode($output, true);
         
         // Display recommendations
