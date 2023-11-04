@@ -1,7 +1,7 @@
 <?php
 // Include file
 require_once('auth.php');
-require_once dirname(__FILE__) . '\controller\categoriesController.php';
+require_once dirname(__FILE__) . '/controller/categoriesController.php';
 if (session_status() === PHP_SESSION_NONE)
     session_start();
 
@@ -29,6 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="css/tiny-slider.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -47,146 +49,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <?php
-    include dirname(__FILE__) . ('/custNavBar.php');
-    ?>
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
 
-    <div>
-        <link href="./homepage.css" rel="stylesheet" />
-        <div class="homepage-container">
-            <h1 class="homepage-text">Trending Now</h1>
-            <div class="homepage-container01">
-                <div class="homepage-container02">
-                    <div class="homepage-container03" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="homepage-image" />
-                        <span>
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <span>$30</span>
-                    </div>
-                    <div class="homepage-container04" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg" class="homepage-image01" />
-                        <span>
-                            <span>Authentic Adidas Tokyo shirt</span>
-                            <br />
-                        </span>
-                        <span>$25</span>
-                    </div>
-                    <div class="homepage-container05" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="homepage-image02" />
-                        <span>
-                            <span>Jordan x J balvin shirt</span>
-                            <br />
-                        </span>
-                        <div class="homepage-container06">
-                            <span>
-                                <span>$40</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="homepage-container07" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="homepage-image03" />
-                        <span>
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <span>
-                            <span>$100</span>
-                            <br />
-                        </span>
-                    </div>
+        <div class="container">
+            <a class="navbar-brand" href="index.php">iCloth</a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    <li>
+                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link" href="registerCustomer.php">Register as Customer</a>
+                        <a class="nav-link" href="registerSeller.php">Register as Seller</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </nav>
+    <!-- End Header/Navigation -->
+
+    <header class="masthead">
+        <div class="container-index">
+            <div class="masthead-subheading">Welcome To iCloth!</div>
+            <div class="masthead-heading text-uppercase">APPARELS JUST FOR YOU</div>
+            <a class="masthead-button btn btn-primary btn-xl text-uppercase" href="#services">Looking to sell?</a>
+        </div>
+    </header>
+
+
+    <section class="page-section" id="services">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Why sell with us</h2>
+                <h3 class="section-subheading text-muted"></h3>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="my-3">E-Commerce</h4>
+                    <p class="text-muted">As a reputable apparel brand, You wll have access to a large Customer base.
+                    </p>
                 </div>
-                <div class="homepage-container08">
-                    <div class="homepage-container09" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="homepage-image04" />
-                        <span>
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <span>$30</span>
-                    </div>
-                    <div class="homepage-container10" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg" class="homepage-image05" />
-                        <span>
-                            <span>Authentic Adidas Tokyo shirt</span>
-                            <br />
-                        </span>
-                        <span>$25</span>
-                    </div>
-                    <div class="homepage-container11" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="homepage-image06" />
-                        <span>
-                            <span>Jordan x J balvin shirt</span>
-                            <br />
-                        </span>
-                        <div class="homepage-container12">
-                            <span>
-                                <span>$40</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="homepage-container13" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="homepage-image07" />
-                        <span>
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <span>
-                            <span>$100</span>
-                            <br />
-                        </span>
-                    </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="my-3">Tailored Recommendations</h4>
+                    <p class="text-muted">We provide free analysis of your Product. Allowing to know what's best to sell
+                    </p>
                 </div>
-                <div class="homepage-container14">
-                    <div class="homepage-container15" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="homepage-image08" />
-                        <span>
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <span>$30</span>
-                    </div>
-                    <div class="homepage-container16" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg" class="homepage-image09" />
-                        <span>
-                            <span>Authentic Adidas Tokyo shirt</span>
-                            <br />
-                        </span>
-                        <span>$25</span>
-                    </div>
-                    <div class="homepage-container17" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="homepage-image10" />
-                        <span>
-                            <span>Jordan x J balvin shirt</span>
-                            <br />
-                        </span>
-                        <div class="homepage-container18">
-                            <span>
-                                <span>$40</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="homepage-container19" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="homepage-image11" />
-                        <span>
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <span>
-                            <span>$100</span>
-                            <br />
-                        </span>
-                    </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="my-3">Security</h4>
+                    <p class="text-muted">We take security very seriously. Rest assured your data and privacy will
+                        always be covered by us.</p>
                 </div>
             </div>
         </div>
-    </div>
-
-
+    </section>
 
 
 

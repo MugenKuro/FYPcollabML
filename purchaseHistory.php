@@ -1,8 +1,8 @@
 <?php
 // Include file
 require_once('auth.php');
-require_once dirname(__FILE__) . '\controller\categoriesController.php';
-require_once dirname(__FILE__) . '\controller\userController.php';
+require_once dirname(__FILE__) . '/controller/categoriesController.php';
+require_once dirname(__FILE__) . '/controller/userController.php';
 
 if (session_status() === PHP_SESSION_NONE)
     session_start();

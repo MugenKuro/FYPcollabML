@@ -1,6 +1,6 @@
 <?php
 require_once('auth.php');
-require_once dirname(__FILE__) . '\entity\users.php';
+require_once dirname(__FILE__) . '/entity/users.php';
 
 $user = new users();
 $user_data = json_decode($user->get_user_data($_SESSION['otp_verify_user_id']));

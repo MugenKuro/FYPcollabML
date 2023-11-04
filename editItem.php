@@ -1,5 +1,5 @@
 <?php
-	include '.\entity\Db.php';
+	include './entity/Db.php';
     include 'viewSellerController.php';
     include 'viewItemController.php';
 	include 'editItemController.php';

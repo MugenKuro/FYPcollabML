@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE)
 $link = $_SERVER['PHP_SELF'];
 if (!strpos($link, 'login.php') && !strpos($link, 'login_verification.php') && !strpos($link, 'registerCustomer.php') 
 && !strpos($link,'register.php') && !strpos($link,'registerSeller.php') && !strpos($link,'registerBizSeller.php') 
-&& !strpos($link,'registerIndSeller.php') && !isset($_SESSION['user_login']) && !strpos($link,'emailVerify.php')) {
+&& !strpos($link,'registerIndSeller.php') && !isset($_SESSION['user_login']) && !strpos($link,'emailVerify.php') && !strpos($link,'index.php')) {
     echo "<script>location.replace('./login.php');</script>";
 }
 if ((strpos($link, 'login_verification.php') || strpos($link, 'emailVerify.php')) && !isset($_SESSION['otp_verify_user_id'])) {
