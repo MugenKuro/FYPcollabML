@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE)
 //User Class (User Account)
 // Include file
 require_once("db.php");
+require_once dirname(__FILE__) . '/../controller/userController.php';
 
 class Users
 {
