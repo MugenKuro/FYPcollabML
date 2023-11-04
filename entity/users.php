@@ -2,13 +2,14 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require dirname(__FILE__) . '/../vendor/autoload.php';
+require dirname(__FILE__) . '\..\vendor\autoload.php';
 
 if (session_status() === PHP_SESSION_NONE)
     session_start();
 //User Class (User Account)
 // Include file
 require_once("db.php");
+require_once dirname(__FILE__) . '\..\controller\userController.php';
 
 class Users
 {

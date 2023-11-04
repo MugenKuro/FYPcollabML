@@ -1,7 +1,7 @@
 <?php
 
 // Include file
-require_once dirname(__FILE__) . '/../entity/categories.php';
+require_once dirname(__FILE__) . '\..\entity\categories.php';
 
 class viewAllCategories
 {
