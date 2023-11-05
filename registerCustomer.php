@@ -1,6 +1,7 @@
 <?php
 // Include file
 require_once dirname(__FILE__) . '/entity/users.php';
+require_once dirname(__FILE__) . '/controller/userController.php';
 require_once('auth.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
