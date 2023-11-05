@@ -109,12 +109,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         <div class="view-item-container03">
                             <div class="view-item-container04">
                                 <span class="view-item-text">
-                                    <span class="view-item-text01">Alexander McQueen Shirt</span>
+                                    <span class="view-item-text01"><?php echo $itemName?></span>
                                     <br />
                                 </span>
                                 <span class="view-item-text03">
                                     <span>$</span>
-                                    <span>100</span>
+                                    <span><?php echo $itemPrice?></span>
                                     <br />
                                 </span>
                             </div>
@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 <br />
                             </span>
                             <span class="view-item-text19">
-                                <span>T-Shirt</span>
+                                <span><?php echo $categoryName?></span>
                                 <br />
                             </span>
                         </div>
@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 <br />
                             </span>
                             <span class="view-item-text25">
-                                &gt; Only provide the best with reasonable price
+                                &gt; <?php echo $itemDescription?>
                             </span>
                         </div>
                         <div class="view-item-container12"></div>
