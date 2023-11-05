@@ -15,9 +15,8 @@
         if (session_status() == PHP_SESSION_NONE){
             session_start();
         }
-        $_SESSION['user_id'] = 43;           // remove this once we have a login system
         
-        // Assume the seller's user ID is stored in a session. Fetch it.
+        // sseller's user ID is stored in a session. Fetch it.
         $seller_user_id = $_SESSION['user_id'];
 
         if (!$seller_user_id) {

@@ -1,39 +1,25 @@
 <?php
-// Include file
 require_once('auth.php');
-require_once dirname(__FILE__) . '\controller\categoriesController.php';
+require_once dirname(__FILE__) . '/controller/categoriesController.php';
 if (session_status() === PHP_SESSION_NONE)
     session_start();
 
-// Check if the user is logged in and their role matches the allowed roles for this page
 if (isset($_SESSION['accountType'])) {
     $userRole = $_SESSION['accountType'];
-
-    // Define the allowed roles for this page
     $allowedRoles = array("Customer");
 
-    // Check if the user's role is allowed
     if (!in_array($userRole, $allowedRoles)) {
-        // User has access, continue with the page
-        header("location: trending.php"); // You can create an "access_denied.php" page
+        header("location: trending.php");
         exit;
     }
 } else {
-    // User is not logged in, redirect them to the login page
     header("location: login.php");
     exit;
-}
-
-// Processing form data when form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-
 }
 ?>
 
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -55,160 +41,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
     <title>iCloth</title>
 
-    <script>
-        function redirectToViewItem() {
-            window.location.href = "viewItem.php";
-        }
-    </script>
 </head>
-
 <body>
     <?php
     include dirname(__FILE__) . ('/custNavBar.php');
-    ?>
 
-    <div>
-        <link href="./homepage.css" rel="stylesheet" />
-        <div class="homepage-container">
-            <h1 class="homepage-text">Trending Now</h1>
-            <div class="homepage-container01">
-                <div class="homepage-container02">
-                    <div class="homepage-container03" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="homepage-image" />
-                        <span>
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <span>$30</span>
-                    </div>
-                    <div class="homepage-container04" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg" class="homepage-image01" />
-                        <span>
-                            <span>Authentic Adidas Tokyo shirt</span>
-                            <br />
-                        </span>
-                        <span>$25</span>
-                    </div>
-                    <div class="homepage-container05" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="homepage-image02" />
-                        <span>
-                            <span>Jordan x J balvin shirt</span>
-                            <br />
-                        </span>
-                        <div class="homepage-container06">
-                            <span>
-                                <span>$40</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="homepage-container07" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="homepage-image03" />
-                        <span>
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <span>
-                            <span>$100</span>
-                            <br />
-                        </span>
-                    </div>
-                </div>
-                <div class="homepage-container08">
-                    <div class="homepage-container09" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="homepage-image04" />
-                        <span>
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <span>$30</span>
-                    </div>
-                    <div class="homepage-container10" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg" class="homepage-image05" />
-                        <span>
-                            <span>Authentic Adidas Tokyo shirt</span>
-                            <br />
-                        </span>
-                        <span>$25</span>
-                    </div>
-                    <div class="homepage-container11" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="homepage-image06" />
-                        <span>
-                            <span>Jordan x J balvin shirt</span>
-                            <br />
-                        </span>
-                        <div class="homepage-container12">
-                            <span>
-                                <span>$40</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="homepage-container13" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="homepage-image07" />
-                        <span>
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <span>
-                            <span>$100</span>
-                            <br />
-                        </span>
-                    </div>
-                </div>
-                <div class="homepage-container14">
-                    <div class="homepage-container15" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="homepage-image08" />
-                        <span>
-                            <span>Vintage Hooter T-Shirt</span>
-                            <br />
-                        </span>
-                        <span>$30</span>
-                    </div>
-                    <div class="homepage-container16" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg" class="homepage-image09" />
-                        <span>
-                            <span>Authentic Adidas Tokyo shirt</span>
-                            <br />
-                        </span>
-                        <span>$25</span>
-                    </div>
-                    <div class="homepage-container17" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="homepage-image10" />
-                        <span>
-                            <span>Jordan x J balvin shirt</span>
-                            <br />
-                        </span>
-                        <div class="homepage-container18">
-                            <span>
-                                <span>$40</span>
-                                <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="homepage-container19" onclick="redirectToViewItem()">
-                        <img alt="image" src="./images/alexander_mcqueen_tshirt.jpg" class="homepage-image11" />
-                        <span>
-                            <span>Alexander McQueen Shirt</span>
-                            <br />
-                        </span>
-                        <span>
-                            <span>$100</span>
-                            <br />
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    // Include the Python script processing here
+    $customer_user_id = $_SESSION['user_id'];
+    $output = shell_exec("python customer/customer_recommender.py $customer_user_id 2>&1");
+    $recommendations = json_decode($output, true);
 
+    // Database connection
+    require_once dirname(__FILE__) . ('/entity/db.php');
+    $db = new Db();
 
+    // Check if there are recommendations, if not, display most popular items
+    if ($recommendations && json_last_error() == JSON_ERROR_NONE) {
+        echo '<div class="homepage-container">';
+        echo '<h1 class="homepage-text">Recommended Just For You</h1>';
+        echo '<div class="homepage-container01">';
 
+        // Loop through the recommendations and display them dynamically
+        foreach ($recommendations as $recommendation) {
+            // Query to retrieve item details based on item_id
+            $itemQuery = "SELECT item_name, item_image_path, price FROM Items WHERE item_id = ?";
+            $itemResult = $db->query($itemQuery, [$recommendation]);
 
+            if ($itemResult->num_rows > 0) {
+                $row = $itemResult->fetch_assoc();
+                $item_id = $recommendation;
+                $item_name = $row['item_name'];
+                $item_image_path = $row['item_image_path'];
+                $item_price = $row['price'];
 
+                echo '<div class="homepage-container02">';
+                echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
+                echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
+                echo '<span>';
+                echo '<span>' . $item_name . '</span>';
+                echo '<br />';
+                echo '</span>';
+                echo '<span>$' . $item_price . '</span>';
+                echo '</div>';
+                echo '</div>';
+            }
+        }
+
+        echo '</div>';
+        echo '</div>';
+    } else {
+        // Query to retrieve most popular items
+        $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
+            JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
+            GROUP BY Items.item_id 
+            ORDER BY AVG(ItemRatings.rating_value) DESC 
+            LIMIT 8";
+        $popularItemsResult = $db->query($popularItemsQuery);
+
+        echo '<div class="homepage-container">';
+        echo '<h1 class="homepage-text">Most Popular Items</h1>';
+        echo '<div class="homepage-container01">';
+
+        // Loop through the popular items and display them
+        while ($row = $popularItemsResult->fetch_assoc()) {
+            $item_id = $row['item_id'];
+            $item_name = $row['item_name'];
+            $item_image_path = $row['item_image_path'];
+            $item_price = $row['price'];
+
+            echo '<div class="homepage-container02">';
+            echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
+            echo '<img alt="image" src="' . $item_image_path . '" class="homepage-image" />';
+            echo '<span>';
+            echo '<span>' . $item_name . '</span>';
+            echo '<br />';
+            echo '</span>';
+            echo '<span>$' . $item_price . '</span>';
+            echo '</div>';
+            echo '</div>';
+        }
+
+        echo '</div>';
+        echo '</div>';
+    }
+?>
+<script>
+        function redirectToViewItem(itemId) {
+            // Redirect to the viewItem page with the item ID as a parameter
+            window.location.href = "viewItem.php?item_id=" + itemId;
+        }
+    </script>
 </body>
-
 </html>

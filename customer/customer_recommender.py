@@ -87,13 +87,13 @@ try:
         # Sort items by predicted rating (highest to lowest)
         sorted_predicted_items = sorted(predicted_ratings.items(), key=lambda x: x[1], reverse=True)
         
-        # Get the top 5 recommended item IDs
-        top_recommendations = [item_id for item_id, rating in sorted_predicted_items[:5]]
+        # Get the top 8 recommended item IDs
+        top_recommendations = [item_id for item_id, rating in sorted_predicted_items[:8]]
         
         # Convert item IDs to regular integers
         top_recommendations = [int(item_id) for item_id in top_recommendations]
         
-        # Convert the top 5 recommendations to JSON
+        # Convert the top 8 recommendations to JSON
         recommendations_json = json.dumps(top_recommendations)
         
         # Print the JSON output
