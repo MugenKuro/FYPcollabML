@@ -25,7 +25,7 @@
             exit;
         }
 
-        $output = shell_exec("python ../python/seller_recommender.py $seller_user_id 2>&1");
+        $output = shell_exec("python seller_recommender.py $seller_user_id 2>&1");
 
         // uncomment below code and comment above code for deployment on Azure 
         // $output = shell_exec("python3 site/wwwroot/python/seller_recommender.py $seller_user_id 2>&1");

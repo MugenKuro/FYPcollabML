@@ -11,8 +11,8 @@ $searchQuery = '';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$_SESSION['user_id'] = 59;
-$_SESSION['username'] = "Faustine";
+// $_SESSION['user_id'] = 59;
+// $_SESSION['username'] = "Faustine";
 // Get the logged-in seller's user ID (you should have this from your authentication)
 $sellerUserId = $_SESSION['user_id']; // Replace with the actual seller's user ID
 
@@ -63,7 +63,7 @@ if (!empty($searchQuery)) {
 } else {
     $params = [$sellerUserId];
 }
-
+include dirname(__FILE__) . ('/sellerNavBar.php');
 try {
     $result = $db->query($sql, $params);
     if ($result->num_rows > 0) {
@@ -76,30 +76,7 @@ try {
                     <link rel="stylesheet" href="../css/style.css">
                     <script src="../js/jquery-3.7.1.min.js"></script>
                 </head>
-                <body>
-                <!-- Start Header/Navigation -->
-                <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
-                    <div class="container">
-                        <a class="navbar-brand" href="">iCloth</a>
-                
-                        <div class="collapse navbar-collapse">
-                            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                                <li>
-                                    <a class="nav-link" href="sellerHomepage.php">Account Setting</a>
-                                    <a class="nav-link" href="addItem.php">Category Requests</a>
-                                    <a class="nav-link" href="sellerAccountSetting.php">Item Listings</a>
-                                    <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
-                                    <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
-                                </li>
-                            </ul>
-                            <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                                <li><span class="nav-link">Welcome, <?php echo htmlspecialchars($_SESSION["username"]); ?></span></li>
-                                <li><a class="nav-link" href="logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-                <!-- End Header/Navigation -->                  
+                <body>               
                     <div class="container mt-4">
                         <h1>Inventory Management</h1>';
 

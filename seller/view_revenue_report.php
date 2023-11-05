@@ -5,8 +5,8 @@ require_once('../entity/db.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$_SESSION['user_id'] = 58;                     // Remove this once we have a login system
-$_SESSION['username'] = "Faustine";           // Remove this once we have a login system
+// $_SESSION['user_id'] = 58;                     // Remove this once we have a login system
+// $_SESSION['username'] = "Faustine";           // Remove this once we have a login system
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     $startDate = $_POST['start_date'];
@@ -137,8 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     </style>
 </head>
 <body>
+    <?php
+    include dirname(__FILE__) . ('/sellerNavBar.php');
+    ?>
     <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
+    <!-- <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
 
         <div class="container">
             <a class="navbar-brand" href="">iCloth</a>
@@ -162,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
             </div>
         </div>
 
-    </nav>
+    </nav> -->
     <!-- End Header/Navigation -->
 <?php
     // Load the content into another page for display (e.g., report_display.php)

@@ -34,7 +34,7 @@
         <li><span class="nav-link">Welcome,
                 <?php echo htmlspecialchars($_SESSION["username"]); ?>
             </span></li>
-            <li><a class="nav-link" href="logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
+            <li><a class="nav-link" href="../logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
     </ul>
 </div>
 </div>

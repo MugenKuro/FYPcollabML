@@ -1,5 +1,5 @@
 import os
-os.environ['SURPRISE_DATA_FOLDER'] = '/home/site/wwwroot/surprise'
+# os.environ['SURPRISE_DATA_FOLDER'] = '/home/site/wwwroot/surprise'
 import sys
 from surprise import Dataset, Reader
 from surprise.model_selection import train_test_split
