@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
     } else {
+        echo $_FILES["image"]["error"];
         $_SESSION['flashdata']['type'] = 'danger';
         $_SESSION['flashdata']['msg'] = 'Please select an image to upload.';
     }
