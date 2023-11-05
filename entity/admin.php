@@ -12,21 +12,33 @@ class Admin
     }
 
     // Function to get all customers
-    public function getAllCustomers()
-    {
-        $sql = "SELECT * FROM Customers";
+    public function viewAllCustomers($statusFilter, $genderFilter) {
+        $sql = "SELECT * FROM Customers WHERE user_id IN (
+                    SELECT user_id FROM Users WHERE 1 ";
+    
+        if ($statusFilter !== "All") {
+            $sql .= " AND status = '$statusFilter'";
+        }
+    
+        if ($genderFilter !== "All") {
+            $sql .= " AND gender = '$genderFilter'";
+        }
+    
+        $sql .= ")";
+    
         $result = $this->db->query($sql);
-
+    
         $customers = [];
-
+    
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $customers[] = $row;
             }
         }
-
+    
         return $customers;
-    }
+    }    
+    
 
     // Function to add a new category
     public function addCategory($categoryName, $status) {
@@ -257,16 +269,28 @@ class Admin
         }
     }
 
-    // Function to view all sellers
-    public function viewAllSellers() {
+    public function viewAllSellers($sellerType = null, $status = null) {
         try {
-            // Fetch all sellers from the Sellers table
-            $sql = "SELECT * FROM Sellers";
+            // Construct the SQL query with a JOIN to the Users table
+            $sql = "SELECT s.* FROM Sellers s
+                    LEFT JOIN Users u ON s.user_id = u.user_id
+                    WHERE 1=1"; // This WHERE clause always evaluates to true
+            
+            if ($sellerType !== "All") {
+                $sql .= " AND s.seller_type = '$sellerType'";
+            }
+            
+            if ($status !== "All") {
+                $sql .= " AND u.status = '$status'";
+            }
+    
             $result = $this->db->query($sql);
             return $result;
         } catch (Exception $e) {
             echo $sql . "<br>" . $e->getMessage();
         }
     }
+    
+    
 }
 ?>

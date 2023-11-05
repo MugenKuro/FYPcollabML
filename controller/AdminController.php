@@ -37,8 +37,8 @@ class AdminController {
         return $this->admin->viewAllCategories();
     }
 
-    public function getAllCustomers() {
-        return $this->admin->getAllCustomers();
+    public function viewAllCustomers($statusFilter, $genderFilter) {
+        return $this->admin->viewAllCustomers($statusFilter, $genderFilter);
     }
 
     public function viewDeactivationRequests() {
@@ -57,8 +57,9 @@ class AdminController {
         return $this->admin->approveSeller($sellerID);
     }
 
-    public function viewAllSellers() {
-        return $this->admin->viewAllSellers();
+    public function viewAllSellers($sellerTypeFilter, $statusFilter) {
+        $result = $this->admin->viewAllSellers($sellerTypeFilter, $statusFilter); // Use $this->admin
+        return $result; // Return the result
     }
 }
 ?>

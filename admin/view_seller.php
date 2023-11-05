@@ -5,7 +5,13 @@ include __DIR__ . "/../controller/AdminController.php";
 // Create an instance of the AdminController class
 $adminController = new AdminController();
 
-$result = $adminController->viewAllSellers();
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $sellerTypeFilter = $_POST["seller_type"];
+    $statusFilter = $_POST["status"];
+    $sellers = $adminController->viewAllSellers($sellerTypeFilter, $statusFilter);
+} else {
+    $sellers = $adminController->viewAllSellers("All", "All");
+}
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +35,33 @@ $result = $adminController->viewAllSellers();
                     <div class="col-sm-6">
                         <h2><b>View All Sellers</b></h2>
                     </div>
+                    <div class="col-sm-6">
+                        <form method="POST" action="view_seller.php">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="seller_type">Seller Type:</label>
+                                    <select class="form-control" name="seller_type">
+                                        <option value="All">All</option>
+                                        <option value="Individual Seller">Individual Seller</option>
+                                        <option value="Business Seller">Business Seller</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="status">Status:</label>
+                                    <select class="form-control" name="status">
+                                        <option value="All">All</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Pending Approval">Pending Approval</option>
+                                        <option value="Pending Deactivation">Pending Deactivation</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mt-4">
+                                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
@@ -47,8 +80,8 @@ $result = $adminController->viewAllSellers();
                 </thead>
                 <tbody>
                     <?php
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
+                    if ($sellers->num_rows > 0) {
+                        while ($row = $sellers->fetch_assoc()) {
                             echo "<tr>";
                             echo "<td>" . $row["seller_id"] . "</td>";
                             echo "<td>" . $row["user_id"] . "</td>";
