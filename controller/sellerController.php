@@ -1,11 +1,11 @@
 <?php
 
 // Include file
-require_once dirname(__FILE__) . '\..\entity\users.php';
-require_once dirname(__FILE__) . '\..\entity\customers.php';
-require_once dirname(__FILE__) . '\..\entity\itemratings.php';
-require_once dirname(__FILE__) . '\..\entity\items.php';
-require_once dirname(__FILE__) . '\..\entity\sellerEntity.php';
+require_once dirname(__FILE__) . '/../entity/users.php';
+require_once dirname(__FILE__) . '/../entity/customers.php';
+require_once dirname(__FILE__) . '/../entity/itemratings.php';
+require_once dirname(__FILE__) . '/../entity/items.php';
+require_once dirname(__FILE__) . '/../entity/sellerEntity.php';
 
 class itemView
 	{
