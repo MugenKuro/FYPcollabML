@@ -5,6 +5,14 @@ require_once dirname(__FILE__) . '/controller/categoriesController.php';
 if (session_status() === PHP_SESSION_NONE)
     session_start();
 
+
+// Check if the user is logged in
+if (isset($_SESSION['accountType'])) {
+    // Redirect the user to login_verification.php
+    header("location: login_verification.php");
+    exit;
+}
+
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -37,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
 
 
     <title>iCloth</title>
@@ -58,9 +67,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="collapse navbar-collapse">
                 <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                     <li>
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link" href="index.php#">Home</a>
+                        <a class="nav-link" href="index.php#services">Services</a>
+                        <a class="nav-link" href="index.php#categories">Categories</a>
                         <a class="nav-link" href="registerCustomer.php">Register as Customer</a>
                         <a class="nav-link" href="registerSeller.php">Register as Seller</a>
+                        <a class="nav-link" href="login.php">Login</a>
                     </li>
                 </ul>
 
@@ -74,19 +86,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container-index">
             <div class="masthead-subheading">Welcome To iCloth!</div>
             <div class="masthead-heading text-uppercase">APPARELS JUST FOR YOU</div>
-            <a class="masthead-button btn btn-primary btn-xl text-uppercase" href="#services">Looking to sell?</a>
+            <a class="masthead-button btn btn-primary btn-xl text-uppercase" href="registerSeller.php">Looking to
+                sell?</a>
         </div>
     </header>
 
 
     <section class="page-section" id="services">
-        <div class="container">
+        <div class="container-services">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Why sell with us</h2>
                 <h3 class="section-subheading text-muted"></h3>
             </div>
-            <div class="row text-center">
-                <div class="col-md-4">
+            <div class="text-center services-row">
+                <div class="text-center services-cell col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fas fa-circle fa-stack-2x text-primary"></i>
                         <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
@@ -95,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p class="text-muted">As a reputable apparel brand, You wll have access to a large Customer base.
                     </p>
                 </div>
-                <div class="col-md-4">
+                <div class="text-center services-cell col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fas fa-circle fa-stack-2x text-primary"></i>
                         <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
@@ -104,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p class="text-muted">We provide free analysis of your Product. Allowing to know what's best to sell
                     </p>
                 </div>
-                <div class="col-md-4">
+                <div class="text-center services-cell col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fas fa-circle fa-stack-2x text-primary"></i>
                         <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
@@ -117,6 +130,108 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </section>
 
+
+    <!-- categories Grid-->
+    <section class="page-section bg-light" id="categories">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Categories</h2>
+                <h3 class="section-subheading text-muted">Here's some of the categories we provide</h3>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <!-- categories item 1-->
+                    <div class="categories-item">
+                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
+                            <div class="categories-hover">
+                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/categories/1.jpg" alt="..." />
+                        </a>
+                        <div class="categories-caption">
+                            <div class="categories-caption-heading">Women's Dresses</div>
+                            <div class="categories-caption-subheading text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <!-- categories item 2-->
+                    <div class="categories-item">
+                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
+                            <div class="categories-hover">
+                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/categories/2.jpg" alt="..." />
+                        </a>
+                        <div class="categories-caption">
+                            <div class="categories-caption-heading">Women's Shoes</div>
+                            <div class="categories-caption-subheading text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <!-- categories item 3-->
+                    <div class="categories-item">
+                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
+                            <div class="categories-hover">
+                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/categories/3.jpg" alt="..." />
+                        </a>
+                        <div class="categories-caption">
+                            <div class="categories-caption-heading">Men's Jeans</div>
+                            <div class="categories-caption-subheading text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
+                    <!-- categories item 4-->
+                    <div class="categories-item">
+                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
+                            <div class="categories-hover">
+                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/categories/4.jpg" alt="..." />
+                        </a>
+                        <div class="categories-caption">
+                            <div class="categories-caption-heading">Men's Shirts</div>
+                            <div class="categories-caption-subheading text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
+                    <!-- categories item 5-->
+                    <div class="categories-item">
+                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
+                            <div class="categories-hover">
+                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/categories/5.jpg" alt="..." />
+                        </a>
+                        <div class="categories-caption">
+                            <div class="categories-caption-heading">Men's Pants</div>
+                            <div class="categories-caption-subheading text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <!-- categories item 6-->
+                    <div class="categories-item">
+                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
+                            <div class="categories-hover">
+                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/categories/6.jpg" alt="..." />
+                        </a>
+                        <div class="categories-caption">
+                            <div class="categories-caption-heading">Women's Shirts</div>
+                            <div class="categories-caption-subheading text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 </body>

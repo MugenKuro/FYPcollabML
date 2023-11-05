@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'System Admin') {
             echo "<script>location.replace('./admin/view_seller.php');</script>";
         } elseif (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'Customer') {
-            echo "<script>location.replace('./index.php');</script>";
+            echo "<script>location.replace('./trending.php');</script>";
         } elseif (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'Seller')  {
             echo "<script>location.replace('./sellerHomepage.php');</script>";
         }
