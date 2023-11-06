@@ -124,7 +124,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 			} else {
 				 $item_image_path = isset($_POST['item_image_path']) ? $_POST['item_image_path'] : $item_image_path;
 			}
-			$sellerController = new itemEdit;
+			$sellerController = new sellerController;
 			$result = $sellerController ->updateItem([
 				'item_id' => $item_id,
 				'item_name' => $item_name,
