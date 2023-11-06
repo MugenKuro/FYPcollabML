@@ -63,6 +63,9 @@ if (isset($_SESSION['accountType'])) {
         echo '<h1 class="homepage-text">Recommended Just For You</h1>';
         echo '<div class="homepage-container01">';
 
+        // Initialize counter for homepage-container02
+        $container02Count = 0;
+
         // Loop through the recommendations and display them dynamically
         foreach ($recommendations as $recommendation) {
             // Query to retrieve item details based on item_id
@@ -76,7 +79,11 @@ if (isset($_SESSION['accountType'])) {
                 $item_image_path = $row['item_image_path'];
                 $item_price = $row['price'];
 
-                echo '<div class="homepage-container02">';
+                if ($container02Count % 4 == 0) {
+                    // Start a new homepage-container02 after every 4 items
+                    echo '<div class="homepage-container02">';
+                }
+
                 echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
                 echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
                 echo '<span>';
@@ -85,8 +92,19 @@ if (isset($_SESSION['accountType'])) {
                 echo '</span>';
                 echo '<span>$' . $item_price . '</span>';
                 echo '</div>';
-                echo '</div>';
+
+                if (($container02Count + 1) % 4 == 0) {
+                    // Close the current homepage-container02 after every 4 items
+                    echo '</div>';
+                }
+
+                $container02Count++;
             }
+        }
+
+        // Close the last homepage-container02 if not already closed
+        if ($container02Count % 4 != 0) {
+            echo '</div>';
         }
 
         echo '</div>';
@@ -104,6 +122,9 @@ if (isset($_SESSION['accountType'])) {
         echo '<h1 class="homepage-text">Most Popular Items</h1>';
         echo '<div class="homepage-container01">';
 
+        // Initialize counter for homepage-container02
+        $container02Count = 0;
+
         // Loop through the popular items and display them
         while ($row = $popularItemsResult->fetch_assoc()) {
             $item_id = $row['item_id'];
@@ -111,7 +132,11 @@ if (isset($_SESSION['accountType'])) {
             $item_image_path = $row['item_image_path'];
             $item_price = $row['price'];
 
-            echo '<div class="homepage-container02">';
+            if ($container02Count % 4 == 0) {
+                // Start a new homepage-container02 after every 4 items
+                echo '<div class="homepage-container02">';
+            }
+
             echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
             echo '<img alt="image" src="' . $item_image_path . '" class="homepage-image" />';
             echo '<span>';
@@ -120,14 +145,25 @@ if (isset($_SESSION['accountType'])) {
             echo '</span>';
             echo '<span>$' . $item_price . '</span>';
             echo '</div>';
+
+            if (($container02Count + 1) % 4 == 0) {
+                // Close the current homepage-container02 after every 4 items
+                echo '</div>';
+            }
+
+            $container02Count++;
+        }
+
+        // Close the last homepage-container02 if not already closed
+        if ($container02Count % 4 != 0) {
             echo '</div>';
         }
 
         echo '</div>';
         echo '</div>';
     }
-?>
-<script>
+    ?>
+    <script>
         function redirectToViewItem(itemId) {
             // Redirect to the viewItem page with the item ID as a parameter
             window.location.href = "viewItem.php?item_id=" + itemId;

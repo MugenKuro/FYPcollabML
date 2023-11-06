@@ -1172,22 +1172,21 @@ a:hover {
 .homepage-container01 {
     flex: 1;
     width: 1367px;
-    height: 773px;
+    height: auto; /* Change height to auto for dynamic content */
     display: flex;
     box-shadow: 5px 5px 10px 2px #d4d4d4;
     margin-top: 0px;
-    align-items: center;
+    align-items: flex-start; /* Align items at the top */
     border-color: rgba(120, 120, 120, 0.4);
     border-style: solid;
     border-width: 2px;
     border-radius: 4px;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-wrap: wrap; /* Enable wrapping for child elements */
+    justify-content: space-around; /* Distribute items evenly */
 }
 
 .homepage-container02 {
-    flex: 0 0 auto;
-    width: 95%;
+    flex: 0 0 calc(25% - 40px); /* Adjust width to fit 4 items with margins */
     height: auto;
     display: flex;
     margin-top: 20px;
@@ -1195,21 +1194,22 @@ a:hover {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 20px;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column; /* Change to column layout */
+    justify-content: flex-start;
 }
 
 .homepage-container03 {
-    width: 240px;
+    width: 100%;
+    max-width: 240px; /* Set a maximum width for each item */
     display: flex;
     margin-top: 30px;
     transition: 0.3s;
     align-items: center;
-    margin-left: 30px;
+    margin-left: 0; /* Reset left margin */
     border-color: rgba(120, 120, 120, 0.4);
     border-style: hidden;
     border-width: 2px;
-    margin-right: 30px;
+    margin-right: 0; /* Reset right margin */
     border-radius: 4px;
     margin-bottom: 30px;
     flex-direction: column;
