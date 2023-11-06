@@ -1,12 +1,11 @@
- <!-- #region --><?php
+<?php
 // Include db.php to access the Db class
 require_once('../entity/db.php');
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-// $_SESSION['user_id'] = 58;                     // Remove this once we have a login system
-// $_SESSION['username'] = "Faustine";           // Remove this once we have a login system
+
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     $startDate = $_POST['start_date'];
@@ -37,7 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
         $sellerID = $sellerRow['seller_id'];
 
         // Fetch orders for the seller within the date range
-        $sql = "SELECT OrderHistory.order_id, OrderHistory.order_date, Items.item_name, CartItems.quantity, Items.price
+        $sql = "SELECT OrderHistory.order_id, OrderHistory.order_date, Items.item_name, CartItems.quantity, Items.price,
+                       (Items.price * CartItems.quantity * 0.01) AS fee,
+                       ((Items.price * CartItems.quantity) - (Items.price * CartItems.quantity * 0.01)) AS revenue
                 FROM OrderHistory
                 INNER JOIN ShoppingCarts ON OrderHistory.cart_id = ShoppingCarts.cart_id
                 INNER JOIN CartItems ON ShoppingCarts.cart_id = CartItems.cart_id
@@ -61,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
             $itemName = $row['item_name'];
             $quantity = $row['quantity'];
             $price = $row['price'];
-            $revenue = $quantity * $price;
+            $fee = $row['fee'];
+            $revenue = $row['revenue'];
 
             // Store order details in the array
             $orders[] = [
@@ -69,10 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
                 'item_name' => $itemName,
                 'quantity' => $quantity,
                 'price' => $price,
+                'fee' => $fee,
                 'revenue' => $revenue,
             ];
 
-            // Update total revenue and sales
+            // Update total revenue, sales, and fee
             $totalRevenue += $revenue;
             $totalSales += $quantity;
         }
@@ -139,38 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 <body>
     <?php
     include dirname(__FILE__) . ('/sellerNavBar.php');
+    include('report_display.php'); // report_display.php to display the content
     ?>
-    <!-- Start Header/Navigation -->
-    <!-- <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
-
-        <div class="container">
-            <a class="navbar-brand" href="">iCloth</a>
-
-            <div class="collapse navbar-collapse">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li>
-                    <a class="nav-link" href="sellerHomepage.php">Account Setting</a>
-                    <a class="nav-link" href="addItem.php">Category Requests</a>
-                    <a class="nav-link" href="sellerAccountSetting.php">Item Listings</a>
-                    <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
-                    <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
-                    </li>
-                </ul>
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><span class="nav-link">Welcome,
-                            <?php echo htmlspecialchars($_SESSION["username"]); ?>
-                        </span></li>
-                        <li><a class="nav-link" href="logout.php"><img src="../images/user.svg"><span> log out</span></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </nav> -->
-    <!-- End Header/Navigation -->
-<?php
-    // Load the content into another page for display (e.g., report_display.php)
-    include('report_display.php'); // Create report_display.php to display the content
-?>
     <div class="container a">
         <p><u><strong>ENTER DATE RANGE FOR REPORT</strong></u></p>
         <form method="post" class="mt-4">

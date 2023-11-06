@@ -38,7 +38,6 @@
 </head>
 <body>
     <div class="container a">
-        <!-- <h1 class="mt-4">Seller Orders Report</h1> -->
         <?php
         
         // Include the report data from generate_report.php
@@ -46,7 +45,7 @@
             $startFormatted = date('d F Y', strtotime($reportData['startDate']));
             $endFormatted = date('d F Y', strtotime($reportData['endDate']));
             echo "<h2 class='text-center'><small class='text-muted'>Report Period:</small> {$startFormatted} to {$endFormatted}</h2>";
-            // Display the order details in a Bootstrap table
+
             if (!empty($reportData['orders'])) {
                 echo "<table class='table table-bordered'>";
                 echo "<thead>";
@@ -55,6 +54,7 @@
                 echo "<th>Item Name</th>";
                 echo "<th>Quantity</th>";
                 echo "<th>Price</th>";
+                echo "<th>Fee (1%)</th>"; 
                 echo "<th>Revenue</th>";
                 echo "</tr>";
                 echo "</thead>";
@@ -66,6 +66,7 @@
                     echo "<td>{$order['item_name']}</td>";
                     echo "<td>{$order['quantity']}</td>";
                     echo "<td>$" . number_format($order['price'], 2) . "</td>";
+                    echo "<td>$" . number_format($order['fee'], 2) . "</td>"; // Display the 'Fee'
                     echo "<td>$" . number_format($order['revenue'], 2) . "</td>";
                     echo "</tr>";
                 }
