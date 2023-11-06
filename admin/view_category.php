@@ -5,6 +5,7 @@ include "admin_header.php";
 $adminController = new AdminController();
 
 $result = $adminController->viewAllCategories();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +16,13 @@ $result = $adminController->viewAllCategories();
 </head>
 <body>
     <div class="container">
+        <!-- Display the success message if available -->
+        <?php if (!empty($successMessage)) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $successMessage; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">

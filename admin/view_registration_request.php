@@ -5,10 +5,17 @@ include __DIR__ . "/../controller/AdminController.php";
 // Create an instance of the AdminController class
 $adminController = new AdminController();
 
+// Initialize a variable to store the success message
+$successMessage = '';
+
 // Check if the "Approve" button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["approve"])) {
     $sellerID = $_POST["seller_id"];
-    $adminController->approveSeller($sellerID);
+    if (!$adminController->approveSeller($sellerID)) {
+        $successMessage = "Seller approved successfully";
+    } else {
+        $successMessage = "Error approving seller";
+    }
 }
 
 $result = $adminController->viewRegistrationRequests();
@@ -25,6 +32,14 @@ $result = $adminController->viewRegistrationRequests();
 </head>
 <body>
     <div class="container">
+        <!-- Display the success message if available -->
+        <?php if (!empty($successMessage)) : ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php echo $successMessage; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php endif; ?>
+
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">

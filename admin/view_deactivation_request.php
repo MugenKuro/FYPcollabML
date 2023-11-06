@@ -5,10 +5,17 @@ include __DIR__ . "/../controller/AdminController.php";
 // Create an instance of the AdminController class
 $adminController = new AdminController();
 
+$successMessage = '';
+
 // Check if the "Deactivate" button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["deactivate"])) {
     $sellerID = $_POST["seller_id"];
-    $adminController->deactivateSeller($sellerID);
+    if (!$adminController->deactivateSeller($sellerID)) {
+        $successMessage = "Seller deactivated successfully!";
+    }
+    else {
+        $successMessage = "Error deactivating seller!";
+    }
 }
 
 $result = $adminController->viewDeactivationRequests();
@@ -27,6 +34,13 @@ $result = $adminController->viewDeactivationRequests();
 </head>
 <body>
     <div class="container">
+        <!-- Display the success message if available -->
+        <?php if (!empty($successMessage)) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $successMessage; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">

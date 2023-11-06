@@ -219,12 +219,6 @@ class Admin
     // Function to deactivate a seller
     public function deactivateSeller($sellerID) {
         try {
-            // Update the status of the seller in the Sellers table
-            $updateSql = "UPDATE Sellers SET status = 'Inactive' WHERE seller_id = ?";
-            $stmt = $this->db->prepare($updateSql);
-            $stmt->bind_param("i", $sellerID);
-            $stmt->execute();
-
             // Update the status of the user in the Users table
             $updateUserSql = "UPDATE Users SET status = 'Inactive' WHERE user_id = (SELECT user_id FROM Sellers WHERE seller_id = ?)";
             $stmtUser = $this->db->prepare($updateUserSql);
@@ -259,11 +253,7 @@ class Admin
             $stmt = $this->db->prepare($updateSql);
             $stmt->bind_param("i", $sellerID);
     
-            if ($stmt->execute()) {
-                echo "Seller approved successfully";
-            } else {
-                echo "Failed to approve seller";
-            }
+            $stmt->execute();
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }

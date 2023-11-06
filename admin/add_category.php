@@ -1,8 +1,9 @@
 <?php
 include __DIR__ . "/../controller/AdminController.php";
 
-
 $adminController = new AdminController();
+
+$successMessage = ''; // Initialize an empty success message
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryName = $_POST["category_name"];
@@ -10,10 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if the 'active' checkbox is selected
     $status = isset($_POST["active"]) ? "Active" : "Inactive";
 
-    if ($adminController->addCategory($categoryName, $status)) {
+    if ($adminController->addCategory($categoryName, $status)) {; 
         header("Location: view_category.php");
     } else {
-        echo "Error: Category not added";
+        $successMessage = "Error adding category!";
     }
 }
 include "admin_header.php";
@@ -25,6 +26,13 @@ include "admin_header.php";
 </head>
 <body>
 <div class="container">
+    <!-- Display the success message if available -->
+    <?php if (!empty($successMessage)) : ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php echo $successMessage; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
