@@ -66,14 +66,9 @@ require_once __DIR__ . '/../sellerAuth.php';
 
         $sellerController = new sellerController;
         $result = $sellerController -> deleteItem($item_id);
-            
-        if($result)
-        {
             header("Location: sellerHomepage.php");
 			exit();
-        }else{
-            echo "Failed";
-        }
+   
     }
 	
 	if (isset($_GET['search'])) {

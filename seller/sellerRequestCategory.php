@@ -3,7 +3,7 @@
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-require_once __DIR__ . '/../auth.php';
+//require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
 
 if(isset($_POST["requestCategory"])){
