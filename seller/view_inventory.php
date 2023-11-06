@@ -11,10 +11,9 @@ $searchQuery = '';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-// $_SESSION['user_id'] = 59;
-// $_SESSION['username'] = "Faustine";
-// Get the logged-in seller's user ID (you should have this from your authentication)
-$sellerUserId = $_SESSION['user_id']; // Replace with the actual seller's user ID
+
+// Get the logged-in seller's user ID 
+$sellerUserId = $_SESSION['user_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if the form was submitted for quantity update
@@ -53,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $sql = "SELECT i.item_id, i.item_name, iv.size, iv.quantity
         FROM Items i
         INNER JOIN Inventory iv ON i.item_id = iv.item_id
-        WHERE i.seller_id = (SELECT seller_id FROM Users WHERE user_id = ?)";
+        WHERE i.seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?)";
 
 // Add search condition if a search query is provided
 if (!empty($searchQuery)) {
@@ -63,6 +62,7 @@ if (!empty($searchQuery)) {
 } else {
     $params = [$sellerUserId];
 }
+
 include dirname(__FILE__) . ('/sellerNavBar.php');
 try {
     $result = $db->query($sql, $params);
