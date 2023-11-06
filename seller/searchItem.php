@@ -1,8 +1,8 @@
 <?php
-require_once('../entity/users.php');
-require_once('../controller/sellerController.php');
-require_once('../auth.php');
-require_once('../sellerAuth.php');
+require_once __DIR__ . '/../entity/users.php';
+require_once __DIR__ . '/../controller/sellerController.php';
+require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/../sellerAuth.php';
 	
 	$searchResults = [];
 	
