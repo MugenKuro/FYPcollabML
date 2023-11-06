@@ -8,8 +8,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 
 if(isset($_POST["requestCategory"])){
     $category = $_POST['category'];
-    $sellerEntity = new sellerRequest();
-    $result = $sellerEntity->requestCategory($category);
+    $sellerController = new sellerController();
+    $result = $sellerController->requestCategory($category);
     if($result)
     {
         header("Location: sellerRequestCategory.php");
@@ -30,7 +30,7 @@ if(isset($_POST["requestCategory"])){
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -61,8 +61,8 @@ if(isset($_POST["requestCategory"])){
 					<td class ="seller-edit-setting-table-td">
 						<select id="category_id" name="category_id">
 						<?php
-							$sellerEntity = new sellerEntity;
-							$categories = $sellerEntity->getCategoriesForDropdown();
+							$sellerController = new sellerController;
+							$categories = $sellerController->getCategoriesForDropdown();
 
 							foreach ($categories as $category) {
 								$category_id_loop = $category['category_id'];
@@ -105,7 +105,7 @@ if(isset($_POST["requestCategory"])){
                             <br>
                         </tr>
                             <?php
-                            $categoryRequests = new viewRequest;
+                            $categoryRequests = new sellerController;
                             $result = $categoryRequests->showRequests();
                             if ($result){
                             // output data of each row

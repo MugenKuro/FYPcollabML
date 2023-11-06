@@ -6,8 +6,8 @@ require_once __DIR__ . '/../controller/sellerController.php';
 require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
 
-$sellerEntity = new sellerView();
-$result = $sellerEntity->showSettings();
+$sellerController = new sellerController();
+$result = $sellerController->showSettings();
 ?>
 <head>
     <meta charset="utf-8">
@@ -22,7 +22,7 @@ $result = $sellerEntity->showSettings();
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -66,7 +66,7 @@ $result = $sellerEntity->showSettings();
                                 <td class ="seller-setting-table-td"><?php echo $row["description"] ?></td>
                                 <td class ="seller-setting-table-td">Preferred Category</td>
                             <?php 
-                                $category_name = $sellerEntity->getCategoryName($row["preferred_category"]);
+                                $category_name = $sellerController->getCategoryName($row["preferred_category"]);
                                 $categoryQuery = $category_name->fetch_assoc();
                                 $categoryString = $categoryQuery["category_name"];
                             ?>

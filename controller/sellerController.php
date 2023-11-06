@@ -7,258 +7,93 @@ require_once dirname(__FILE__) . '/../entity/itemratings.php';
 require_once dirname(__FILE__) . '/../entity/items.php';
 require_once dirname(__FILE__) . '/../entity/sellerEntity.php';
 
-class itemView
+
+class sellerController {
+    private $seller;
+
+    public function __construct() {
+        $this->seller = new sellerEntity();
+    }
+	public function getCategoryName($category_id)
 	{
-		public function getItemData($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> getItemData($inputdata);	
-
-			if($result)
-            {
-				return $result;
-			}
-			else
-            {
-				return false;
-			}
-		}	
-		
-		public function getItemReviews($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> getItemReviews($inputdata);	
-
-			if($result)
-            {
-				return $result;
-			}
-			else
-            {
-				return false;
-			}
-			
-		}	
-		public function getItemAverage($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> getItemAverage($inputdata);
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}		
-		public function getSellerData($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> getSellerData($inputdata);
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}	
+		return $this->seller->getCategoryName($category_id);
 	}
-	class sellerView
-	{   
-        private $sellerEntity;
-        public function __construct()
-        {
-            $this->sellerEntity = new sellerEntity;
-        }
-		public function showItems()
-		{	
-            $result = $this->sellerEntity->showItems();	
-
-			if($result)
-            {
-				return $result;
-			}
-			else
-            {
-				return false;
-			}
-		}	
-
-		public function showSettings(){
-			$result = $this->sellerEntity->showSettings();
-
-			if($result)
-			{
-				return $result;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		public function getCategoryName($category_id){
-            $result = $this->sellerEntity->getCategoryName($category_id);
-            if($result){
-                return $result;
-            }
-            else{
-                return false;
-            }
-        }
-	}
-	class viewRequest
-	{   
-        private $sellerEntity;
-        public function __construct()
-        {
-            $this->sellerEntity = new sellerEntity;
-        }
-		public function showRequests()
-		{	
-            $result = $this->sellerEntity->showRequests();	
-
-			if($result)
-            {
-				return $result;
-			}
-			else
-            {
-				return false;
-			}
-		}	
-	}
-
-	class sellerRequest
-	{   
-        private $sellerEntity;
-        public function __construct()
-        {
-            $this->sellerEntity = new sellerEntity;
-        }	
-        public function requestCategory($categories){
-            $result = $this->sellerEntity->requestCategory($categories);
-            if($result)
-            {
-				return $result;
-			}
-			else
-            {
-				return false;
-			}
-        }
-		
-	}
- 
-	class sellerEdit
+	
+	public function getItemData($inputdata)
 	{
-		public function deactivateUser()
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> deactivateUser();
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}	
-        public function editSettings($inputData){
-            $sellerEntity = new sellerEntity;
-            $result = $sellerEntity -> editSettings($inputData);
-            if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-        }
+		return $this->seller->getItemData($inputdata);
 	}
-
-	class itemEdit
+	
+	public function getItemReviews($inputdata)
 	{
-		public function updateItem($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> updateItem($inputdata);	
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}
-		
-		public function getCategoriesForDropdown()
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> getCategoriesForDropdown();	
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}
-
-		public function dataForEdit($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-            $result = $sellerEntity -> dataForEdit($inputdata);
-
-			if($result){
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
+		return $this->seller->getItemReviews($inputdata);
 	}
-	class itemAdd
+	
+	public function getItemAverage($inputdata)
 	{
-		public function addItem($inputdata)
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> addItem($inputdata);	
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}
-
-		public function getCategoriesForDropdown()
-		{	
-			$sellerEntity = new sellerEntity;
-			$result = $sellerEntity -> getCategoriesForDropdown();	
-
-			if($result)
-            {
-				return true;
-			}
-			else
-            {
-				return false;
-			}
-		}		
+		return $this->seller->getItemAverage($inputdata);
 	}
+	
+	public function getCategoriesForDropdown()
+	{
+		return $this->seller->getCategoriesForDropdown();
+	}
+	
+	public function dataForEdit($inputdata)
+	{
+		return $this->seller->dataForEdit($inputdata);
+	}
+	
+	public function showItems()
+	{
+		return $this->seller->showItems();
+	}
+	
+	public function showSettings()
+	{
+		return $this->seller->showSettings();
+	}
+	
+	public function showRequests()
+	{
+		return $this->seller->showRequests();
+	}
+	
+	public function requestCategory($categories)
+	{
+		return $this->seller->requestCategory($categories);
+	}
+	
+	public function deactivateUser()
+	{
+		return $this->seller->deactivateUser();
+	}
+	
+	public function editSettings($inputData)
+	{
+		return $this->seller->editSettings($inputData);
+	}
+	
+	public function updateItem($inputdata)
+	{
+		return $this->seller->updateItem($inputdata);
+	}
+	
+	public function addItem($inputdata)
+	{
+		return $this->seller->addItem($inputdata);
+	}
+	
+	public function getSellerData($inputdata)
+	{
+		return $this->seller->getSellerData($inputdata);
+	}
+	public function searchItem($inputdata){
+		return $this->seller->searchItem($inputdata);
+	}
+
+	public function deleteItem($inputdata){
+		return $this->seller->deleteItem($inputdata);
+	}
+}
 ?>

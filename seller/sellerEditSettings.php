@@ -7,8 +7,8 @@ require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
 
 if (isset($_POST['requestDeactivation'])){
-    $sellerEntity = new sellerEdit;
-    $deactivate = $sellerEntity->deactivateUser();
+    $sellerController = new sellerController;
+    $deactivate = $sellerController->deactivateUser();
 }
 
 if (isset($_POST['updateLogin'])){
@@ -29,8 +29,8 @@ if (isset($_POST['updateLogin'])){
     $bank_account_no = $_POST['bank_account_no'];
         
     
-    $sellerEntity = new sellerEdit;
-        $result = $sellerEntity ->editSettings([
+    $sellerController = new sellerEdit;
+        $result = $sellerController ->editSettings([
             'profile_image' => $profile_image,
             'username' => $username,
             'password1' => $password1,
@@ -67,7 +67,7 @@ if (isset($_POST['updateLogin'])){
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -131,8 +131,8 @@ if (isset($_POST['updateLogin'])){
                                 <td class ="seller-edit-setting-table-td">
 							<select id="category_id" name="preferred_category">
 							<?php
-							$sellerEntity = new sellerEntity;
-							$categories = $sellerEntity->getCategoriesForDropdown();
+							$sellerController = new sellerController;
+							$categories = $sellerController->getCategoriesForDropdown();
 
 							foreach ($categories as $category) {
 								$category_id_loop = $category['category_id'];
