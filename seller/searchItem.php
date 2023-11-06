@@ -7,9 +7,9 @@ require_once __DIR__ . '/../sellerAuth.php';
 	$searchResults = [];
 	
 	if (isset($_GET['search'])) {
-		$sellerEntity = new sellerEntity();
+		$sellerController = new sellerController();
 		$inputdata = $_GET['search'];
-		$searchResults = $sellerEntity->searchItem($inputdata);
+		$searchResults = $sellerController->searchItem($inputdata);
 	}
 
 ?>
@@ -29,7 +29,7 @@ require_once __DIR__ . '/../sellerAuth.php';
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -48,9 +48,9 @@ require_once __DIR__ . '/../sellerAuth.php';
 	
 	<?php
 	if (isset($_GET['search'])) {
-		$sellerEntity = new sellerEntity();
+		$sellerController = new sellerController();
         $inputdata = isset($_GET['search']) ? $_GET['search'] : '';
-		$search = $sellerEntity->searchItem($inputdata);
+		$search = $sellerController->searchItem($inputdata);
 		
 		if(!empty($search)) {
 
@@ -60,7 +60,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 	        <div class="seller-container">
             <div class="seller-container01">
         <?php 
-    $seller = new sellerView;
+    $seller = new sellerController;
     $result = $seller ->showItems();
     if($result)
     {
