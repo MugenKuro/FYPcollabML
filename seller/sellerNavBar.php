@@ -13,6 +13,7 @@
             <a class="nav-link" href="sellerRequestCategory.php">Category Requests</a>
             <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
             <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
+            <a class="nav-link" href="seller_recommender.php">Recommendations</a>
             
         </li>
     </ul>

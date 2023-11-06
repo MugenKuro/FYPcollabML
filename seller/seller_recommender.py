@@ -1,12 +1,11 @@
 import os
-# os.environ['SURPRISE_DATA_FOLDER'] = '/home/site/wwwroot/surprise'
 import sys
+import json
+import pandas as pd
+import pymysql
 from surprise import Dataset, Reader
 from surprise.model_selection import train_test_split
 from surprise import SVD
-import pymysql
-import json
-import pandas as pd
 
 # Determine the current script directory
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -27,10 +26,8 @@ try:
         db=db_name,
         ssl_ca=db_ssl
     )
-    #print("SUCCESS: Connection to Remote MySQL instance succeeded")
 except pymysql.MySQLError as e:
-    #print("ERROR: Unexpected error: Could not connect to MySQL instance.")
-    #print(e)
+    print("Error: Could not connect to the MySQL database.")
     sys.exit(1)
 
 try:
@@ -86,18 +83,10 @@ try:
         sorted_predicted_items = sorted(predicted_ratings.items(), key=lambda x: x[1], reverse=True)
         
         # Display the top recommended items from the preferred category
-        top_recommendations = [item_id for item_id, rating in sorted_predicted_items[:5]]
-        recommended_items = []
-        for item_id in top_recommendations:
-            cursor.execute(
-                "SELECT item_name FROM Items WHERE item_id = %s",
-                (item_id,)
-            )
-            item_name = cursor.fetchone()[0]
-            recommended_items.append(item_name)
-
+        top_recommendations = [{"item_id": item_id, "predicted_rating": rating} for item_id, rating in sorted_predicted_items[:6]]
+        
         # Print recommendations as JSON
-        recommendations_json = json.dumps(recommended_items)
+        recommendations_json = json.dumps(top_recommendations)
         print(recommendations_json)
 
 finally:
