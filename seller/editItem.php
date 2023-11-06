@@ -20,7 +20,7 @@ require_once __DIR__ . '/../sellerAuth.php';
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -50,8 +50,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 	if(isset($_GET['item_id'])) {
 		
         $item_id = $_GET['item_id'];
-		$sellerEntity = new sellerEntity;
-		$result = $sellerEntity -> dataForEdit($item_id);
+		$sellerController = new sellerController;
+		$result = $sellerController -> dataForEdit($item_id);
 
 		if($result)
 		{
@@ -74,8 +74,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 			$price = $_POST['price'];
 			$description = $_POST['description'];
 			
-			$sellerEntity = new sellerEntity;
-			$categories = $sellerEntity->getCategoriesForDropdown();
+			$sellerController = new sellerController;
+			$categories = $sellerController->getCategoriesForDropdown();
 
 			$selected_category_id = $_POST['category_id'];
 			$category_id = null;
@@ -124,8 +124,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 			} else {
 				 $item_image_path = isset($_POST['item_image_path']) ? $_POST['item_image_path'] : $item_image_path;
 			}
-			$sellerEntity = new itemEdit;
-			$result = $sellerEntity ->updateItem([
+			$sellerController = new itemEdit;
+			$result = $sellerController ->updateItem([
 				'item_id' => $item_id,
 				'item_name' => $item_name,
 				'price' => $price,
@@ -147,8 +147,8 @@ require_once __DIR__ . '/../sellerAuth.php';
     {
         $item_id = $_POST['item_id'];
 
-        $sellerEntity = new sellerEntity;
-        $result = $sellerEntity -> deleteItem($item_id);
+        $sellerController = new sellerController;
+        $result = $sellerController -> deleteItem($item_id);
             
         if($result)
         {
@@ -190,8 +190,8 @@ require_once __DIR__ . '/../sellerAuth.php';
                                 <td class ="seller-edit-setting-table-td">
 								<select id="category_id" name="category_id">
 								<?php
-									$sellerEntity = new sellerEntity;
-									$categories = $sellerEntity->getCategoriesForDropdown();
+									$sellerController = new sellerController;
+									$categories = $sellerController->getCategoriesForDropdown();
 
 							foreach ($categories as $category) {
 								$category_id_loop = $category['category_id'];

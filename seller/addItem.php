@@ -21,7 +21,7 @@ require_once __DIR__ . '/../sellerAuth.php';
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+	<link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -48,8 +48,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 			$quantity = $_POST['quantity'];
 			$size = $_POST['size'];
 			
-			$sellerEntity = new sellerEntity;
-			$categories = $sellerEntity->getCategoriesForDropdown();
+			$sellerController = new sellerController;
+			$categories = $sellerController->getCategoriesForDropdown();
 
 			$selected_category_id = $_POST['category_id'];
 			foreach ($categories as $category) {
@@ -88,8 +88,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 				echo "The file " . htmlspecialchars(basename($_FILES["item_image_path"]["name"])) . "has been uploaded..";
 				$item_image_path = $target_file;
 			
-			$sellerEntity = new itemAdd;
-			$result = $sellerEntity -> addItem([
+			$sellerController = new sellerController;
+			$result = $sellerController -> addItem([
 				'item_name' => $item_name,
 				'price' => $price,
 				'category_id' => $category_id,
@@ -139,8 +139,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 							<td class ="seller-edit-setting-table-td">
 							<select id="category_id" name="category_id">
 							<?php
-							$sellerEntity = new sellerEntity;
-							$categories = $sellerEntity->getCategoriesForDropdown();
+							$sellerController = new sellerController;
+							$categories = $sellerController->getCategoriesForDropdown();
 
 							foreach ($categories as $category) {
 								$category_id_loop = $category['category_id'];
