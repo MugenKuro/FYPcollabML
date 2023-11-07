@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             <div class="view-item-container">
                 <div class="view-item-container01">
                     <div class="view-item-container02">
-                        <img alt="image" src="<?php echo $dir . $itemImage?>" class="view-item-image" />
+                        <img alt="image" src="<?php echo '.' . $itemImage?>" class="view-item-image" />
                         <div class="view-item-container03">
                             <div class="view-item-container04">
                                 <span class="view-item-text">
