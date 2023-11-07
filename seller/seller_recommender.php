@@ -13,7 +13,7 @@
 </head>
 <body>
 <?php
-require_once('../auth.php');
+// require_once('../auth.php');
 require_once ('../entity/db.php');
 
 include dirname(__FILE__) . ('/sellerNavBar.php');
@@ -28,11 +28,11 @@ if (isset($_SESSION['accountType'])) {
     $allowedRoles = array("Seller");
 
     if (!in_array($userRole, $allowedRoles)) {
-        header("location: seller_recommender.php");
+        header("location: /seller/seller_recommender.php");
         exit;
     }
 } else {
-    header("location: login.php");
+    header("location: ../login.php");
     exit;
 }
 // Retrieve the top 5 items with the most sales
