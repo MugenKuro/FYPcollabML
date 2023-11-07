@@ -23,18 +23,18 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $db = new Db();
 
-if (isset($_SESSION['accountType'])) {
-    $userRole = $_SESSION['accountType'];
-    $allowedRoles = array("Seller");
+// if (isset($_SESSION['accountType'])) {
+//     $userRole = $_SESSION['accountType'];
+//     $allowedRoles = array("Seller");
 
-    if (!in_array($userRole, $allowedRoles)) {
-        header("location: /seller/seller_recommender.php");
-        exit;
-    }
-} else {
-    header("location: ../login.php");
-    exit;
-}
+//     if (!in_array($userRole, $allowedRoles)) {
+//         header("location: /seller/seller_recommender.php");
+//         exit;
+//     }
+// } else {
+//     header("location: ../login.php");
+//     exit;
+// }
 // Retrieve the top 5 items with the most sales
 $sql = "SELECT I.item_name, SUM(CI.quantity) AS total_sales
         FROM Items AS I
