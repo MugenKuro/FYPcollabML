@@ -298,14 +298,12 @@
             $bank_name = $inputData['bank_name'];
             $bank_account_no = $inputData['bank_account_no'];
             $userID = $_SESSION['user_id'];
-            if(empty($password)){
-                $statement = $this->db->prepare("UPDATE users SET  username = ? , email =? where user_id = $userID");
-            $statement->bind_param("ss",  $username, $email);
-            }else{
             if($password == $confirmPass){
             $statement = $this->db->prepare("UPDATE users SET  username = ? , password = ?, email =? where user_id = $userID");
             $statement->bind_param("sss",  $username, $password, $email);
-            }
+            }else{
+                $statement = $this->db->prepare("UPDATE users SET  username = ? , email =? where user_id = $userID");
+                $statement->bind_param("ss",  $username, $email);
             }
             $statement->execute();
             $statement2 = $this->db->prepare("UPDATE sellers set preferred_category=? ,bank_name=?, bank_account_no =?, profile_image =? , seller_name = ? , description = ?, pick_up_address = ? where user_id = $userID");
