@@ -1,6 +1,7 @@
 import json
 import sys
-import mysql.connector
+import os
+import pymysql
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -9,12 +10,15 @@ from sklearn.metrics.pairwise import cosine_similarity
 rec_size = 4
 
 item_id = int(sys.argv[1])
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-host = "icloth.mysql.database.azure.com"
-port = 3306
-database = "ecomdb"
-user = "iclothfyp"
-password = "Fyp123!@#"
+# Database connection parameters
+db_host = 'icloth.mysql.database.azure.com'
+db_user = 'iclothfyp'
+db_password = 'Fyp123!@#'
+db_name = 'eComDB'
+db_ssl = os.path.join(script_dir, '../SSL_cert/DigiCertGlobalRootCA.crt.pem')
+
 
 # host = "localhost"
 # port = 3306
@@ -22,11 +26,15 @@ password = "Fyp123!@#"
 # user = "root"
 # password = "password"
 try:
-    connection = mysql.connector.connect(
-        host=host, port=port, database=database, user=user, password=password)
-except mysql.connector.Error as err:
-    print("Something went wrong: {}".format(err))
-    exit()
+    connection = pymysql.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        db=db_name,
+        ssl_ca=db_ssl
+    )
+except pymysql.MySQLError as err:
+    sys.exit(1)
 
 cursor = connection.cursor()
 cursor1 = connection.cursor()
