@@ -1,13 +1,12 @@
-<!doctype html>
-<html lang="en">
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-//require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
-
-
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -17,7 +16,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 
     <meta name="description" content="" />
     <meta name="keywords" content="bootstrap, bootstrap4" />
-    
+
     <!-- Bootstrap CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -30,16 +29,18 @@ require_once __DIR__ . '/../sellerAuth.php';
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
     <title>iCloth</title>
 </head>
 
-<body>    
+<body>
+    <?php
+    include dirname(__FILE__) . ('/sellerNavBar.php');
+    ?>
     <div class="seller-container">
         <div class="seller-container01">
             <div class= "centering-div">
             <?php
-    include dirname(__FILE__) . ('/sellerNavBar.php');
+
     if(isset($_POST["requestCategory"])){
         $category = $_POST['category'];
         $sellerController = new sellerController();
