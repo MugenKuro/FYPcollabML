@@ -18,9 +18,9 @@ require_once ('../entity/db.php');
 
 include dirname(__FILE__) . ('/sellerNavBar.php');
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// if (session_status() === PHP_SESSION_NONE) {
+//     session_start();
+// }
 $db = new Db();
 
 // if (isset($_SESSION['accountType'])) {
@@ -64,8 +64,9 @@ $seller_user_id = $_SESSION['user_id'];
 // $pythonScript = "python seller_recommender.py $seller_user_id";
 
 // for Azure
-$pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id";
+$pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id 2>&1";
 $output = shell_exec($pythonScript);
+echo $output;
 
 // Parse the JSON output from the Python script
 $recommendations = json_decode($output, true);
