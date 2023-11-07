@@ -60,6 +60,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 			}
 			
 			
+            $is_image_uploaded = !empty($_FILES["item_image_path"]["name"]);
+            if ($is_image_uploaded) {
 			$target_dir = "../images/item_images/";		
 			$target_file = $target_dir . basename($_FILES["item_image_path"]["name"]);
 			$uploadsuccess = 1;
@@ -71,7 +73,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 				$uploadsuccess = 0;
 			}
 			
-			if ($_FILES["item_image_path"]["size"] > 500000000000) {
+			if ($_FILES["item_image_path"]["size"] > 5000000) {
 				echo "Sorry, your file is too large.";
 				$uploadsuccess = 0;
 			}
@@ -98,10 +100,9 @@ require_once __DIR__ . '/../sellerAuth.php';
 				'quantity' => $quantity,
 				'size' => $size
 			]);
-			header('Location: sellerHomepage.php');
-            exit;
+            echo "<script>location.replace('./sellerHomepage.php');</script>";
 			}}
-            
+        }
 			}
 		
     ?>

@@ -112,7 +112,7 @@ require_once __DIR__ . '/../sellerAuth.php';
                 'bank_account_no'=> $bank_account_no
     
             ]);
-                header('Location: sellerAccountSetting.php');
+            echo "<script>location.replace('./sellerAccountSetting.php');</script>";
                 exit;
     }
     ?>

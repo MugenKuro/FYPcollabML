@@ -133,7 +133,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 				'description' => $description,
 				'item_image_path' => $is_image_uploaded ? $item_image_path : '',
 			]);
-				header('Location: sellerHomepage.php');
+			echo "<script>location.replace('./sellerHomepage.php');</script>";
 		}
 	
 
@@ -143,7 +143,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 
         $sellerController = new sellerController;
         $result = $sellerController -> deleteItem($item_id);
-        header('Location: sellerHomepage.php');
+		echo "<script>location.replace('./sellerHomepage.php');</script>";
     }
     ?>
     

@@ -66,7 +66,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 
         $sellerController = new sellerController;
         $result = $sellerController -> deleteItem($item_id);
-        header('Location: sellerHomepage.php');
+        echo "<script>location.replace('./sellerHomepage.php');</script>";
 		exit();
    
     }
@@ -95,7 +95,6 @@ require_once __DIR__ . '/../sellerAuth.php';
             ?>
             <div class="item-details-container">
             <img alt="image" class ="view-item-image" src="..<?php echo $row['item_image_path']?>"></img>
-            <span class = "item-details-text"><?=$row['item_image_path'] ?></span>
             <div class="item-name-price-container">
             <span class = "item-details-text-underline">Item Name :</span>
             <span class = "item-details-text"><?=$row['item_name'] ?></span>
