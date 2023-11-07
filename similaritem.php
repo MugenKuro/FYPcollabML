@@ -7,7 +7,6 @@
         <?php
         $item_id_rec = $_SESSION['item_id'];
         $output = shell_exec("python3 /home/site/wwwroot/item-recommender/ViewSimilarItems.py $item_id_rec 2>&1");
-
         $recommendations = json_decode($output, true);
 
         // Database connection
@@ -51,7 +50,7 @@
 
             echo '</div>';
             echo '</div>';
-        } else {
+        } /* else {
             // failure so display random
             // Set the seed
             mt_srand($item_id_rec);
@@ -83,8 +82,8 @@
 
                     $container02Count++;
                 }
-            }
-        }
+            } 
+            }*/
         ?>
         <script>
             function redirectToViewItem(itemId) {

@@ -1,14 +1,13 @@
+import os
+import sys
+lib_path = "/home/.local/lib/python3.9/site-packages"
+sys.path.append(lib_path)
+
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 import pymysql
 import json
-import sys
-import os
-
-pymysql_path = "/home/.local/lib/python3.9/site-packages"
-sys.path.append(pymysql_path)
-
 # import mysql.connector
 
 
