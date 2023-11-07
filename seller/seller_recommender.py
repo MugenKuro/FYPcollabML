@@ -1,4 +1,5 @@
 import os
+os.environ['SURPRISE_DATA_FOLDER'] = '/home/site/wwwroot/surprise_data'
 import sys
 import json
 import pandas as pd
