@@ -270,7 +270,7 @@
 
             $userQuery = "SELECT * FROM sellers JOIN users ON sellers.user_id = users.user_id  WHERE sellers.seller_id= $sellerIdString" ;
             $result = $this->db->query($userQuery);
-                return $result;
+            return $result;
         }
         public function deactivateUser(){
             $userID = $_SESSION['user_id'];
@@ -285,10 +285,11 @@
 
         public function editSettings($inputData){
             $profile_image = $inputData["profile_image"];
-            $profile_image = '/images/item_images/' . $profile_image;
             $username=  $inputData['username'];
             $password = $inputData['password1'];
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $confirmPass = $inputData['password2']; 
+            $confirmPass = password_hash($confirmPass, PASSWORD_DEFAULT);
             $sellerName = $inputData['seller_name']; //seller
             $description = $inputData['description']; //seller
             $address = $inputData['pick_up_address']; //seller
