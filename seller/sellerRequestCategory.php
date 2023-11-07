@@ -6,15 +6,7 @@ require_once __DIR__ . '/../controller/sellerController.php';
 //require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
 
-if(isset($_POST["requestCategory"])){
-    $category = $_POST['category'];
-    $sellerController = new sellerController();
-    $result = $sellerController->requestCategory($category);
-    if($result)
-    {
-        header("Location: sellerRequestCategory.php");
-    } 
-}
+
 ?>
 
 <head>
@@ -46,6 +38,15 @@ if(isset($_POST["requestCategory"])){
 
 <?php
     include dirname(__FILE__) . ('/sellerNavBar.php');
+    if(isset($_POST["requestCategory"])){
+        $category = $_POST['category'];
+        $sellerController = new sellerController();
+        $result = $sellerController->requestCategory($category);
+        if($result)
+        {
+            header('Location: sellerRequestCategory.php');
+        } 
+    }
     ?>
 
     

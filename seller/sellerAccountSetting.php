@@ -6,8 +6,7 @@ require_once __DIR__ . '/../controller/sellerController.php';
 //require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
 
-$sellerController = new sellerController();
-$result = $sellerController->showSettings();
+
 ?>
 <head>
     <meta charset="utf-8">
@@ -39,6 +38,8 @@ $result = $sellerController->showSettings();
     include dirname(__FILE__) . ('/sellerNavBar.php');
     ?>
     <?php
+    $sellerController = new sellerController();
+    $result = $sellerController->showSettings();
     $row = $result->fetch_assoc();
     ?>
     <div>

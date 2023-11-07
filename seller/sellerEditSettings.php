@@ -5,8 +5,7 @@ require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
 //require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
-$sellerController = new sellerController();
-$result = $sellerController->showSettings();
+
 
 if (isset($_POST['requestDeactivation'])){
     $sellerController = new sellerController;
@@ -82,7 +81,7 @@ if (isset($_POST['updateLogin'])){
             'bank_account_no'=> $bank_account_no
 
         ]);
-            header("Location: sellerAccountSetting.php");
+            header('Location: sellerAccountSetting.php');
 }
 
 ?>
@@ -116,6 +115,8 @@ if (isset($_POST['updateLogin'])){
     include dirname(__FILE__) . ('/sellerNavBar.php');
     ?>
     <?php
+    $sellerController = new sellerController();
+    $result = $sellerController->showSettings();
     $row = $result->fetch_assoc();
     ?>
     <div>
