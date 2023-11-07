@@ -34,9 +34,11 @@ require_once __DIR__ . '/../sellerAuth.php';
     <title>iCloth</title>
 </head>
 
-<body>
-
-<?php
+<body>    
+    <div class="seller-container">
+        <div class="seller-container01">
+            <div class= "centering-div">
+            <?php
     include dirname(__FILE__) . ('/sellerNavBar.php');
     if(isset($_POST["requestCategory"])){
         $category = $_POST['category'];
@@ -49,10 +51,6 @@ require_once __DIR__ . '/../sellerAuth.php';
     }
     ?>
 
-    
-    <div class="seller-container">
-        <div class="seller-container01">
-            <div class= "centering-div">
                     <br>
                     <span class= "seller-setting-header">Request for new category</span>
                     </br>

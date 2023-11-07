@@ -111,7 +111,12 @@ if (isset($_POST['updateLogin'])){
 </head>
 
 <body>
-<?php
+
+    <div>
+        <div class="seller-container">
+            <div class="seller-container01">
+                        <div class= "centering-div">
+                        <?php
     include dirname(__FILE__) . ('/sellerNavBar.php');
     ?>
     <?php
@@ -119,10 +124,6 @@ if (isset($_POST['updateLogin'])){
     $result = $sellerController->showSettings();
     $row = $result->fetch_assoc();
     ?>
-    <div>
-        <div class="seller-container">
-            <div class="seller-container01">
-                        <div class= "centering-div">
                             <br>
                         <span class= "seller-setting-header">Edit Account Setting</span>
 <br><br>
