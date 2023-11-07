@@ -42,21 +42,21 @@ require_once __DIR__ . '/../sellerAuth.php';
     }
     
     if (isset($_POST['updateLogin'])){
-        $is_image_uploaded = !empty($_FILES["profile_image"]["name"]);
-                
+        $is_image_uploaded = !empty($_FILES["item_image_path"]["name"]);
+			
         if ($is_image_uploaded) {
             $target_dir = "../images/SellerLogo/";		
-            $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+            $target_file = $target_dir . basename($_FILES["item_image_path"]["name"]);
             $uploadsuccess = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
             
-            $check = getimagesize($_FILES["profile-image"]["tmp_name"]);
+            $check = getimagesize($_FILES["item_image_path"]["tmp_name"]);
             if ($check === false) {
                 echo "File is not an image.";
                 $uploadsuccess = 0;
             }
             
-            if ($_FILES["profile_image"]["size"] > 500000) {
+            if ($_FILES["item_image_path"]["size"] > 500000) {
                 echo "Sorry, your file is too large.";
                 $uploadsuccess = 0;
             }
@@ -69,16 +69,17 @@ require_once __DIR__ . '/../sellerAuth.php';
             if ($uploadsuccess == 0) {
                 echo "Sorry, your file was not uploaded.";
             } else {
-                if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
-                    echo "The file " . htmlspecialchars(basename($_FILES["profile_image"]["name"])) . " has been uploaded..";
+                if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_file)) {
+                    echo "The file " . htmlspecialchars(basename($_FILES["item_image_path"]["name"])) . " has been uploaded..";
                     $profile_image = $target_file;
+                    $profile_image = ltrim($profile_image, ".");
                 } else {
                     echo "Sorry, there was an error uploading your file.";
                     
                 }
             }
         } else {
-             $profile_image = isset($_POST['profile_image']) ? $_POST['profile_image'] : $profile_image;
+             $profile_image = isset($_POST['item_image_path']) ? $_POST['item_image_path'] : $item_image_path;
         }
         $username= $_POST['username'];
         $password1 = $_POST['password1'];
@@ -93,7 +94,8 @@ require_once __DIR__ . '/../sellerAuth.php';
         $email = $_POST['email'];
         $bank_name = $_POST['bank_name'];
         $bank_account_no = $_POST['bank_account_no'];
-        
+       
+
         
         $sellerController = new sellerController;
             $result = $sellerController ->editSettings([
@@ -111,15 +113,13 @@ require_once __DIR__ . '/../sellerAuth.php';
     
             ]);
                 header('Location: sellerAccountSetting.php');
+                exit;
     }
     ?>
     <div>
         <div class="seller-container">
             <div class="seller-container01">
                         <div class= "centering-div">
-                        <?php
-    include dirname(__FILE__) . ('/sellerNavBar.php');
-    ?>
     <?php
     $sellerController = new sellerController();
     $result = $sellerController->showSettings();
@@ -128,12 +128,12 @@ require_once __DIR__ . '/../sellerAuth.php';
                             <br>
                         <span class= "seller-setting-header">Edit Account Setting</span>
 <br><br>
-                        <form class="seller-form" action="sellerEditSettings.php" method="POST">
+                        <form class="seller-form" enctype="multipart/form-data" action="sellerEditSettings.php" method="POST">
                             <table class ="seller-edit-table">
                                 <tr>
                                 <td class ="seller-edit-setting-table-td"><span>Profile Image</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="file" id="profile_image" placeholder="Image"
-                                    name="profile_image" value=""></input></td>
+                                <td class ="seller-edit-setting-table-td"><input type="file" id="item_image_path" placeholder="Image"
+                                    name="item_image_path" value=""></input></td>
                                 </tr>
                             </table>
                             <br>

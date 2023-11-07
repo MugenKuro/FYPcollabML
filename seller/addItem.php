@@ -99,6 +99,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 				'size' => $size
 			]);
 			header('Location: sellerHomepage.php');
+            exit;
 			}}
             
 			}

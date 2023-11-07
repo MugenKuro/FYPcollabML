@@ -48,6 +48,7 @@ require_once __DIR__ . '/../sellerAuth.php';
         if($result)
         {
             header('Location: sellerRequestCategory.php');
+            exit;
         } 
     }
     ?>
