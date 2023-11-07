@@ -1,11 +1,15 @@
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
+import pymysql
 import json
 import sys
 import os
+
+pymysql_path = "/home/.local/lib/python3.9/site-packages"
+sys.path.append(pymysql_path)
+
 # import mysql.connector
-import pymysql
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
 
 rec_size = 4
@@ -67,6 +71,7 @@ item_vectors = vectorizer.fit_transform(items_df['description'])
 item_similarity_matrix = cosine_similarity(item_vectors)
 # print(items_df)
 
+
 def recommend_similar_items(item_id, top_n=rec_size):
     # Get the index of the item in the items_df DataFrame
     original_item_index = items_df[items_df['item_id'] == item_id].index[0]
@@ -83,6 +88,7 @@ def recommend_similar_items(item_id, top_n=rec_size):
         items_df.iloc[item_index]['item_id'] for item_index, similarity_score in sorted_item_similarity_scores[:top_n]]
 
     return top_n_similar_item_ids
+
 
 # Call the function with your item_id
 top_n_similar_item_ids = recommend_similar_items(item_id)
