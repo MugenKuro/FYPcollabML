@@ -60,7 +60,11 @@ if ($saleResult->num_rows > 0) {
 
 // Execute the Python script to get recommendations
 $seller_user_id = $_SESSION['user_id'];
-$pythonScript = "python seller_recommender.py $seller_user_id";
+// for windows
+// $pythonScript = "python seller_recommender.py $seller_user_id";
+
+// for Azure
+$pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id";
 $output = shell_exec($pythonScript);
 
 // Parse the JSON output from the Python script

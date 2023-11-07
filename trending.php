@@ -50,7 +50,11 @@ if (isset($_SESSION['accountType'])) {
 
     // Include the Python script processing here
     $customer_user_id = $_SESSION['user_id'];
-    $output = shell_exec("python customer/customer_recommender.py $customer_user_id 2>&1");
+    // for windows
+    // $output = shell_exec("python customer/customer_recommender.py $customer_user_id 2>&1");
+
+    // for Azure
+    $output = shell_exec("/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/customer/customer_recommender.py $customer_user_id 2>&1");
     $recommendations = json_decode($output, true);
 
     // Database connection
