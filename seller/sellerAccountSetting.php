@@ -1,13 +1,13 @@
-<!doctype html>
-<html lang="en">
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-//require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/../auth.php';
 require_once __DIR__ . '/../sellerAuth.php';
-
-
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,23 +29,22 @@ require_once __DIR__ . '/../sellerAuth.php';
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
     <title>iCloth</title>
 </head>
 
 <body>
-<?php
-    include dirname(__FILE__) . ('/sellerNavBar.php');
-    ?>
     <?php
-    $sellerController = new sellerController();
-    $result = $sellerController->showSettings();
-    $row = $result->fetch_assoc();
+    include dirname(__FILE__) . ('/sellerNavBar.php');
     ?>
     <div>
         <div class="seller-container">
         <div class="seller-container01">
                 <div class= "centering-div">
+                <?php
+                $sellerController = new sellerController();
+                $result = $sellerController->showSettings();
+                $row = $result->fetch_assoc();
+                ?>
                         <span class= "seller-setting-header">Account Setting</span>
                         <span class= "seller-setting-name">Profile Image</span>
                         <img alt="no image found " src="..<?php echo $row["profile_image"] ?>" class="seller-setting-image" />
