@@ -6,14 +6,12 @@
     <div class="view-item-container24">
         <?php
         $item_id = $_SESSION['item_id'];
-        $output = shell_exec("python3 item-recommender/ViewSimilarItems.py $item_id 2>&1");
+        $output = shell_exec("python item-recommender/ViewSimilarItems.py $item_id 2>&1");
         $recommendations = json_decode($output, true);
 
         // Database connection
         require_once dirname(__FILE__) . ('/entity/db.php');
         $db = new Db();
-
-
 
         // Check if there are recommendations, if not, display most popular items
         if ($recommendations && json_last_error() == JSON_ERROR_NONE) {
@@ -54,6 +52,11 @@
             echo '</div>';
         } 
         ?>
-       
+       <script>
+        function redirectToViewItem(itemId) {
+            // Redirect to the viewItem page with the item ID as a parameter
+            window.location.href = "viewItem.php?item_id=" + itemId;
+        }
+        </script>
     </div>
 </div>

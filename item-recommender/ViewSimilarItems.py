@@ -1,7 +1,7 @@
 import json
 import sys
 import os
-#import mysql.connector
+# import mysql.connector
 import pymysql
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
