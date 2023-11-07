@@ -236,44 +236,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 </div>
                             </div>
                         </div>
-                        <div class="view-item-container23">
-                            <span class="view-item-text63">
-                                <span>Similar Items</span>
-                                <br />
-                            </span>
-                            <div class="view-item-container24">
-                                <div class="view-item-container25">
-                                    <img alt="image" src="./images/vintage_hooters_tshirt.jpg" class="view-item-image5" />
-                                    <span>
-                                        <span>Vintage Hooter T-Shirt</span>
-                                        <br />
-                                    </span>
-                                    <span>$30</span>
-                                </div>
-                                <div class="view-item-container26">
-                                    <img alt="image" src="./images/authentic_adidas_shirt_hiroko.jpg"
-                                        class="view-item-image6" />
-                                    <span>
-                                        <span>Authentic Adidas Tokyo shirt</span>
-                                        <br />
-                                    </span>
-                                    <span>$25</span>
-                                </div>
-                                <div class="view-item-container27">
-                                    <img alt="image" src="./images/jordan_x_j_balvin_shirt.jpg" class="view-item-image7" />
-                                    <span>
-                                        <span>Jordan x J balvin shirt</span>
-                                        <br />
-                                    </span>
-                                    <div class="view-item-container28">
-                                        <span>
-                                            <span>$40</span>
-                                            <br />
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+                        include dirname(__FILE__) . ('/similaritem.php');
+                        ?>
                     </div>
                 </div>
             </div>
