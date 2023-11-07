@@ -89,7 +89,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 			$is_image_uploaded = !empty($_FILES["item_image_path"]["name"]);
 			
 			if ($is_image_uploaded) {
-				$target_dir = "/images/item_images/";		
+				$target_dir = "../images/item_images/";		
 				$target_file = $target_dir . basename($_FILES["item_image_path"]["name"]);
 				$uploadsuccess = 1;
 				$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -124,7 +124,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 			} else {
 				 $item_image_path = isset($_POST['item_image_path']) ? $_POST['item_image_path'] : $item_image_path;
 			}
-			$sellerController = new itemEdit;
+			$sellerController = new sellerController;
 			$result = $sellerController ->updateItem([
 				'item_id' => $item_id,
 				'item_name' => $item_name,
@@ -133,13 +133,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 				'description' => $description,
 				'item_image_path' => $is_image_uploaded ? $item_image_path : '',
 			]);
-			
-			if($result)
-			{
-				header("Location: sellerHomepage.php");
-			}else{
-				echo "Failed to edit.";
-			}
+				header('Location: sellerHomepage.php');
 		}
 	
 
@@ -149,14 +143,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 
         $sellerController = new sellerController;
         $result = $sellerController -> deleteItem($item_id);
-            
-        if($result)
-        {
-            header("Location: sellerHomepage.php");
-			exit();
-        }else{
-            echo "Failed";
-        }
+        header('Location: sellerHomepage.php');
     }
     ?>
     

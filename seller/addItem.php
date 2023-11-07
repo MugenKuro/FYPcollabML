@@ -94,22 +94,16 @@ require_once __DIR__ . '/../sellerAuth.php';
 				'price' => $price,
 				'category_id' => $category_id,
 				'description' => $description,
-				'item_image_path' => $item_image_path,
+				'item_image_path' => $is_image_uploaded ? $item_image_path : '',
 				'quantity' => $quantity,
 				'size' => $size
 			]);
-			
-			if($result)
-			{
-				header("Location: sellerHomepage.php");
-			}else{
-				echo "Failed to add.";
+			header('Location: sellerHomepage.php');
+            exit;
 			}}
-             else { 
-				echo "Sorry, there was an error uploading your file.";
-				}
+            
 			}
-		}
+		
     ?>
 	<div>
         <div class="seller-container">

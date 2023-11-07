@@ -80,7 +80,10 @@
         public function deleteItem($inputdata)
         {
             $item_id = $inputdata;
-
+            $deleteInventory = "DELETE FROM Inventory where `item_id` = $item_id";
+            $statement = $this->db->query($deleteInventory);
+            $deleteRating = "DELETE FROM itemRatings where `item_id`=$item_id";
+            $statement2 = $this->db->query($deleteRating);
             $userQuery = "DELETE FROM items WHERE `item_id` = $item_id";
             $result = $this->db->query($userQuery);
             if($result){
@@ -282,6 +285,7 @@
 
         public function editSettings($inputData){
             $profile_image = $inputData["profile_image"];
+            $profile_image = '/images/item_images/' . $profile_image;
             $username=  $inputData['username'];
             $password = $inputData['password1'];
             $confirmPass = $inputData['password2']; 
@@ -293,9 +297,15 @@
             $bank_name = $inputData['bank_name'];
             $bank_account_no = $inputData['bank_account_no'];
             $userID = $_SESSION['user_id'];
+            if(empty($password)){
+                $statement = $this->db->prepare("UPDATE users SET  username = ? , email =? where user_id = $userID");
+            $statement->bind_param("ss",  $username, $email);
+            }else{
             if($password == $confirmPass){
             $statement = $this->db->prepare("UPDATE users SET  username = ? , password = ?, email =? where user_id = $userID");
             $statement->bind_param("sss",  $username, $password, $email);
+            }
+            }
             $statement->execute();
             $statement2 = $this->db->prepare("UPDATE sellers set preferred_category=? ,bank_name=?, bank_account_no =?, profile_image =? , seller_name = ? , description = ?, pick_up_address = ? where user_id = $userID");
             $statement2->bind_param("issssss",$preferred_category, $bank_name, $bank_account_no, $profile_image, $sellerName, $description, $address);
@@ -305,7 +315,7 @@
             }else{
                 return false;
             }
-        }}
+        }
     }
 
 ?>
