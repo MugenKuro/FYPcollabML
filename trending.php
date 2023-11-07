@@ -114,6 +114,7 @@ if (isset($_SESSION['accountType'])) {
         echo '</div>';
         echo '</div>';
     } else {
+        echo $output;
         // Query to retrieve most popular items
         $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
             JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
