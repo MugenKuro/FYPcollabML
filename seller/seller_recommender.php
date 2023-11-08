@@ -1,30 +1,15 @@
-<!Doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link href="../css/style.css" rel="stylesheet">
-
-    <!-- Include Chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$seller_user_id = $_SESSION['user_id'];
+
 // require_once('../auth.php');
 require_once ('../entity/db.php');
 
 include dirname(__FILE__) . ('/sellerNavBar.php');
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-// var_dump($_SESSION);
-
-$seller_user_id = $_SESSION['user_id'];
-// echo $seller_user_id;
 $db = new Db();
 
 // if (isset($_SESSION['accountType'])) {
@@ -74,6 +59,20 @@ echo $output;
 
 // Parse the JSON output from the Python script
 $recommendations = json_decode($output, true);
+echo '<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>';
 
 if (!$recommendations) {
     echo '<div class="container mt-5"><p class="text-center">No recommendations available.</p></div>';
