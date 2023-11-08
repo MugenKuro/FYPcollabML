@@ -21,8 +21,10 @@ include dirname(__FILE__) . ('/sellerNavBar.php');
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+// var_dump($_SESSION);
 
 $seller_user_id = $_SESSION['user_id'];
+// echo $seller_user_id;
 $db = new Db();
 
 // if (isset($_SESSION['accountType'])) {
