@@ -55,7 +55,7 @@ if ($saleResult->num_rows > 0) {
 // for Azure
 $pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id 2>&1";
 $output = shell_exec($pythonScript);
-echo $output;
+// echo $output;
 
 // Parse the JSON output from the Python script
 $recommendations = json_decode($output, true);
