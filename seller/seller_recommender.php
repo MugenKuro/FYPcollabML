@@ -18,9 +18,11 @@ require_once ('../entity/db.php');
 
 include dirname(__FILE__) . ('/sellerNavBar.php');
 
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$seller_user_id = $_SESSION['user_id'];
 $db = new Db();
 
 // if (isset($_SESSION['accountType'])) {
@@ -59,7 +61,7 @@ if ($saleResult->num_rows > 0) {
 }
 
 // Execute the Python script to get recommendations
-$seller_user_id = $_SESSION['user_id'];
+
 // for windows
 // $pythonScript = "python seller_recommender.py $seller_user_id";
 
