@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         <?php endif; ?>
                         <div class="homepage-container03"
                             onclick="window.location='viewItem.php?item_id=<?php echo $item->item_id; ?>'">
-                            <img alt="image" src="<?php echo $dir . $item->item_image_path; ?>" class="homepage-image" />
+                            <img alt="image" src="<?php echo '.' . $item->item_image_path; ?>" class="homepage-image" />
                             <span class="item-name">
                                 <?php echo $item->item_name; ?>
                             </span>
