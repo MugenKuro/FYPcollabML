@@ -164,6 +164,15 @@ class viewAnItem {
     }
 }
 
+class searchItemByName {
+    public function searchItem($tags) {
+        $items = new items();
+        $data = json_decode($items->searchItemByName($tags));
+
+        return json_encode($data);
+    }
+}
+
 
 
 
