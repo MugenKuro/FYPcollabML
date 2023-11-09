@@ -154,6 +154,142 @@ a.more {
     margin-right: 20px;
 }
 
+/*search pop up*/
+.right-content .search .card::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255, .5);
+    backdrop-filter: blur(5px);
+    z-index: -1;
+}
+
+.search-box {
+    position: relative;
+}
+
+.input-group {
+    margin-bottom: 10px; /* Add margin to create space between input-group and search */
+}
+
+.search {
+    --main-color: #ffb43a;
+    --hover-color: hsl(37, 94%, 57%);
+    --body-color: #1e1e2a;
+    --container-color: #2d2e37;
+    --text-color: #fcfeff;
+    color: var(--text-color);
+    font-family: 'Joan', serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    position: absolute;
+    width: 100%;
+    height: 235px;
+    right: 0;
+    top: 100%;
+    overflow-y: auto;
+}
+
+.card {
+    --text-color: #fcfeff;
+    pointer-events: none;
+    font-family: 'Joan', serif;
+    margin: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    text-decoration: none;
+    color: #adadad;
+    position: relative;
+    width: 100%;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 3px 0px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between; /* Spacing between card_image and cont */
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    background: rgb(255, 255, 255, .5);
+    backdrop-filter: blur(5px);
+}
+
+#card_image {
+    pointer-events: none;
+    color: #adadad;
+    font-family: 'Joan', serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    width: 60px;
+    height: 100%;
+    border-radius: 2px;
+    margin-left: 8px;
+}
+
+.cont {
+    --main-color: #ffb43a;
+    --hover-color: hsl(37, 94%, 57%);
+    --body-color: #1e1e2a;
+    --container-color: #2d2e37;
+    --text-color: #fcfeff;
+    font-family: 'Joan', serif;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    color: var(--body-color);
+    margin-left: 0px;
+    min-height: 55px; /* Set a minimum height here */
+    display: flex; /* Use flexbox to align items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
+.cont h3 {
+    color: var(--body-color);
+    pointer-events: auto;
+    font-family: 'Joan', serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    font-size: 15px;
+    line-height: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 120px;
+    align-items: left;
+}
+
+.cont p {
+    pointer-events: auto;
+    font-family: 'Joan', serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    font-size: 10px;
+    color: #000;
+    font-weight: 1000;
+    width: 50px;
+}
+
+
+
+
 /*index*/
 .masthead {
     --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Solid";
@@ -1172,21 +1308,22 @@ a:hover {
 .homepage-container01 {
     flex: 1;
     width: 1367px;
-    height: auto; /* Change height to auto for dynamic content */
+    height: 773px;
     display: flex;
     box-shadow: 5px 5px 10px 2px #d4d4d4;
     margin-top: 0px;
-    align-items: flex-start; /* Align items at the top */
+    align-items: center;
     border-color: rgba(120, 120, 120, 0.4);
     border-style: solid;
     border-width: 2px;
     border-radius: 4px;
-    flex-wrap: wrap; /* Enable wrapping for child elements */
-    justify-content: space-around; /* Distribute items evenly */
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .homepage-container02 {
-    flex: 0 0 calc(25% - 40px); /* Adjust width to fit 4 items with margins */
+    flex: 0 0 auto;
+    width: 95%;
     height: auto;
     display: flex;
     margin-top: 20px;
@@ -1194,22 +1331,21 @@ a:hover {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 20px;
-    flex-direction: column; /* Change to column layout */
-    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .homepage-container03 {
-    width: 100%;
-    max-width: 240px; /* Set a maximum width for each item */
+    width: 240px;
     display: flex;
     margin-top: 30px;
     transition: 0.3s;
     align-items: center;
-    margin-left: 0; /* Reset left margin */
+    margin-left: 30px;
     border-color: rgba(120, 120, 120, 0.4);
     border-style: hidden;
     border-width: 2px;
-    margin-right: 0; /* Reset right margin */
+    margin-right: 30px;
     border-radius: 4px;
     margin-bottom: 30px;
     flex-direction: column;
