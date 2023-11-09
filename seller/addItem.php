@@ -66,7 +66,9 @@ require_once __DIR__ . '/../sellerAuth.php';
 			$target_file = $target_dir . basename($_FILES["item_image_path"]["name"]);
 			$uploadsuccess = 1;
 			$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-			
+            $filename = uniqid() . "." . $imageFileType;
+        
+            
 			$check = getimagesize($_FILES["item_image_path"]["tmp_name"]);
 			if ($check === false) {
 				echo "File is not an image.";
@@ -86,17 +88,15 @@ require_once __DIR__ . '/../sellerAuth.php';
 			if ($uploadsuccess == 0) {
 				echo "Sorry, your file was not uploaded.";
 			} else {
-				if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_file)) {
+				if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_dir . $filename)) {
 				echo "The file " . htmlspecialchars(basename($_FILES["item_image_path"]["name"])) . "has been uploaded..";
-				$item_image_path = $target_file;
-			
 			$sellerController = new sellerController;
 			$result = $sellerController -> addItem([
 				'item_name' => $item_name,
 				'price' => $price,
 				'category_id' => $category_id,
 				'description' => $description,
-				'item_image_path' => $is_image_uploaded ? $item_image_path : '',
+				'item_image_path' => $is_image_uploaded ? $filename : '',
 				'quantity' => $quantity,
 				'size' => $size
 			]);
@@ -116,17 +116,17 @@ require_once __DIR__ . '/../sellerAuth.php';
                         <table class ="seller-edit-setting-table">
                             <tr>
                                 <td class ="seller-edit-setting-table-td"><span>Image</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="file" id="item_image_path" placeholder="Image"
+                                <td class ="seller-edit-setting-table-td"><input required type="file" id="item_image_path" placeholder="Image"
                                     name="item_image_path" value=""></input></td>
                             </tr>
                             <tr>
                                 <td class ="seller-edit-setting-table-td"> <span>Item Name</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="item name" name="item_name"
+                                <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="item name" name="item_name"
                                     class="seller-settings-textinput input" /></input></td>
                             </tr>
                             <tr>
                                 <td class ="seller-edit-setting-table-td"><span>Price</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="Price" name="price"
+                                <td class ="seller-edit-setting-table-td"><input required type="text" placeholder="Price" name="price"
                                     class="seller-settings-textinput input" /></input></td>
                             </tr>
                             <tr>
@@ -148,23 +148,23 @@ require_once __DIR__ . '/../sellerAuth.php';
                             </tr>
                             <tr>
                                 <td class ="seller-edit-setting-table-td">  <span>Quantity</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="Quantity" name="quantity"
+                                <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="Quantity" name="quantity"
                                     class="seller-settings-textinput input" /></input></td>
                             </tr>
 
                             <tr>
                                 <td class ="seller-edit-setting-table-td"><span>Size</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="Size" name="size"
+                                <td class ="seller-edit-setting-table-td"><input required type="text" placeholder="Size" name="size"
                                     class="seller-settings-textinput input" /></input></td>
 							</tr>
 							<tr>
                                 <td class ="seller-edit-setting-table-td"> <span>Description</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="Description" name="description"
+                                <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="Description" name="description"
                                     class="seller-settings-textinput input" /></input></td>
                             <tr>
                                 <div class= "seller-setting-button-container">
                                 <td class="seller-edit-setting-button-td">
-                                <input type="submit" name="submit" class="seller-setting-button" value="Add"></input>
+                                <input required type="submit" name="submit" class="seller-setting-button" value="Add"></input>
                                 </td>
                                 <td class="seller-edit-setting-button-td">
                                 <button type="button" class="seller-setting-button1"

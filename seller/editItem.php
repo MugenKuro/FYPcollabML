@@ -93,7 +93,8 @@ require_once __DIR__ . '/../sellerAuth.php';
 				$target_file = $target_dir . basename($_FILES["item_image_path"]["name"]);
 				$uploadsuccess = 1;
 				$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-				
+				$filename = uniqid() . "." . $imageFileType;
+
 				$check = getimagesize($_FILES["item_image_path"]["tmp_name"]);
 				if ($check === false) {
 					echo "File is not an image.";
@@ -113,17 +114,15 @@ require_once __DIR__ . '/../sellerAuth.php';
 				if ($uploadsuccess == 0) {
 					echo "Sorry, your file was not uploaded.";
 				} else {
-					if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_file)) {
+					if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_dir . $filename)) {
 						echo "The file " . htmlspecialchars(basename($_FILES["item_image_path"]["name"])) . " has been uploaded..";
-						$item_image_path = $target_file;
 					} else {
 						echo "Sorry, there was an error uploading your file.";
 						
 					}
 				}
-			} else {
-				 $item_image_path = isset($_POST['item_image_path']) ? $_POST['item_image_path'] : $item_image_path;
-			}
+			} 
+			
 			$sellerController = new sellerController;
 			$result = $sellerController ->updateItem([
 				'item_id' => $item_id,
@@ -131,7 +130,7 @@ require_once __DIR__ . '/../sellerAuth.php';
 				'price' => $price,
 				'category_id' => $category_id,
 				'description' => $description,
-				'item_image_path' => $is_image_uploaded ? $item_image_path : '',
+				'item_image_path' => $is_image_uploaded ? $filename : '',
 			]);
 			echo "<script>location.replace('./sellerHomepage.php');</script>";
 		}
@@ -165,11 +164,11 @@ require_once __DIR__ . '/../sellerAuth.php';
                             <table class ="seller-edit-table">
                             <tr>
 							<td class ="seller-edit-setting-table-td"> <span>Item Name</span></td>
-                            <td class ="seller-edit-setting-table-td"> <input class="seller-input" type="text" id="item_name" placeholder="Item Name" name="item_name" value="<?php echo $item_name ?>"></input></td>
+                            <td class ="seller-edit-setting-table-td"> <input required class="seller-input" type="text" id="item_name" placeholder="Item Name" name="item_name" value="<?php echo $item_name ?>"></input></td>
                             </tr>
                             <tr>
                                 <td class ="seller-edit-setting-table-td"><span>Price</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="Price" name="price" value="<?php echo $price ?>"
+                                <td class ="seller-edit-setting-table-td"><input required type="text" placeholder="Price" name="price" value="<?php echo $price ?>"
                                     class="seller-input" /></input></td>
                             </tr>
                             <tr>
@@ -190,7 +189,7 @@ require_once __DIR__ . '/../sellerAuth.php';
                             </tr>
 							<tr>
 								<td class ="seller-edit-setting-table-td"><span>Description :</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="Description" name="description" value="<?php echo $description ?>"
+                                <td class ="seller-edit-setting-table-td"><input required type="text" placeholder="Description" name="description" value="<?php echo $description ?>"
                                     class="seller-input" /></input></td>
 							</tr>
 							<tr>

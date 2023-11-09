@@ -49,6 +49,7 @@ require_once __DIR__ . '/../sellerAuth.php';
             $target_file = $target_dir . basename($_FILES["item_image_path"]["name"]);
             $uploadsuccess = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+            $filename = uniqid() . "." . $imageFileType;
             
             $check = getimagesize($_FILES["item_image_path"]["tmp_name"]);
             if ($check === false) {
@@ -69,17 +70,12 @@ require_once __DIR__ . '/../sellerAuth.php';
             if ($uploadsuccess == 0) {
                 echo "Sorry, your file was not uploaded.";
             } else {
-                if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_file)) {
+                if (move_uploaded_file($_FILES["item_image_path"]["tmp_name"], $target_dir . $filename)) {
                     echo "The file " . htmlspecialchars(basename($_FILES["item_image_path"]["name"])) . " has been uploaded..";
-                    $profile_image = $target_file;
-                    $profile_image = ltrim($profile_image, ".");
                 } else {
                     echo "Sorry, there was an error uploading your file.";
-                    
                 }
             }
-        } else {
-             $profile_image = isset($_POST['item_image_path']) ? $_POST['item_image_path'] : $item_image_path;
         }
         $username= $_POST['username'];
         $password1 = $_POST['password1'];
@@ -99,7 +95,7 @@ require_once __DIR__ . '/../sellerAuth.php';
         
         $sellerController = new sellerController;
             $result = $sellerController ->editSettings([
-                'profile_image' => $profile_image,
+                'profile_image' => $is_image_uploaded ? $filename : '',
                 'username' => $username,
                 'password1' => $password1,
                 'password2'=> $password2,
@@ -140,10 +136,10 @@ require_once __DIR__ . '/../sellerAuth.php';
                             <table class ="seller-edit-table">
                             <tr>
                                 <td class ="seller-edit-setting-table-td"> <span>Seller Name</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="seller name" name="seller_name" value="<?php echo $row['seller_name'] ?>"   
+                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="seller name" name="seller_name" value="<?php echo $row['seller_name'] ?>"   
                                     class="seller-input" /></input></td>
                                 <td class ="seller-edit-setting-table-td"><span>Username</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="username" name="username" value="<?php echo $row['username'] ?>"
+                                <td class ="seller-edit-setting-table-td"><input required type="text" placeholder="username" name="username" value="<?php echo $row['username'] ?>"
                                     class="seller-input" /></input></td>
                             </tr>
                             <?php
@@ -152,21 +148,21 @@ require_once __DIR__ . '/../sellerAuth.php';
                             ?>
                             <tr>
                             <td class ="seller-edit-setting-table-td"><span>Pick-Up Address</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="street name" name="address1" value="<?php echo $address1 ?>"
+                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="street name" name="address1" value="<?php echo $address1 ?>"
                                     class="seller-input" /></input></td>
-                                    <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="blk number" name="address2" value="<?php echo $address2 ?>"
+                                    <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="blk number" name="address2" value="<?php echo $address2 ?>"
                                     class="seller-input" /></input></td>
-                                    <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="postal code" name="address3" value="<?php echo $address3 ?>"
+                                    <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="postal code" name="address3" value="<?php echo $address3 ?>"
                                     class="seller-input" /></input></td>
                             </tr>
                             <tr>
                             <td class ="seller-edit-setting-table-td"> <span>Email</span></td>
-                            <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="email" name="email"  value="<?php echo $row['email'] ?>"
+                            <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="email" name="email"  value="<?php echo $row['email'] ?>"
                                     class="seller-input" /></td>
                             </tr>
                             <tr>
                                 <td class ="seller-edit-setting-table-td"> <span>Description</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="description" name="description" value="<?php echo $row['description'] ?>"
+                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="description" name="description" value="<?php echo $row['description'] ?>"
                                     class="seller-input" /></input></td>
                                 <td class ="seller-edit-setting-table-td"> <span>Preferred Category</span></td>
                                 <td class ="seller-edit-setting-table-td">
@@ -186,10 +182,10 @@ require_once __DIR__ . '/../sellerAuth.php';
                             </tr>
                             <tr>
                                 <td class ="seller-edit-setting-table-td"> <span>Bank Name</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="Bank Name" name="bank_name" value="<?php echo $row['bank_name'] ?>"
+                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="Bank Name" name="bank_name" value="<?php echo $row['bank_name'] ?>"
                                     class="seller-input" /></input></td>
                                 <td class ="seller-edit-setting-table-td"> <span>Bank Number</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input type="text" placeholder="Bank Number" name="bank_account_no" value="<?php echo $row['bank_account_no'] ?>"
+                                <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="Bank Number" name="bank_account_no" value="<?php echo $row['bank_account_no'] ?>"
                                     class="seller-input" /></input></td>
                             </tr>
                             <tr>
