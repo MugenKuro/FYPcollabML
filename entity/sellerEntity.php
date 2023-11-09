@@ -51,7 +51,7 @@
 			$price = $inputdata["price"];
 			$category_id = $inputdata["category_id"];
 			$description = $inputdata["description"];
-		    $item_image_path = basename($_FILES["item_image_path"]["name"]);
+            $item_image_path = $inputdata["item_image_path"];
             $item_image_path = '/images/item_images/' . $item_image_path;
             $quantity = $inputdata["quantity"];
             $size = $inputdata["size"];
@@ -125,23 +125,14 @@
 			$price = $inputdata["price"];
 			$category_id = $inputdata["category_id"];
 			$description = $inputdata["description"];
-
-			
-			$is_image_uploaded = !empty($_FILES["item_image_path"]["name"]);
-			
-			if ($is_image_uploaded) {
-				$item_image_path = basename($_FILES["item_image_path"]["name"]);
-			} else {
-				$item_image_path = $inputdata["item_image_path"];
-			}
-			
+			$item_image_path = $inputdata["item_image_path"];
 			$userQuery = "UPDATE `items` SET `item_name` = '$item_name', 
 			`price` = '$price', 
 			`category_id` = '$category_id', 
 			`description` = '$description'
 
             ";
-			
+			$is_image_uploaded = !empty($_FILES["item_image_path"]["name"]);
 			if ($is_image_uploaded) {
                 $item_image_path = '/images/item_images/' . $item_image_path;
 				$userQuery .= ", `item_image_path` = '$item_image_path'";
@@ -285,6 +276,7 @@
 
         public function editSettings($inputData){
             $profile_image = $inputData["profile_image"];
+            $profile_image = '/images/sellerLogo/' . $profile_image;
             $username=  $inputData['username'];
             $password = $inputData['password1'];
             $password = password_hash($password, PASSWORD_DEFAULT);
@@ -306,9 +298,17 @@
                 $statement->bind_param("ss",  $username, $email);
             }
             $statement->execute();
-            $statement2 = $this->db->prepare("UPDATE sellers set preferred_category=? ,bank_name=?, bank_account_no =?, profile_image =? , seller_name = ? , description = ?, pick_up_address = ? where user_id = $userID");
+            $is_image_uploaded = !empty($_FILES["item_image_path"]["name"]);
+			if ($is_image_uploaded) {
+                $statement2 = $this->db->prepare("UPDATE sellers set preferred_category=? ,bank_name=?, bank_account_no =?, profile_image =? , seller_name = ? , description = ?, pick_up_address = ? where user_id = $userID");
             $statement2->bind_param("issssss",$preferred_category, $bank_name, $bank_account_no, $profile_image, $sellerName, $description, $address);
             $statement2->execute();
+			} else{
+                $statement2 = $this->db->prepare("UPDATE sellers set preferred_category=? ,bank_name=?, bank_account_no =? , seller_name = ? , description = ?, pick_up_address = ? where user_id = $userID");
+                $statement2->bind_param("isssss",$preferred_category, $bank_name, $bank_account_no, $sellerName, $description, $address);
+                $statement2->execute();
+            }
+           
             if($statement && $statement2){
                 return true;
             }else{
