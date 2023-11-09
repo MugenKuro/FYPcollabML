@@ -28,23 +28,29 @@ if (isset($_SESSION['accountType'])) {
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['user-account-setting-button2'])) {
+        $submitClass = $_POST['user-account-setting-button2'];
 
-    $user = new deactivateCustomerAccount();
-    $deactivateUser = json_decode($user->deactivateCustAcc($_SESSION['user_id']));
-    if (isset($deactivateUser->status)) {
-        if ($deactivateUser->status == 'success') {
-            $_SESSION['flashdata']['type'] = 'success';
-            $_SESSION['flashdata']['msg'] = 'account deactivated successfully.';
+        if ($submitClass == 'deactivate-form') {
+            $user = new deactivateCustomerAccount();
+            $deactivateUser = json_decode($user->deactivateCustAcc($_SESSION['user_id']));
+            if (isset($deactivateUser->status)) {
+                if ($deactivateUser->status == 'success') {
+                    $_SESSION['flashdata']['type'] = 'success';
+                    $_SESSION['flashdata']['msg'] = 'account deactivated successfully.';
 
-            // Perform the redirect
-            header('Location: logout.php');
-        } elseif ($deactivateUser->status == 'nothing') {
-            $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
-        } else {
-            $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+                    // Perform the redirect
+                    header('Location: logout.php');
+                } elseif ($deactivateUser->status == 'nothing') {
+                    $_SESSION['flashdata']['type'] = 'danger';
+                    $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+                } else {
+                    $_SESSION['flashdata']['type'] = 'danger';
+                    $_SESSION['flashdata']['msg'] = 'Something went wrong.';
+                }
+            }
         }
+
     }
 
 }

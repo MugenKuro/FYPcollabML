@@ -27,27 +27,7 @@ if (isset($_SESSION['accountType'])) {
 }
 
 // Processing form data when form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $user = new deactivateCustomerAccount();
-    $deactivateUser = json_decode($user->deactivateCustAcc($_SESSION['user_id']));
-    if (isset($deactivateUser->status)) {
-        if ($deactivateUser->status == 'success') {
-            $_SESSION['flashdata']['type'] = 'success';
-            $_SESSION['flashdata']['msg'] = 'account deactivated successfully.';
-
-            // Perform the redirect
-            header('Location: login.php');
-        } elseif ($deactivateUser->status == 'nothing') {
-            $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
-        } else {
-            $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'Something went wrong.';
-        }
-    }
-
-}
 ?>
 
 <!doctype html>
