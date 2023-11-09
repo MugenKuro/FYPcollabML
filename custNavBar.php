@@ -91,9 +91,7 @@ require_once './controller/userController.php';
                                         $item_name = $item->item_name;
                                         $item_price = $item->price;
                                         $image_path = $item->item_image_path;
-                                        $current_folder = basename(__DIR__);
-                                        $dir = "/" . $current_folder;
-                                        $image_src = $dir . $image_path;
+                                        $image_src = "." . $image_path;
 
                                         // Generate HTML for current movie
                                         echo '<a href=' . "viewitem.php?item_id=$item_id" . ' class="card">';
