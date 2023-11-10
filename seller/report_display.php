@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Seller Orders Report</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- <link rel="stylesheet" href="../css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="../css/style.css"> -->
     <style>
         .a {
             padding: 20px;
