@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . "/../controller/AdminController.php";
+require_once "../controller/AdminController.php";
 
 $categoryId = $_GET["category_id"];
 $adminController = new AdminController();

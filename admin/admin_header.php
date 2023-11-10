@@ -41,7 +41,7 @@ if (isset($_SESSION['accountType'])) {
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../css/fontawesome.min.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- <link rel="stylesheet" href="../css/style.css"> -->
 
     <style>
         body {
@@ -143,6 +143,117 @@ if (isset($_SESSION['accountType'])) {
             margin-right: 10px;
             width: 32px;
             height: 32px;
+        }
+
+        .nav-link {
+            display: inline;
+            margin-right: 10px;
+            /* Add some spacing between the links if needed */
+        }
+        .custom-navbar-nav li a,
+        .custom-navbar-cta li {
+            white-space: nowrap; /* Prevent line wrapping */
+        }
+
+
+        .custom-navbar {
+            background: #0988be !important;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .custom-navbar .navbar-brand {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .custom-navbar .navbar-brand>span {
+            opacity: .4;
+        }
+
+        .custom-navbar .navbar-toggler {
+            border-color: transparent;
+        }
+
+        .custom-navbar .navbar-toggler:active,
+        .custom-navbar .navbar-toggler:focus {
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            outline: none;
+        }
+
+        @media (min-width: 992px) {
+            .custom-navbar .custom-navbar-nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+        }
+
+        .custom-navbar .custom-navbar-nav li a {
+            font-weight: 500;
+            color: #ffffff !important;
+            opacity: .5;
+            -webkit-transition: .3s all ease;
+            -o-transition: .3s all ease;
+            transition: .3s all ease;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .custom-navbar .custom-navbar-nav li a:before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 8px;
+                right: 8px;
+                background: #f9bf29;
+                height: 5px;
+                opacity: 1;
+                visibility: visible;
+                width: 0;
+                -webkit-transition: .15s all ease-out;
+                -o-transition: .15s all ease-out;
+                transition: .15s all ease-out;
+            }
+        }
+
+        .custom-navbar .custom-navbar-nav li a:hover {
+            opacity: 1;
+        }
+
+        .custom-navbar .custom-navbar-nav li a:hover:before {
+            width: calc(100% - 16px);
+        }
+
+        .custom-navbar .custom-navbar-nav li.active a {
+            opacity: 1;
+        }
+
+        .custom-navbar .custom-navbar-nav li.active a:before {
+            width: calc(100% - 16px);
+        }
+
+        .custom-navbar .custom-navbar-cta {
+            margin-left: 0 !important;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row;
+        }
+
+        @media (min-width: 768px) {
+            .custom-navbar .custom-navbar-cta {
+                margin-left: 40px !important;
+            }
+        }
+
+        .custom-navbar .custom-navbar-cta li {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .custom-navbar .custom-navbar-cta li:first-child {
+            margin-right: 20px;
         }
     </style>
 
