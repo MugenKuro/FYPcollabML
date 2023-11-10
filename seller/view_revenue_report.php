@@ -6,6 +6,7 @@ $userID = $_SESSION['user_id'];
 
 require_once('../entity/db.php');
 require_once('../sellerAuth.php');
+include('sellerNavBar.php');
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
@@ -136,7 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 </head>
 <body>
     <?php
-    include('sellerNavBar.php');
     include('report_display.php'); // report_display.php to display the content
     ?>
     <div class="container a">

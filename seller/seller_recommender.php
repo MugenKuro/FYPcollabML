@@ -8,22 +8,10 @@ $seller_user_id = $_SESSION['user_id'];
 require_once ('../entity/db.php');
 require_once ('../sellerAuth.php');
 
-include './sellerNavBar.php';
+include('sellerNavBar.php');
 
 $db = new Db();
 
-// if (isset($_SESSION['accountType'])) {
-//     $userRole = $_SESSION['accountType'];
-//     $allowedRoles = array("Seller");
-
-//     if (!in_array($userRole, $allowedRoles)) {
-//         header("location: /seller/seller_recommender.php");
-//         exit;
-//     }
-// } else {
-//     header("location: ../login.php");
-//     exit;
-// }
 // Retrieve the top 5 items with the most sales
 $sql = "SELECT I.item_name, SUM(CI.quantity) AS total_sales
         FROM Items AS I
@@ -50,10 +38,10 @@ if ($saleResult->num_rows > 0) {
 // Execute the Python script to get recommendations
 
 // for windows
-// $pythonScript = "python seller_recommender.py $seller_user_id";
+$pythonScript = "python seller_recommender.py $seller_user_id";
 
 // for Azure
-$pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id 2>&1";
+// $pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id 2>&1";
 $output = shell_exec($pythonScript);
 // echo $output;
 
