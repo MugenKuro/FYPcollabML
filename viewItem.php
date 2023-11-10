@@ -32,9 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         exit;
     }
     $_SESSION["item_id"] = $_GET["item_id"];
-    ;
 
 }
+
 ?>
 
 <!doctype html>
@@ -63,6 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
 
     <title>iCloth</title>
+
+    <script>
+    </script>
 </head>
 
 <body>
@@ -70,9 +73,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     <?php
     include dirname(__FILE__) . ('/custNavBar.php');
 
+    $totalReviews = 0;
+
     $items = new viewAnItem();
     $itemData = json_decode($items->viewItem($_SESSION['item_id']));
-    
+
     if (!empty($itemData)) {
         foreach ($itemData as $item) {
             // Access item properties and generate the HTML dynamically
@@ -85,8 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     }
 
-    $category = new viewCatById();
-    $categoryData = json_decode($category->viewCategoryById($itemCategory));
+    $categoryData = json_decode($items->viewCategoryById($itemCategory));
     if (!empty($categoryData)) {
         foreach ($categoryData as $cat) {
             // Access item properties and generate the HTML dynamically
@@ -94,156 +98,232 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     }
 
+    $itemInventory = json_decode($items->viewSize($_SESSION['item_id']));
+
+    $itemReview = json_decode($items->viewReviews($_SESSION['item_id']));
+
+    $itemSeller = json_decode($items->viewSellers($seller_id));
+    if (!empty($itemSeller)) {
+        foreach ($itemSeller as $seller) {
+            // Access item properties and generate the HTML dynamically
+            $sellerName = $seller->seller_name;
+            $sellerImage = $seller->profile_image;
+        }
+    }
+
+    $item_id = $_SESSION["item_id"];
+
     $current_folder = basename(__DIR__);
     $dir = "/" . $current_folder;
 
     ?>
 
 
-        <div>
-            <link href="./view-item.css" rel="stylesheet" />
-            <div class="view-item-container">
-                <div class="view-item-container01">
-                    <div class="view-item-container02">
-                        <img alt="image" src="<?php echo '.' . $itemImage?>" class="view-item-image" />
-                        <div class="view-item-container03">
-                            <div class="view-item-container04">
-                                <span class="view-item-text">
-                                    <span class="view-item-text01"><?php echo $itemName?></span>
-                                    <br />
+    <div>
+        <link href="./view-item.css" rel="stylesheet" />
+        <div class="view-item-container">
+            <div class="view-item-container01">
+                <div id="message"></div>
+                <div class="view-item-container02">
+                    <img alt="image" src="<?php echo '.' . $itemImage ?>" class="view-item-image" />
+                    <div class="view-item-container03">
+                        <div class="view-item-container04">
+                            <span class="view-item-text">
+                                <span class="view-item-text01">
+                                    <?php echo $itemName ?>
                                 </span>
-                                <span class="view-item-text03">
-                                    <span>$</span>
-                                    <span><?php echo $itemPrice?></span>
-                                    <br />
+                                <br />
+                            </span>
+                            <span class="view-item-text03">
+                                <span>$</span>
+                                <span>
+                                    <?php echo $itemPrice ?>
                                 </span>
-                            </div>
-                            <div class="view-item-container05">
-                                <div class="view-item-container06">
-                                    <img alt="image" src="./images/default_user.jpg" class="view-item-image1" />
-                                    <div class="view-item-container07">
-                                        <span class="view-item-text07">
-                                            <span>Hype Tshirt seller</span>
-                                            <br />
+                                <br />
+                            </span>
+                        </div>
+                        <div class="view-item-container05">
+                            <div class="view-item-container06">
+                                <img alt="image" src="<?php echo "." . $sellerImage ?>" class="view-item-image1" />
+                                <div class="view-item-container07">
+                                    <span class="view-item-text07">
+                                        <span>
+                                            <?php echo $sellerName ?>
                                         </span>
-                                        <span class="view-item-text10">
-                                            <span class="view-item-text11">5 star</span>
-                                            <br />
-                                        </span>
-                                    </div>
+                                    </span>
                                 </div>
-                                <div class="view-item-container08">
-                                    <button type="button" class="view-item-button button"
-                                        onclick="window.location='cart.php'">
+                            </div>
+                            <div class="view-item-container08">
+                                <form action="" class="add-form-submit">
+                                    <div class="col-sm-6">
+                                        <label for="size">Size</label>
+                                        <select id="size" name="size" class="added_size form-control"
+                                            style="margin-bottom: 5px;">
+                                            <?php
+                                            if (!empty($itemInventory)) {
+                                                foreach ($itemInventory as $item) {
+                                                    $itemSize = $item->size;
+                                                    echo "<option value=\"$itemSize\"";
+                                                    echo ">$itemSize</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" class="added_id" value="<?= $item_id ?>">
+                                    <input type="hidden" class="added_price" value="<?= $itemPrice ?>">
+                                    <input type="hidden" class="added_qty" value="1">
+                                    <button type="button" class="view-item-button addItemBtn">
                                         <span class="view-item-text13">
                                             <span>Add to cart</span>
                                             <br />
                                         </span>
                                     </button>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                        <div class="view-item-container09"></div>
-                        <div class="view-item-container10">
-                            <span class="view-item-text16">
-                                <span class="view-item-text17">Category</span>
-                                <br />
+                    </div>
+                    <div class="view-item-container09"></div>
+                    <div class="view-item-container10">
+                        <span class="view-item-text16">
+                            <span class="view-item-text17">Category</span>
+                            <br />
+                        </span>
+                        <span class="view-item-text19">
+                            <span>
+                                <?php echo $categoryName ?>
                             </span>
-                            <span class="view-item-text19">
-                                <span><?php echo $categoryName?></span>
-                                <br />
-                            </span>
-                        </div>
-                        <div class="view-item-container11">
-                            <span class="view-item-text22">
-                                <span class="view-item-text23">Description</span>
-                                <br />
-                            </span>
-                            <span class="view-item-text25">
-                                &gt; <?php echo $itemDescription?>
-                            </span>
-                        </div>
-                        <div class="view-item-container12"></div>
-                        <div class="view-item-container13">
-                            <span class="view-item-text26">
-                                <span>Reviews</span>
-                                <br />
-                            </span>
+                            <br />
+                        </span>
+                    </div>
+                    <div class="view-item-container11">
+                        <span class="view-item-text22">
+                            <span class="view-item-text23">Description</span>
+                            <br />
+                        </span>
+                        <span class="view-item-text25">
+                            &gt;
+                            <?php echo $itemDescription ?>
+                        </span>
+                    </div>
+                    <div class="view-item-container12"></div>
+                    <div class="view-item-container13">
+                        <span class="view-item-text26">
+                            <span>Reviews</span>
+                            <br />
+                        </span>
+                        <?php
+                        $current_item_id = $_SESSION["item_id"];
+
+                        if (!empty($itemReview)) {
+                            $totalReviews = count($itemReview);
+                            $totalRatings = 0; // Variable to store the sum of ratings
+                        
+                            // Calculate average rating
+                            foreach ($itemReview as $review) {
+                                $totalRatings += $review->rating_value;
+                            }
+                            $averageRating = $totalReviews > 0 ? round($totalRatings / $totalReviews, 1) : 0;
+                            ?>
                             <span class="view-item-text29">
-                                <span>5 Star</span>
-                                <span>Review</span>
+                                <span>Average Rating:</span>
+                                <span>
+                                    <?php echo $averageRating; ?> stars
+                                </span>
                                 <br />
                             </span>
                             <span class="view-item-text33">
-                                <span>(3 Reviews)</span>
+                                <span>(
+                                    <?php echo $totalReviews; ?> Reviews)
+                                </span>
                                 <br />
                             </span>
-                            <div class="view-item-container14">
-                                <img alt="image" src="./images/default_user.jpg" class="view-item-image2" />
-                                <div class="view-item-container15">
-                                    <div class="view-item-container16">
-                                        <span class="view-item-text36">
-                                            <span>Hannel</span>
-                                            <br />
-                                        </span>
-                                        <span class="view-item-text39">
-                                            <span class="view-item-text40">5 star</span>
-                                            <br />
-                                        </span>
-                                    </div>
-                                    <span class="view-item-text42">
-                                        <span>Product was amazing, good quality.</span>
-                                        <br />
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="view-item-container17">
-                                <img alt="image" src="./images/default_user.jpg" class="view-item-image3" />
-                                <div class="view-item-container18">
-                                    <div class="view-item-container19">
-                                        <span class="view-item-text45">
-                                            <span>feebee</span>
-                                            <br />
-                                        </span>
-                                        <span class="view-item-text48">
-                                            <span class="view-item-text49">5 star</span>
-                                            <br />
-                                        </span>
-                                    </div>
-                                    <span class="view-item-text51">
-                                        <span>T-shirt was amazing, love it.</span>
-                                        <br />
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="view-item-container20">
-                                <img alt="image" src="./images/default_user.jpg" class="view-item-image4" />
-                                <div class="view-item-container21">
-                                    <div class="view-item-container22">
-                                        <span class="view-item-text54">
-                                            <span>Marina1231</span>
-                                            <br />
-                                        </span>
-                                        <span class="view-item-text57">
-                                            <span class="view-item-text58">5 star</span>
+                            <?php
+
+                            // Display individual reviews
+                            for ($i = 0; $i < min(3, count($itemReview)); $i++) {
+                                $review = $itemReview[$i];
+                                $userImage = $review->image_path;
+                                $userName = $review->nickname;
+                                $rating = $review->rating_value;
+                                $reviewText = $review->review_text;
+                                ?>
+                                <div class="view-item-container14">
+                                    <img alt="image" src="<?php echo "." . $userImage; ?>" class="view-item-image2" />
+                                    <div class="view-item-container15">
+                                        <div class="view-item-container16">
+                                            <span class="view-item-text36">
+                                                <span>
+                                                    <?php echo $userName; ?>
+                                                </span>
+                                                <br />
+                                            </span>
+                                            <span class="view-item-text39">
+                                                <span class="view-item-text40">
+                                                    <?php echo $rating; ?> star
+                                                </span>
+                                                <br />
+                                            </span>
+                                        </div>
+                                        <span class="view-item-text42">
+                                            <span>
+                                                <?php echo $reviewText; ?>
+                                            </span>
                                             <br />
                                         </span>
                                     </div>
-                                    <span class="view-item-text60">
-                                        <span>good</span>
-                                        <br />
-                                    </span>
                                 </div>
-                            </div>
-                        </div>
-                        <?php
-                        include dirname(__FILE__) . ('/similaritem.php');
+                                <?php
+                            }
+                        } else {
+                            echo "No reviews";
+                        }
                         ?>
                     </div>
+                    <button class="view-item-button" id="viewMoreBtn"
+                        onclick="window.location='viewItemReviews.php?item_id=<?php echo $current_item_id; ?>'">
+                        <span class="view-item-text13">
+                            View More
+                        </span>
+                    </button>
+                    <?php
+                    include dirname(__FILE__) . ('/similaritem.php');
+                    ?>
                 </div>
             </div>
         </div>
+    </div>
 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // Send product details in the server
+            $(".addItemBtn").click(function (e) {
+                e.preventDefault();
+                var id = $(".add-form-submit .added_id").val();
+                var price = $(".add-form-submit .added_price").val();
+                var size = $(".add-form-submit .added_size").val();
+                var qty = $(".add-form-submit .added_qty").val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        id: id,
+                        price: price,
+                        size: size,
+                        qty: qty
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        $("#message").html(response);
+                        window.scrollTo(0, 0);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

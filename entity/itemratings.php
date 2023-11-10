@@ -62,6 +62,25 @@ class itemratings {
     
         return json_encode($resp);
     }
+
+    public function viewReviewByItem($item_id) {
+        $sql = "SELECT ir.rating_id, c.customer_id, c.nickname, c.image_path, ir.rating_value, ir.review_text
+        FROM `itemratings` as ir, `customers` as c
+        WHERE ir.customer_id = c.customer_id
+        AND ir.item_id = $item_id";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = array(); // Initialize an empty array to store category data
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row; // Add each category row to the $data array
+            }
+        }
+    
+        return json_encode($data);
+
+    }
     
 
 

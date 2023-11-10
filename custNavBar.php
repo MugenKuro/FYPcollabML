@@ -35,12 +35,12 @@ require_once './controller/userController.php';
     </script>
 
     <div class="container">
-        <a class="navbar-brand" href="index.php">iCloth</a>
+        <a class="navbar-brand" href="trending.php">iCloth</a>
 
         <div class="collapse navbar-collapse">
             <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                 <li>
-                    <a class="nav-link" href="index.php">Home</a>
+                    <a class="nav-link" href="trending.php">Home</a>
                     <a class="nav-link" href="purchaseHistory.php">Purchase history</a>
                     <a class="nav-link" href="userAccountSetting.php">settings</a>
                 </li>

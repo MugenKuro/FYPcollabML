@@ -58,124 +58,120 @@ if (isset($_SESSION['accountType'])) {
     <?php
     include dirname(__FILE__) . ('/custNavBar.php');
     ?>
-    <div class="untree_co-section before-footer-section">
-        <div class="container">
-            <div class="row mb-5">
-                <form class="col-md-12" method="post">
-                    <div class="site-blocks-table">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th class="product-thumbnail">Image</th>
-                                    <th class="product-name">Product</th>
-                                    <th class="product-price">Price</th>
-                                    <th class="product-quantity">Quantity</th>
-                                    <th class="product-total">Total</th>
-                                    <th class="product-remove">Remove</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="product-thumbnail">
-                                        <img src="./images/alexander_mcqueen_Tshirt.jpg" alt="Image" class="img-fluid">
-                                    </td>
-                                    <td class="product-name">
-                                        <h2 class="h5 text-black">Alexander McQueen Shirt</h2>
-                                    </td>
-                                    <td>$100.00</td>
-                                    <td>
-                                        <div class="input-group mb-3 d-flex align-items-center quantity-container"
-                                            style="max-width: 120px;">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-outline-black decrease"
-                                                    type="button">&minus;</button>
-                                            </div>
-                                            <input type="text" class="form-control text-center quantity-amount"
-                                                value="1" placeholder="" aria-label="Example text with button addon"
-                                                aria-describedby="button-addon1">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-black increase"
-                                                    type="button">&plus;</button>
-                                            </div>
-                                        </div>
 
-                                    </td>
-                                    <td>$100.00</td>
-                                    <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                                </tr>
-
-                                <tr>
-                                    <td class="product-thumbnail">
-                                        <img src="./images/jordan_x_j_balvin_shirt.jpg" alt="Image" class="img-fluid">
-                                    </td>
-                                    <td class="product-name">
-                                        <h2 class="h5 text-black">Jordan x J balvin shirt</h2>
-                                    </td>
-                                    <td>$40.00</td>
-                                    <td>
-                                        <div class="input-group mb-3 d-flex align-items-center quantity-container"
-                                            style="max-width: 120px;">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-outline-black decrease"
-                                                    type="button">&minus;</button>
-                                            </div>
-                                            <input type="text" class="form-control text-center quantity-amount"
-                                                value="1" placeholder="" aria-label="Example text with button addon"
-                                                aria-describedby="button-addon1">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-black increase"
-                                                    type="button">&plus;</button>
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                    <td>$40.00</td>
-                                    <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </form>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row mb-5">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <button id="blackBtns" class="btn btn-black btn-sm btn-block">Update Cart</button>
-                        </div>
-                        <div class="col-md-6">
-                            <button id="blackBtns" class="btn btn-outline-black btn-sm btn-block"
-                                onclick="window.location='index.php'">Continue
-                                Shopping</button>
-                        </div>
-                    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div style="display:<?php if (isset($_SESSION['showAlert'])) {
+                    echo $_SESSION['showAlert'];
+                } else {
+                    echo 'none';
+                }
+                unset($_SESSION['showAlert']); ?>" class="alert alert-success alert-dismissible mt-3">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>
+                        <?php if (isset($_SESSION['message'])) {
+                            echo $_SESSION['message'];
+                        }
+                        unset($_SESSION['showAlert']); ?>
+                    </strong>
                 </div>
-                <div class="col-md-6 pl-5">
-                    <div class="row justify-content-end">
-                        <div class="col-md-7">
-                            <div class="row">
-                                <div class="col-md-12 text-right border-bottom mb-5">
-                                    <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col-md-6">
-                                    <span class="text-black">Total</span>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <strong class="text-black">$140.00</strong>
-                                </div>
-                            </div>
+                <div class="table-responsive mt-2">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <td colspan="8">
+                                    <h4 class="text-center text-info m-0">Products in your cart!</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                                <th>
+                                    <a href="action.php?clear=all" class="badge-danger badge p-1"
+                                        style="background-color: red;"
+                                        onclick="return confirm('Are you sure want to clear your cart?');"><i
+                                            class="fas fa-trash"></i>&nbsp;&nbsp;Clear Cart</a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $cartitems = new viewCartItems();
+                            $cart_id = $cartitems->checkIfCartExist($_SESSION['user_id']);
+                            $_SESSION['cart_id'] = $cart_id;
+                            $itemData = json_decode($cartitems->viewCartItem($cart_id));
+                            $grand_total = 0;
+                            $current_folder = basename(__DIR__);
+                            $dir = "/" . $current_folder;
+                            if (empty($itemData)) {
+                                echo '<tr><td colspan="8">No items found in the cart</td></tr>';
+                            } else {
+                                foreach ($itemData as $item):
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <?= $item->cart_item_id ?>
+                                        </td>
+                                        <input type="hidden" class="pid" value="<?= $item->cart_item_id ?>">
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button id="blackBtns" class="btn btn-black btn-lg py-3 btn-block"
-                                        onclick="window.location='checkOut.php'">Proceed To Checkout</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                        <td><img src="<?= $dir . $item->item_image_path ?>" width="50"></td>
+
+                                        <td>
+                                            <?= $item->item_name ?>
+                                        </td>
+
+                                        <td>
+                                            <?= $item->size ?>
+                                        </td>
+
+                                        <td>
+                                            <i class="fas fa-dollar-sign"></i>&nbsp;&nbsp;
+                                            <?= number_format($item->price, 2); ?>
+                                        </td>
+                                        <input type="hidden" class="pprice" value="<?= $item->price ?>">
+
+                                        <td>
+                                            <input type="number" class="form-control itemQty" value="<?= $item->quantity ?>"
+                                                style="width:75px;">
+                                        </td>
+
+                                        <td><i class="fas fa-dollar-sign"></i>&nbsp;&nbsp;
+                                            <?= number_format($item->price * $item->quantity, 2); ?>
+                                        </td>
+                                        <td>
+                                            <a href="action.php?remove=<?= $item->cart_item_id ?>&price=<?= $item->price ?>" class="text-danger lead"
+                                                onclick="return confirm('Are you sure want to remove this item?');"><i
+                                                    class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <?php $grand_total += $item->total_price; ?>
+
+                                <tr>
+                                    <td colspan="3">
+                                        <a href="index.php" class="btn btn-success"><i
+                                                class="fas fa-cart-plus"></i>&nbsp;&nbsp;Continue
+                                            Shopping</a>
+                                    </td>
+                                    <td colspan="2"><b>Grand Total</b></td>
+                                    <td><b><i class="fas fa-dollar-sign"></i>&nbsp;&nbsp;
+                                            <?= number_format($grand_total, 2); ?>
+                                        </b></td>
+                                    <td colspan="2">
+                                        <a href="checkout.php"
+                                            class="btn btn-info <?= ($grand_total > 1) ? '' : 'disabled'; ?>"><i
+                                                class="far fa-credit-card"></i>&nbsp;&nbsp;Checkout</a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
