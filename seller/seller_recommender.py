@@ -39,53 +39,113 @@ try:
         else:
             print("Error: User ID not provided.")
             sys.exit(1)
-        
-        # Fetch the preferred category of the seller
+
+        # Fetch the seller's seller_id based on their user_id
         cursor.execute(
-            "SELECT preferred_category FROM Sellers WHERE user_id = %s",
+            "SELECT seller_id FROM Sellers WHERE user_id = %s",
             (seller_user_id,)
         )
-        preferred_category = cursor.fetchone()[0]
+        seller_id = cursor.fetchone()[0]
 
-        # Query item ratings from the database
+        # Check if the seller has any items attached to them
         cursor.execute(
-            "SELECT customer_id, item_id, rating_value FROM ItemRatings"
+            "SELECT COUNT(*) FROM Items WHERE seller_id = %s",
+            (seller_id,)
         )
-        data = cursor.fetchall()
-        
-        # Create a DataFrame from the fetched data
-        df = pd.DataFrame(data, columns=['customer_id', 'item_id', 'rating_value'])
-        
-        # Create a Surprise dataset from the DataFrame
-        reader = Reader(rating_scale=(1, 5))
-        dataset = Dataset.load_from_df(df[['customer_id', 'item_id', 'rating_value']], reader)
-        
-        # Build a train set
-        trainset = dataset.build_full_trainset()
-        
-        # Build and train an SVD model
-        model = SVD()
-        model.fit(trainset)
-        
-        # Get a list of all item IDs from the preferred category
-        cursor.execute(
-            "SELECT item_id FROM Items WHERE category_id = %s",
-            (preferred_category,)
-        )
-        preferred_category_items = [row[0] for row in cursor.fetchall()]
-        
-        # Predict ratings for items from the preferred category
-        predicted_ratings = {}
-        for item_id in preferred_category_items:
-            prediction = model.predict(seller_user_id, item_id)
-            predicted_ratings[item_id] = prediction.est
-        
-        # Sort items by predicted rating (highest to lowest)
-        sorted_predicted_items = sorted(predicted_ratings.items(), key=lambda x: x[1], reverse=True)
-        
-        # Display the top recommended items from the preferred category
-        top_recommendations = [{"item_id": item_id, "predicted_rating": rating} for item_id, rating in sorted_predicted_items[:6]]
-        
+        item_count = cursor.fetchone()[0]
+
+        if item_count > 0:
+            # If the seller has items, recommend those items
+            cursor.execute(
+                "SELECT item_id FROM Items WHERE seller_id = %s",
+                (seller_id,)
+            )
+            items_to_recommend = [row[0] for row in cursor.fetchall()]
+
+            # Query item ratings from the database
+            cursor.execute(
+                "SELECT customer_id, item_id, rating_value FROM ItemRatings"
+            )
+            data = cursor.fetchall()
+
+            # Create a DataFrame from the fetched data
+            df = pd.DataFrame(data, columns=['customer_id', 'item_id', 'rating_value'])
+
+            # Create a Surprise dataset from the DataFrame
+            reader = Reader(rating_scale=(1, 5))
+            dataset = Dataset.load_from_df(df[['customer_id', 'item_id', 'rating_value']], reader)
+
+            # Build a train set
+            trainset = dataset.build_full_trainset()
+
+            # Build and train an SVD model
+            model = SVD()
+            model.fit(trainset)
+
+            # Predict ratings for items to recommend
+            predicted_ratings = {}
+            for item_id in items_to_recommend:
+                prediction = model.predict(seller_user_id, item_id)
+                predicted_ratings[item_id] = prediction.est
+
+            # Sort items by predicted rating (highest to lowest)
+            sorted_predicted_items = sorted(predicted_ratings.items(), key=lambda x: x[1], reverse=True)
+
+            # Display the top recommended items
+            top_recommendations = [{"item_id": item_id, "predicted_rating": rating} for item_id, rating in sorted_predicted_items[:6]]
+
+        else:
+            # If the seller has no items, fetch top-rated items in their preferred category
+            cursor.execute(
+                "SELECT preferred_category FROM Sellers WHERE user_id = %s",
+                (seller_user_id,)
+            )
+            preferred_category = cursor.fetchone()[0]
+
+            cursor.execute(
+                "SELECT item_id FROM Items WHERE category_id = %s",
+                (preferred_category,)
+            )
+            items_to_recommend = [row[0] for row in cursor.fetchall()]
+
+            top_recommendations = []
+
+            if len(items_to_recommend) == 0:
+                print("No items available for recommendations.")
+                sys.exit(0)
+
+            # Query item ratings from the database
+            cursor.execute(
+                "SELECT customer_id, item_id, rating_value FROM ItemRatings"
+            )
+            data = cursor.fetchall()
+
+            # Create a DataFrame from the fetched data
+            df = pd.DataFrame(data, columns=['customer_id', 'item_id', 'rating_value'])
+
+            # Create a Surprise dataset from the DataFrame
+            reader = Reader(rating_scale=(1, 5))
+            dataset = Dataset.load_from_df(df[['customer_id', 'item_id', 'rating_value']], reader)
+
+            # Build a train set
+            trainset = dataset.build_full_trainset()
+
+            # Build and train an SVD model
+            model = SVD()
+            model.fit(trainset)
+
+            # Predict ratings for items in the preferred category
+            predicted_ratings = {}
+            for item_id in items_to_recommend:
+                prediction = model.predict(seller_user_id, item_id)
+                predicted_ratings[item_id] = prediction.est
+
+            # Sort items by predicted rating (highest to lowest)
+            sorted_predicted_items = sorted(predicted_ratings.items(), key=lambda x: x[1], reverse=True)
+
+            # Display the top recommended items
+            top_recommendations = [{"item_id": item_id, "predicted_rating": rating} for item_id, rating in sorted_predicted_items[:6]]
+
         # Print recommendations as JSON
         recommendations_json = json.dumps(top_recommendations)
         print(recommendations_json)
