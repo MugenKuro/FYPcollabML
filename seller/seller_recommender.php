@@ -5,10 +5,10 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $seller_user_id = $_SESSION['user_id'];
 
-// require_once('../auth.php');
 require_once ('../entity/db.php');
+require_once ('../sellerAuth.php');
 
-include dirname(__FILE__) . ('/sellerNavBar.php');
+include './sellerNavBar.php';
 
 $db = new Db();
 

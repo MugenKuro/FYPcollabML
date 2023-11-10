@@ -1,10 +1,11 @@
 <?php
-// Include db.php to access the Db class
-require_once('../entity/db.php');
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+$userID = $_SESSION['user_id'];
+
+require_once('../entity/db.php');
+require_once('../sellerAuth.php');
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
@@ -19,12 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     if ($db->getConnectError()) {
         die("Connection failed: " . $db->getConnectError());
     }
-
-    // Get the user ID from the session
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-    $userID = $_SESSION['user_id'];
 
     // Fetch seller details based on the user ID
     $sellerQuery = "SELECT seller_id FROM Sellers WHERE user_id = ?";
@@ -94,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Seller Orders Report</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- <title>Seller Orders Report</title> -->
+    <!-- <link rel="stylesheet" href="../css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="../css/style.css"> -->
     <style>
         .a {
             padding: 20px;
@@ -141,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 </head>
 <body>
     <?php
-    include dirname(__FILE__) . ('/sellerNavBar.php');
+    include('sellerNavBar.php');
     include('report_display.php'); // report_display.php to display the content
     ?>
     <div class="container a">
