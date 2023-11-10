@@ -1,3 +1,13 @@
+<style>
+        .item-name {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines to show */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+
 <div class="view-item-container23">
     <span class="view-item-text63">
         <span>Similar Items</span>
@@ -15,9 +25,6 @@
 
         // Check if there are recommendations, if not, display most popular items
         if ($recommendations && json_last_error() == JSON_ERROR_NONE) {
-            echo '<div class="homepage-container">';
-            echo '<h1 class="homepage-text">Recommended Just For You</h1>';
-            echo '<div class="homepage-container01">';
 
             // Initialize counter for homepage-container02
             $container02Count = 25;
@@ -37,7 +44,7 @@
 
                     echo '<div class="view-item-container' . $container02Count . '" onclick="redirectToViewItem(' . $item_id . ')">';
                     echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
-                    echo '<span>';
+                    echo '<span class="item-name">';
                     echo '<span>' . $item_name . '</span>';
                     echo '<br />';
                     echo '</span>';
@@ -48,9 +55,7 @@
                 }
             }
 
-            echo '</div>';
-            echo '</div>';
-        } /* else {
+        }  else {
             // failure so display random
             // Set the seed
             mt_srand($item_id_rec);
@@ -83,7 +88,7 @@
                     $container02Count++;
                 }
             } 
-            }*/
+            }
         ?>
         <script>
             function redirectToViewItem(itemId) {
