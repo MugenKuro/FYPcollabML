@@ -6,6 +6,10 @@ require_once dirname(__FILE__) . '/../entity/customers.php';
 require_once dirname(__FILE__) . '/../entity/orderhistory.php';
 require_once dirname(__FILE__) . '/../entity/itemratings.php';
 require_once dirname(__FILE__) . '/../entity/items.php';
+require_once dirname(__FILE__) . '/../entity/cartitems.php';
+require_once dirname(__FILE__) . '/../entity/inventory.php';
+require_once dirname(__FILE__) . '/../entity/sellers.php';
+require_once dirname(__FILE__) . '/../entity/shoppingcarts.php';
 
 class registerController{
     
@@ -162,6 +166,36 @@ class viewAnItem {
 
         return json_encode($data);
     }
+
+    public function viewCategoryById($category_id)
+    {
+        $category = new categories();
+        $data = json_decode($category->viewCategoryById($category_id));
+
+        return json_encode($data);
+    }
+
+    public function viewSize($item_id) {
+        $inventory = new inventory();
+        $data = json_decode($inventory->viewInventory($item_id));
+
+        return json_encode($data);
+    }
+
+    public function viewReviews($item_id) {
+        $reviews = new itemratings();
+        $data = json_decode($reviews->viewReviewByItem($item_id));
+
+        return json_encode($data);
+    }
+
+    public function viewSellers($seller_id) {
+        $sellers = new sellers();
+        $data = json_decode($sellers->viewSellers($seller_id));
+
+        return json_encode($data);
+    }
+    
 }
 
 class searchItemByName {
@@ -173,6 +207,76 @@ class searchItemByName {
     }
 }
 
+class viewCartItems {
+    public function checkIfCartExist($user_id) {
+        $cart = new shoppingcarts();
+        $data = $cart->checkIfCartExist($user_id);
+
+        return $data;
+    }
+
+    public function viewCartItem($cart_id) {
+        $cartitems = new cartitems();
+        $data = json_decode($cartitems->viewCartItem($cart_id));
+
+        return json_encode($data);
+    }
+}
+
+class addItemsToCart {
+    public function checkIfCartExist($user_id) {
+        $cart = new shoppingcarts();
+        $data = $cart->checkIfCartExist($user_id);
+
+        return $data;
+    }
+
+    public function addToCart($cart_id, $item_id, $size, $quantity) {
+        $cart = new cartitems();
+        $data = $cart->addCartItem($cart_id, $item_id, $size, $quantity);
+
+        return $data;
+    }
+
+    public function updateCartPrice($cart_id, $total_price) {
+        $cart = new shoppingcarts();
+        $data = $cart->updateCartPrice($cart_id, $total_price);
+
+        return $data;
+    }
+}
+
+class clearCartItems {
+    public function clearCart($cart_id) {
+        $cart = new cartitems();
+        $data = $cart->clearCart($cart_id);
+
+        return $data;
+    }
+
+    public function updateCartPriceToZero($cart_id) {
+        $cart = new shoppingcarts();
+        $data = $cart->updateCartPriceToZero($cart_id);
+
+        return $data;
+    }
+}
+
+class removeAnCartItem {
+    public function removeAnItem($cart_item_id) {
+        $cart = new cartitems();
+        $data = $cart->removeAnItem($cart_item_id);
+
+        return $data;
+    }
+
+    public function updateCartPriceMinus($cart_id, $price) {
+        $cart = new shoppingcarts();
+        $data = $cart->updateCartPriceMinus($cart_id, $price);
+
+        return $data;
+    }
+}
 
 
 
