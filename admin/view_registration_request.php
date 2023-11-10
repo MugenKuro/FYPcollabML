@@ -25,8 +25,10 @@ $result = $adminController->viewRegistrationRequests();
 <head>
     <style>
         .table td {
+            white-space: nowrap; 
             overflow: hidden;
             text-overflow: ellipsis; 
+            max-width: 125px; 
         }
     </style>
 </head>
