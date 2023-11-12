@@ -43,6 +43,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // Check if the form was submitted for adding new inventory
+    if (isset($_POST["item_name"]) && isset($_POST["size"]) && isset($_POST["quantity"])) {
+        $itemName = $_POST["item_name"];
+        $size = $_POST["size"];
+        $quantity = $_POST["quantity"];
+
+        // Query to add a new inventory record
+        $insertSql = "INSERT INTO Inventory (item_id, size, quantity)
+                      VALUES ((SELECT item_id FROM Items WHERE item_name = ? AND seller_id = (SELECT seller_id FROM Users WHERE user_id = ? AND account_type = 'Seller')), ?, ?)";
+        $insertParams = [$itemName, $sellerUserId, $size, $quantity];
+
+        try {
+            $result = $db->query($insertSql, $insertParams);
+
+            if ($result) {
+                // Set the success message
+                $successMessage = 'Inventory added successfully.';
+            } else {
+                $successMessage = 'Error adding inventory: ' . $db->getConnectError();
+            }
+        } catch (Exception $e) {
+            $successMessage = 'Error: ' . $e->getMessage();
+        }
+    }
+
     // Check if the form was submitted for searching item names
     if (isset($_POST["search_query"])) {
         $searchQuery = $_POST["search_query"];
@@ -64,17 +89,23 @@ if (!empty($searchQuery)) {
     $params = [$sellerUserId];
 }
 ?>
-               
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Add your CSS stylesheets and any necessary scripts here -->
+    <link rel="stylesheet" href="your-styles.css">
+    <script src="your-scripts.js"></script>
 </head>
 <body>
 <?php
 include('sellerNavBar.php');
-?> 
+?>
 <div class="container mt-4">
-    <h1>Inventory Management</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Inventory Management</h1>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addInventoryModal">Add Inventory</button>
+    </div>
     <form method="post" action="" class="mb-3">
         <div class="input-group">
             <input type="text" class="form-control" name="search_query" placeholder="Search Item Names" value="<?php echo $searchQuery; ?>">
@@ -88,64 +119,114 @@ include('sellerNavBar.php');
         $result = $db->query($sql, $params);
         if ($result->num_rows > 0) {
             ?>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Item Name</th>
-                <th>Size</th>
-                <th>Quantity</th>
-                <th>Update Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = $result->fetch_assoc()) { ?>
+            <table class="table table-bordered">
+                <thead>
                 <tr>
-                    <td><?php echo $row['item_name']; ?></td>
-                    <td><?php echo $row['size']; ?></td>
-                    <td><?php echo $row['quantity']; ?></td>
-                    <td>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#updateModal<?php echo $row['inventory_id']; ?>">Update</button>
-                    </td>
+                    <th>Item Name</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Update Quantity</th>
                 </tr>
+                </thead>
+                <tbody>
+                <?php while ($row = $result->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo $row['item_name']; ?></td>
+                        <td><?php echo $row['size']; ?></td>
+                        <td><?php echo $row['quantity']; ?></td>
+                        <td>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#updateModal<?php echo $row['inventory_id']; ?>">Update</button>
+                        </td>
+                    </tr>
 
-                <!-- Modal for updating quantity -->
-                <div class="modal fade" id="updateModal<?php echo $row['inventory_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Update Quantity</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="">
-                                    <input type="hidden" name="inventory_id" value="<?php echo $row['inventory_id']; ?>">
-                                    <input type="hidden" name="size" value="<?php echo $row['size']; ?>">
-                                    <div class="form-group">
-                                        <label for="new_quantity">New Quantity:</label>
-                                        <input type="text" class="form-control" id="new_quantity<?php echo $row['inventory_id']; ?>" name="new_quantity" placeholder="New Quantity" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!-- Modal for updating quantity -->
+                    <div class="modal fade" id="updateModal<?php echo $row['inventory_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Update Quantity</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="">
+                                        <input type="hidden" name="inventory_id" value="<?php echo $row['inventory_id']; ?>">
+                                        <input type="hidden" name="size" value="<?php echo $row['size']; ?>">
+                                        <div class="form-group">
+                                            <label for="new_quantity">New Quantity:</label>
+                                            <input type="text" class="form-control" id="new_quantity<?php echo $row['inventory_id']; ?>" name="new_quantity" placeholder="New Quantity" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
-        </tbody>
-    </table>
-    <?php
-} else {
-    echo 'You have no inventory records.';
-}
-} catch (Exception $e) {
-echo 'Error: ' . $e->getMessage();
-}
-?>
+                <?php } ?>
+                </tbody>
+            </table>
+        <?php
+        } else {
+            echo 'You have no inventory records.';
+        }
+    } catch (Exception $e) {
+        echo 'Error: ' . $e->getMessage();
+    }
+    ?>
 </div>
+
+<!-- Modal for adding inventory -->
+<div class="modal fade" id="addInventoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Inventory</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="">
+                    <div class="form-group">
+                        <label for="item_name">Item Name:</label>
+                        <select class="form-control" id="item_name" name="item_name" required>
+                            <?php
+                            // Query to retrieve item names for the seller
+                            $itemNamesSql = "SELECT item_name FROM Items WHERE seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?)";
+                            $itemNamesParams = [$sellerUserId];
+
+                            try {
+                                $itemNamesResult = $db->query($itemNamesSql, $itemNamesParams);
+                                while ($itemNameRow = $itemNamesResult->fetch_assoc()) {
+                                    echo "<option value='" . $itemNameRow['item_name'] . "'>" . $itemNameRow['item_name'] . "</option>";
+                                }
+                            } catch (Exception $e) {
+                                echo 'Error: ' . $e->getMessage();
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="size">Size:</label>
+                        <input type="text" class="form-control" id="size" name="size" placeholder="Size" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
