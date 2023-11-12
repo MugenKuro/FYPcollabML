@@ -66,7 +66,7 @@
                     echo "<td>{$order['item_name']}</td>";
                     echo "<td>{$order['quantity']}</td>";
                     echo "<td>$" . number_format($order['price'], 2) . "</td>";
-                    echo "<td>$" . number_format($order['fee'], 2) . "</td>"; // Display the 'Fee'
+                    echo "<td>-$" . number_format($order['fee'], 2) . "</td>"; // Display the 'Fee'
                     echo "<td>$" . number_format($order['revenue'], 2) . "</td>";
                     echo "</tr>";
                 }
