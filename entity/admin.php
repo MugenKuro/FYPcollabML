@@ -228,6 +228,20 @@ class Admin
             echo $updateSql . "<br>" . $e->getMessage();
         }
     }
+
+    // Function to reject deactivation request
+    public function rejectDeactivation($sellerID) {
+        try {
+            // Update the status of the user in the Users table
+            $updateUserSql = "UPDATE Users SET status = 'Active' WHERE user_id = (SELECT user_id FROM Sellers WHERE seller_id = ?)";
+            $stmtUser = $this->db->prepare($updateUserSql);
+            $stmtUser->bind_param("i", $sellerID);
+            $stmtUser->execute();
+        } catch (Exception $e) {
+            echo $updateSql . "<br>" . $e->getMessage();
+        }
+    }
+    
     
     public function viewRegistrationRequests() {
         try {
@@ -249,6 +263,22 @@ class Admin
             $updateSql = "UPDATE Users u
                           JOIN Sellers s ON u.user_id = s.user_id
                           SET u.status = 'Active'
+                          WHERE s.seller_id = ? AND u.account_type = 'Seller'";
+            $stmt = $this->db->prepare($updateSql);
+            $stmt->bind_param("i", $sellerID);
+    
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    public function rejectSeller($sellerID) {
+        try {
+            // Update the 'Users' table based on 'seller_id' by joining with 'Sellers'
+            $updateSql = "UPDATE Users u
+                          JOIN Sellers s ON u.user_id = s.user_id
+                          SET u.status = 'Rejected'
                           WHERE s.seller_id = ? AND u.account_type = 'Seller'";
             $stmt = $this->db->prepare($updateSql);
             $stmt->bind_param("i", $sellerID);

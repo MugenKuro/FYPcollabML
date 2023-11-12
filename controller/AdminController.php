@@ -49,12 +49,21 @@ class AdminController {
         return $this->admin->deactivateSeller($sellerID);
     }
 
+    public function rejectDeactivation($sellerID) {
+        return $this->admin->rejectDeactivation($sellerID);
+    }
+    
+
     public function viewRegistrationRequests() {
         return $this->admin->viewRegistrationRequests();
     }
 
     public function approveSeller($sellerID) {
         return $this->admin->approveSeller($sellerID);
+    }
+
+    public function rejectSeller($sellerID) {
+        return $this->admin->rejectSeller($sellerID);
     }
 
     public function viewAllSellers($sellerTypeFilter, $statusFilter) {
