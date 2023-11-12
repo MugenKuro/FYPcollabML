@@ -8,13 +8,22 @@ $adminController = new AdminController();
 // Initialize a variable to store the success message
 $successMessage = '';
 
-// Check if the "Approve" button is clicked
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["approve"])) {
+// Check if the "Approve" or "Reject" button is clicked
+if ($_SERVER["REQUEST_METHOD"] === "POST" && (isset($_POST["approve"]) || isset($_POST["reject"]))) {
     $sellerID = $_POST["seller_id"];
-    if (!$adminController->approveSeller($sellerID)) {
-        $successMessage = "Seller approved successfully";
-    } else {
-        $successMessage = "Error approving seller";
+    
+    if (isset($_POST["approve"])) {
+        if (!$adminController->approveSeller($sellerID)) {
+            $successMessage = "Seller approved successfully";
+        } else {
+            $successMessage = "Error approving seller";
+        }
+    } elseif (isset($_POST["reject"])) {
+        if (!$adminController->rejectSeller($sellerID)) {
+            $successMessage = "Seller rejected successfully";
+        } else {
+            $successMessage = "Error rejecting seller";
+        }
     }
 }
 
@@ -24,11 +33,21 @@ $result = $adminController->viewRegistrationRequests();
 <html lang="en">
 <head>
     <style>
-        .table td {
-            white-space: nowrap; 
-            overflow: hidden;
-            text-overflow: ellipsis; 
-            max-width: 125px; 
+        .table-wrapper {
+            background: #fff;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            overflow-x: auto; /* Add horizontal scroll on small screens */
+            min-width: 1200px; /* Adjust this to the minimum width that your table needs */
+        }
+        button.btn {
+            width: 100px; /* Set a fixed width */
+            height: 40px; /* Set a fixed height */
+            line-height: 40px; /* Align text vertically */
+            text-align: center; /* Align text horizontally */
+            padding: 0; /* Remove padding */
         }
     </style>
 </head>
@@ -103,6 +122,7 @@ $result = $adminController->viewRegistrationRequests();
                             echo "<form method='POST'>";
                             echo "<input type='hidden' name='seller_id' value='" . $row["seller_id"] . "'>";
                             echo "<button type='submit' class='btn btn-success' name='approve'>Approve</button>";
+                            echo "<button type='submit' class='btn btn-danger' name='reject'>Reject</button>";
                             echo "</form>";
                             echo "</td>";
                             echo "</tr>";

@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <select class="form-control" name="status">
                                         <option value="All">All</option>
                                         <option value="Active">Active</option>
+                                        <option value="Rejected">Rejected</option>
                                         <option value="Inactive">Inactive</option>
                                         <option value="Pending Approval">Pending Approval</option>
                                         <option value="Pending Deactivation">Pending Deactivation</option>

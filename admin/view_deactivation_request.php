@@ -18,6 +18,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["deactivate"])) {
     }
 }
 
+// Check if the "Reject" button is clicked
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["reject"])) {
+    $sellerID = $_POST["seller_id"];
+    if (!$adminController->rejectDeactivation($sellerID)) {
+        $successMessage = "Seller rejected successfully!";
+    }
+    else {
+        $successMessage = "Error rejecting seller!";
+    }
+}
+
 $result = $adminController->viewDeactivationRequests();
 ?>
 <!DOCTYPE html>
@@ -82,6 +93,7 @@ $result = $adminController->viewDeactivationRequests();
                             echo "<form method='POST'>";
                             echo "<input type='hidden' name='seller_id' value='" . $row["seller_id"] . "'>";
                             echo "<button type='submit' class='btn btn-danger' name='deactivate'>Deactivate</button>";
+                            echo "<button type='submit' class='btn btn-warning text-white' name='reject'>Reject</button>";
                             echo "</form>";
                             echo "</td>";
                             echo "</tr>";
