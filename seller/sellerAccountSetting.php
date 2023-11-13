@@ -48,46 +48,46 @@ require_once __DIR__ . '/../sellerAuth.php';
                         <span class= "seller-setting-header">Account Setting</span>
                         <span class= "seller-setting-name">Profile Image</span>
                         <img alt="no image found " src="..<?php echo $row["profile_image"] ?>" class="seller-setting-image" />
-                        <table class ="seller-setting-table">
-                            <tr>
-                                <td class ="seller-setting-table-td"><span>Seller Name</span></td>
-                                <td class ="seller-setting-table-td"><?php echo $row["seller_name"] ?></td>
-                                <td class ="seller-setting-table-td">Username</td>
-                                <td class ="seller-setting-table-td"><?php echo $row["username"] ?></td>
-                            </tr>
-                            <tr>
-                                <td class ="seller-setting-table-td">Email</td>
-                                <td class ="seller-setting-table-td"><?php echo $row["email"] ?></td>
-                                <td class ="seller-setting-table-td">Pick-up Address</td>
-                                <td class ="seller-setting-table-td"><?php echo $row["pick_up_address"] ?>
-                            </tr>
-                            <tr>
-                                <td class ="seller-setting-table-td">Description</td>
-                                <td class ="seller-setting-table-td"><?php echo $row["description"] ?></td>
-                                <td class ="seller-setting-table-td">Preferred Category</td>
+                                 <span class= "seller-setting-header"><span>Seller Name</span></span>
+                                 <span class= "seller-setting-name"><?php echo $row["seller_name"] ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Username</span>
+                                 <span class= "seller-setting-name"><?php echo $row["username"] ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Email</span>
+                                 <span class= "seller-setting-name"><?php echo $row["email"] ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Pick-up Address</span>
+                                 <span class= "seller-setting-name"><?php echo $row["pick_up_address"] ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Description</span>
+                                 <span class= "seller-setting-name"><?php echo $row["description"] ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Preferred Category</span>
+                                 <span class= "seller-setting-name">
                             <?php 
                                 $category_name = $sellerController->getCategoryName($row["preferred_category"]);
                                 $categoryQuery = $category_name->fetch_assoc();
                                 $categoryString = $categoryQuery["category_name"];
                             ?>
-                                <td class ="seller-setting-table-td"><?php echo $categoryString ?></td>
-                            </tr>
-
+                            </span>
+                                 <span class= "seller-setting-name"><?php echo $categoryString ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Bank Name</span>
+                                 <span class= "seller-setting-name"><?php echo $row["bank_name"] ?></span>
+                                 <br>
+                                 <span class= "seller-setting-header">Bank Number</span>
+                                 <span class= "seller-setting-name"><?php echo $row["bank_account_no"] ?></span>
+                                 <br>
+                            <table class ="seller-setting-table">
                             <tr>
-                                <td class ="seller-setting-table-td">Bank Name</td>
-                                <td class ="seller-setting-table-td"><?php echo $row["bank_name"] ?></td>
-                                <td class ="seller-setting-table-td">Bank Number</td>
-                                <td class ="seller-setting-table-td"><?php echo $row["bank_account_no"] ?></td>
-                            </tr>
-                            <tr>
-                                <td></td>
                                 <td class="seller-setting-button-td">
                                     <button type="button" class="seller-setting-button button"  onclick="window.location='sellerEditSettings.php'">
-                                    <span>Edit login Details</span></td>
+                                    <span>Edit login Details</span></span>
                                 <td class="seller-setting-button-td">
                                     <button type="button" class="seller-setting-button1 button" onclick="window.location='sellerHomepage.php'">
                                     <span>Cancel</span></button>
-                                </td>
+                                </span>
                             </tr>
                         </table>
                 </div>

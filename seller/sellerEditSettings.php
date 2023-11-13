@@ -121,52 +121,38 @@ require_once __DIR__ . '/../sellerAuth.php';
     $result = $sellerController->showSettings();
     $row = $result->fetch_assoc();
     ?>
-                            <br>
-                        <span class= "seller-setting-header">Edit Account Setting</span>
-<br><br>
-                        <form class="seller-form" enctype="multipart/form-data" action="sellerEditSettings.php" method="POST">
-                            <table class ="seller-edit-table">
-                                <tr>
-                                <td class ="seller-edit-setting-table-td"><span>Profile Image</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="file" id="item_image_path" placeholder="Image"
-                                    name="item_image_path" value=""></input></td>
-                                </tr>
-                            </table>
-                            <br>
-                            <table class ="seller-edit-table">
-                            <tr>
-                                <td class ="seller-edit-setting-table-td"> <span>Seller Name</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="seller name" name="seller_name" value="<?php echo $row['seller_name'] ?>"   
-                                    class="seller-input" /></input></td>
-                                <td class ="seller-edit-setting-table-td"><span>Username</span></td>
-                                <td class ="seller-edit-setting-table-td"><input required type="text" placeholder="username" name="username" value="<?php echo $row['username'] ?>"
-                                    class="seller-input" /></input></td>
-                            </tr>
-                            <?php
-                            $address= $row['pick_up_address'];
-                            list($address1, $address2, $address3) = explode(',', $address);
-                            ?>
-                            <tr>
-                            <td class ="seller-edit-setting-table-td"><span>Pick-Up Address</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="street name" name="address1" value="<?php echo $address1 ?>"
-                                    class="seller-input" /></input></td>
-                                    <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="blk number" name="address2" value="<?php echo $address2 ?>"
-                                    class="seller-input" /></input></td>
-                                    <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="postal code" name="address3" value="<?php echo $address3 ?>"
-                                    class="seller-input" /></input></td>
-                            </tr>
-                            <tr>
-                            <td class ="seller-edit-setting-table-td"> <span>Email</span></td>
-                            <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="email" name="email"  value="<?php echo $row['email'] ?>"
-                                    class="seller-input" /></td>
-                            </tr>
-                            <tr>
-                                <td class ="seller-edit-setting-table-td"> <span>Description</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="description" name="description" value="<?php echo $row['description'] ?>"
-                                    class="seller-input" /></input></td>
-                                <td class ="seller-edit-setting-table-td"> <span>Preferred Category</span></td>
-                                <td class ="seller-edit-setting-table-td">
-							<select id="category_id" name="preferred_category">
+                      <div class="settings-container">
+            <div class="settings-container01">
+                    <span class="settings-text">
+                        <span>Update Account Details</span>
+                        <br />
+                    </span>
+                </div>
+                <div class="settings-container03"></div>
+                <div class="settings-container04">
+                    <form class="update-form" enctype="multipart/form-data" action="sellerEditSettings.php" method="POST">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="email">Seller Name</label>
+                                <input required  type="text" placeholder="seller name" name="seller_name" value="<?php echo $row['seller_name'] ?>"   
+                                class="form-control" /></input>
+                            </div>
+                            <div class="col-sm-6">
+                            <label for="username">Username</label>
+                                <input required type="text" placeholder="username" name="username" value="<?php echo $row['username'] ?>"
+                                    class="form-control" /></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="username">Email </label>
+                                <input required type="text" placeholder="email" name="email"  value="<?php echo $row['email'] ?>"
+                                    class="form-control" /></input>
+                            </div>
+                            <div class="col-sm-6">
+                            <label>Preferred Category</label>
+                            <select id="category_id" name="preferred_category" class= "form-control">
 							<?php
 							$sellerController = new sellerController;
 							$categories = $sellerController->getCategoriesForDropdown();
@@ -178,26 +164,85 @@ require_once __DIR__ . '/../sellerAuth.php';
 							}
 							?>
 							</select>
-							</td>
-                            </tr>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="password">Password</label>
+                                <input type="text" placeholder="password" name="password1"
+                                    class="form-control" /></input>
+                            </div>                           
+                            <?php
+                            $address= $row['pick_up_address'];
+                            list($address1, $address2, $address3) = explode(',', $address);
+                            ?>
+                            <div class="col-sm-6">
+                                <label for="address1">Address 1</label>
+                                <input required  type="text" placeholder="street name" name="address1" value="<?php echo $address1 ?>"
+                                    class="form-control" /></input>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="retypePassword">Re-type Password</label>
+                                <input type="text" placeholder="password" name="password2"
+                                    class="form-control" /></input>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="address2">Address 2</label>
+                                <input required  type="text" placeholder="blk number" name="address2" value="<?php echo $address2 ?>"
+                                    class="form-control" /></input>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="gender">Bank name</label>
+                                <input required  type="text" placeholder="Bank Name" name="bank_name" value="<?php echo $row['bank_name'] ?>"
+                                    class="form-control" /></input>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="address3">Address 3</label>
+                                <input required  type="text" placeholder="postal code" name="address3" value="<?php echo $address3 ?>"
+                                    class="form-control" /></input>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="dob">Bank Number</label>
+                                <input required type="text" placeholder="Bank Number" name="bank_account_no" value="<?php echo $row['bank_account_no'] ?>"
+                                    class="form-control" /></input>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="userImage">Profile Image</label>
+                                <div class="custom-file">
+                                    <input type="file" id="item_image_path" placeholder="Image" name="item_image_path" class="form-control-file" value=""></input>
+                                </div>
+                            </div>
+                            <small class="form-text text-muted col-sm-3">Leave it empty if you're not changing your
+                                image.</small>
+
+                        </div>
+                       
+                        <div class="form-group row">
+                        <div class="col-sm-6">
+                                <label for="firstName">Description</label>
+                                <input required  type="text" placeholder="description" name="description" value="<?php echo $row['description'] ?>"
+                                    class="form-control" /></input>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                        <table class ="seller-setting-table">
                             <tr>
-                                <td class ="seller-edit-setting-table-td"> <span>Bank Name</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input required  type="text" placeholder="Bank Name" name="bank_name" value="<?php echo $row['bank_name'] ?>"
-                                    class="seller-input" /></input></td>
-                                <td class ="seller-edit-setting-table-td"> <span>Bank Number</span></td>
-                                <td class ="seller-edit-setting-table-td"> <input required type="text" placeholder="Bank Number" name="bank_account_no" value="<?php echo $row['bank_account_no'] ?>"
-                                    class="seller-input" /></input></td>
-                            </tr>
-                            <tr>
-                                <td class ="seller-edit-setting-table-td"><span>Password</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="password" name="password1"
-                                    class="seller-input" /></input></td>
-                                    <td class ="seller-edit-setting-table-td"><span>Retype Password</span></td>
-                                <td class ="seller-edit-setting-table-td"><input type="text" placeholder="password" name="password2"
-                                    class="seller-input" /></input></td>
-                            </tr>
-                            <tr>
-                                <td></td>
+    
                                 <div class= "seller-setting-button-container">
                                 <td class="seller-edit-setting-button-td">
                                 <input type="submit" name="updateLogin" class="seller-setting-button"
@@ -210,7 +255,7 @@ require_once __DIR__ . '/../sellerAuth.php';
                                 </td>
                                 </div>
                             </tr>
-                            </table>
+                        </table>
                     </form>
 
                     <form method="POST" action="sellerEditSettings.php">
@@ -218,12 +263,11 @@ require_once __DIR__ . '/../sellerAuth.php';
                             <input type="submit" name="requestDeactivation" value="Request Deactivation"  class="seller-setting-button2 button">
                         </div>
                     </form>
-                </div>
+                    </div>
 
-            </div>
-        </div>
-    </div>
-
+</div>
+</div>
+</div>
 
 </body>
 
