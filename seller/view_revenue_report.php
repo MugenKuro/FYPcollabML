@@ -6,7 +6,7 @@ $userID = $_SESSION['user_id'];
 
 require_once('../entity/db.php');
 require_once('../sellerAuth.php');
-include('sellerNavBar.php');
+
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/tiny-slider.css" rel="stylesheet">
-    <link href="../css/sellerStyle.css" rel="stylesheet">
+	<link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -155,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 </head>
 <body>
     <?php
+    include('sellerNavBar.php');
     include('report_display.php'); // report_display.php to display the content
     ?>
     <div class="container a">

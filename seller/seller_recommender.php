@@ -8,8 +8,6 @@ $seller_user_id = $_SESSION['user_id'];
 require_once ('../entity/db.php');
 require_once ('../sellerAuth.php');
 
-include('sellerNavBar.php');
-
 $db = new Db();
 
 // Retrieve the top 5 items with the most sales
@@ -38,10 +36,10 @@ if ($saleResult->num_rows > 0) {
 // Execute the Python script to get recommendations
 
 // for windows
-// $pythonScript = "python seller_recommender.py $seller_user_id";
+$pythonScript = "python seller_recommender.py $seller_user_id";
 
 // for Azure
-$pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id 2>&1";
+// $pythonScript = "/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/seller/seller_recommender.py $seller_user_id 2>&1";
 $output = shell_exec($pythonScript);
 // echo $output;
 
@@ -69,11 +67,13 @@ echo '<!Doctype html>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
     <title>iCloth</title>
+
 </head>
 <body>';
-
+include('sellerNavBar.php');
 if (!$recommendations) {
     echo '<div class="container mt-5"><p class="text-center">No recommendations available.</p></div>';
 } else {
