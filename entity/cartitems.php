@@ -102,6 +102,18 @@ class cartitems {
         return $data;
     }
 
+    public function updateCartItemQty($cart_item_id, $quantity) {
+        $sql = "UPDATE cartitems SET quantity = $quantity WHERE cart_item_id = '$cart_item_id'";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = false;
+        if ($result > 0) {
+            $data = true;
+        }
+    
+        return $data;
+    }
+
 
 }
 

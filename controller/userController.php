@@ -278,6 +278,52 @@ class removeAnCartItem {
     }
 }
 
+class checkOutCart {
+    public function updateCartPriceTotal($cart_id, $total_price, $cartItemId) {
+        $cart = new shoppingcarts();
+        $data = $cart->updateCartPriceTotal($cart_id, $total_price, $cartItemId);
+
+        return $data;
+    }
+
+    public function viewStock($cart_item_id) {
+        $cart = new inventory();
+        $data = $cart->viewStock($cart_item_id);
+
+        return $data;
+    }
+
+    public function updateCartItemQty($cart_item_id, $quantity) {
+        $cart = new cartitems();
+        $data = $cart->updateCartItemQty($cart_item_id, $quantity);
+
+        return $data;
+    }
+}
+
+class makePayment {
+    public function decreaseQuantity($cart_item_id) {
+        $cart = new inventory();
+        $data = $cart->decreaseQuantity($cart_item_id);
+
+        return $data;
+    }
+
+    public function addOrderHistory($cart_id, $user_id) {
+        $order = new orderhistory();
+        $data = $order->addOrderHistory($cart_id, $user_id);
+
+        return $data;
+    }
+
+    public function checkOutCart($cart_id) {
+        $cart = new shoppingcarts();
+        $data = $cart->setCartInactive($cart_id);
+
+        return $data;
+    }
+}
+
 
 
 ?>

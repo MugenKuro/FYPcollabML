@@ -162,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br />
                             </span>
                             <div class="user-account-setting-container06">
-                                <img src="<?php echo $dir . $imagePath; ?>" alt="image"
+                                <img src="<?php echo "." . $imagePath; ?>" alt="image"
                                     class="user-account-setting-image" />
                             </div>
                         </div>
@@ -297,7 +297,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <button type="button" class="user-account-setting-button button"
                                 onclick="window.location='settings.php'">
                                 <span class="user-account-setting-text64">
-                                    <span>Edit login Details</span>
+                                    <span>Edit Account Details</span>
                                     <br />
                                 </span>
                             </button>
