@@ -14,17 +14,25 @@ if (isset($_POST['id'])) {
     $cart_id = $cart->checkIfCartExist($_SESSION['user_id']);
 
     if (isset($cart_id)) {
-        $addtocart = $cart->addToCart($cart_id, $id, $size, $qty);
-        $updateshoppingcart = $cart->updateCartPrice($cart_id, $total_price);
-        if ($addtocart) {
-            echo '<div class="alert alert-success alert-dismissible mt-2">
+        $stock = (int) $cart->viewItemStock($id, $size);
+        if ($stock >= $qty) {
+            $addtocart = $cart->addToCart($cart_id, $id, $size, $qty);
+            $updateshoppingcart = $cart->updateCartPrice($cart_id, $total_price);
+            if ($addtocart) {
+                echo '<div class="alert alert-success alert-dismissible mt-2">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Item added to your cart!</strong>
             </div>';
+            } else {
+                echo '<div class="alert alert-danger alert-dismissible mt-2">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Item already added to your cart!</strong>
+            </div>';
+            }
         } else {
             echo '<div class="alert alert-danger alert-dismissible mt-2">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Item already added to your cart!</strong>
+            <strong>Not enough stock! '.$stock.' remaining.</strong>
             </div>';
         }
     } else {
@@ -82,7 +90,7 @@ if (isset($_POST['itemQty'])) {
 
     $cart = new checkOutCart();
 
-    $quantity = (int)$cart->viewStock($cartItemId);
+    $quantity = (int) $cart->viewStock($cartItemId);
     if (isset($quantity) && $itemQty > 0 && $itemQty <= $quantity) {
 
         $result2 = $cart->updateCartPriceTotal($_SESSION['cart_id'], $tprice, $cartItemId);
@@ -97,21 +105,21 @@ if (isset($_POST['itemQty'])) {
         } else {
             $_SESSION['showAlert'] = 'block';
             $_SESSION['message'] = 'Error. Something went wrong!';
-            
+
         }
 
     } elseif (isset($quantity) && $itemQty <= 0) {
         $_SESSION['showAlert'] = 'block';
         $_SESSION['message'] = 'Quantity cannot be negative!';
-        
+
     } elseif (isset($quantity) && $itemQty > $quantity) {
         $_SESSION['showAlert'] = 'block';
         $_SESSION['message'] = 'Quantity exceed current stock!';
-        
+
     } else {
         $_SESSION['showAlert'] = 'block';
         $_SESSION['message'] = 'Error. Something went wrong!';
-        
+
     }
 
 }

@@ -38,14 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     ;
 
 } else {
-    $rate = new ratePurchasedItem();
-    extract($_POST);
-    $rating = json_decode($rate->addItemRating($_SESSION["customer_id"], $_SESSION["item_id"], $rating, $review));
-    if ($rating->status == 'success') {
-        $_SESSION['flashdata']['type'] = 'success';
-        $_SESSION['flashdata']['msg'] = 'Review added successfully.';
+    if (isset($_POST['review'])) {
+        $rate = new ratePurchasedItem();
+        extract($_POST);
+        $rating = json_decode($rate->addItemRating($_SESSION["customer_id"], $_SESSION["item_id"], $rating, $review));
+        if ($rating->status == 'success') {
+            $_SESSION['flashdata']['type'] = 'success';
+            $_SESSION['flashdata']['msg'] = 'Review added successfully.';
+        }
     }
-
 }
 ?>
 

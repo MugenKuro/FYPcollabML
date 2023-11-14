@@ -232,6 +232,13 @@ class addItemsToCart {
         return $data;
     }
 
+    public function viewItemStock($item_id, $size) {
+        $inventory = new inventory();
+        $data = $inventory->viewItemStock($item_id, $size);
+
+        return $data;
+    }
+
     public function addToCart($cart_id, $item_id, $size, $quantity) {
         $cart = new cartitems();
         $data = $cart->addCartItem($cart_id, $item_id, $size, $quantity);

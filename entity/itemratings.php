@@ -42,7 +42,7 @@ class itemratings {
     }
 
     public function addItemRating($customer_id, $item_id, $rating_value, $review_text) {
-        $sql = "SELECT * FROM `itemratings` where `customer_id` = $customer_id AND `item_id` = $item_id ";
+        $sql = "SELECT * FROM `itemratings` where `customer_id` = $customer_id AND `item_id` = $item_id";
         $db = new Db();
         $result = $db->query($sql);
         if ($result->num_rows > 0) {
