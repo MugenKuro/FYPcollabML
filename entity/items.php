@@ -56,7 +56,7 @@ class items {
 
 
     public function viewItemByCategory($category_id) {
-        $sql = "SELECT * FROM `items` where `category_id` = $category_id";
+        $sql = "SELECT * FROM `items` where `category_id` = $category_id AND `status` = 'Active'";
         $db = new Db();
         $result = $db->query($sql);
 
@@ -75,7 +75,7 @@ class items {
     }
     
     public function viewItem($item_id) {
-        $sql = "SELECT * FROM `items` where `item_id` = $item_id";
+        $sql = "SELECT * FROM `items` where `item_id` = $item_id AND `status` = 'Active'";
         $db = new Db();
         $result = $db->query($sql);
         $data = array(); // Initialize an empty array to store category data
@@ -98,7 +98,8 @@ class items {
         // Prepare a select statement
         $sql = "
         SELECT item_id, item_image_path, item_name, price FROM items
-        WHERE item_name REGEXP '".$search."';
+        WHERE item_name REGEXP '".$search."'
+        AND status = 'Active';
         ";
         $result = $db->query($sql);
         if ($result->num_rows > 0) {
@@ -110,6 +111,21 @@ class items {
         return json_encode($data);
     }
 
+    public function viewItemBySeller($seller_id) {
+        $sql = "SELECT * FROM `items` where `seller_id` = $seller_id AND `status` = 'Active'";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = array();
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+    
+        return json_encode($data);
+
+    }
 
 }
 

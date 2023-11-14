@@ -148,7 +148,7 @@ if (isset($_SESSION['accountType'])) {
                 // Query to retrieve most popular items filtered by gender and category range
                 $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
                     JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
-                    WHERE Items.category_id >= ? AND Items.category_id <= ?  -- Filter by category range
+                    WHERE Items.category_id >= ? AND Items.category_id <= ?  AND Items.status = 'Active'
                     GROUP BY Items.item_id 
                     ORDER BY AVG(ItemRatings.rating_value) DESC 
                     LIMIT 8";
