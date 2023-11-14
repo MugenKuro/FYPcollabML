@@ -58,9 +58,9 @@ class Admin
     }
     
     // Function to delete a category
-    public function deleteCategory($categoryID) {
+    public function deactivateCategory($categoryID) {
         try {
-            $sql = "DELETE FROM categories WHERE category_id = ?";
+            $sql = "UPDATE categories SET status = 'Inactive' WHERE category_id = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("i", $categoryID);
             $stmt->execute();
@@ -68,12 +68,24 @@ class Admin
         } catch (Exception $e) {
             return false;
         }
-    }
+    }    
 
     public function confirmDeletion() {
         // confirmation logic using javascript
         return true; 
     }
+
+    // public function deleteCategory($categoryID) {
+    //     try {
+    //         $sql = "UPDATE categories SET status = 'Inactive' WHERE category_id = ?";
+    //         $stmt = $this->db->prepare($sql);
+    //         $stmt->bind_param("i", $categoryID);
+    //         $stmt->execute();
+    //         return true;
+    //     } catch (Exception $e) {
+    //         return false;
+    //     }
+    // }
 
     // Function to get and update a category
     public function getCategoryById($categoryId) {

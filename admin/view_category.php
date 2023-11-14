@@ -47,7 +47,7 @@ $result = $adminController->viewAllCategories();
                                 echo "<td>
                                         <div class='btn-group'>
                                             <a href='update_category.php?category_id=" . $row["category_id"] . "' class='btn btn-warning btn-update text-white' data-bs-toggle='tooltip' title='Edit'>Update</a>
-                                            <a href='delete_category.php?category_id=" . $row["category_id"] . "' class='btn btn-danger btn-delete text-white' data-bs-toggle='tooltip' title='Delete'>Delete</a>
+                                             
                                         </div>
                                       </td>";
                                 echo "</tr>";
@@ -60,5 +60,6 @@ $result = $adminController->viewAllCategories();
             </table>
         </div>
     </div>
+    <!-- <a href='delete_category.php?category_id=" . $row["category_id"] . "' class='btn btn-danger btn-delete text-white' data-bs-toggle='tooltip' title='Delete'>Delete</a> -->
 </body>
 </html>

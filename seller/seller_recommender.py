@@ -103,7 +103,7 @@ try:
             preferred_category = cursor.fetchone()[0]
 
             cursor.execute(
-                "SELECT item_id FROM Items WHERE category_id = %s",
+                "SELECT item_id FROM Items WHERE category_id = %s AND status = 'Active'",
                 (preferred_category,)
             )
             items_to_recommend = [row[0] for row in cursor.fetchall()]
