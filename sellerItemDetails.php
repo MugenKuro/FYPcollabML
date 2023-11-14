@@ -1,7 +1,8 @@
 <?php
-	include '.\entity\Db.php';
-    include 'viewSellerController.php';
-    include 'viewItemController.php';
+require_once __DIR__ . '/../entity/users.php';
+require_once __DIR__ . '/../controller/sellerController.php';
+require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/../sellerAuth.php';
 ?>
 
 <!DOCTYPE html>
@@ -16,10 +17,10 @@
     <meta name="keywords" content="bootstrap, bootstrap4" />
 
     <!-- Bootstrap CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="css/tiny-slider.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/tiny-slider.css" rel="stylesheet">
+    <link href="../css/sellerStyle.css" rel="stylesheet">
 
 
     <!-- Include Bootstrap JavaScript and jQuery (required for dropdown functionality) -->
@@ -37,48 +38,35 @@
 	if(isset($_GET['item_id'])) {
 		
         $item_id = $_GET['item_id'];
-		$sellerEntity = new sellerEntity;
-		$itemData = $sellerEntity -> getItemData($item_id);
-
-		if($itemData)
-		{
-			$row = mysqli_fetch_assoc($itemData);
-		}
-        $sellerData = $sellerEntity -> getSellerData($item_id);
-        if($sellerData){
-            $row2 = mysqli_fetch_assoc($sellerData);
-        }
-        $itemAverageRating = $sellerEntity->getItemAverage($item_id);
-        if ($itemAverageRating){
-            $row3= mysqli_fetch_assoc($itemAverageRating);
-        }
-        $itemRating = $sellerEntity ->getItemReviews($item_id);
-        if($itemRating){
-            $row4= mysqli_fetch_assoc($itemRating);
-        }
-
-	}
+		$sellerController = new sellerController;
+        $itemData = $sellerController -> getItemData($item_id);
+        $row = mysqli_fetch_assoc($itemData);
+    $sellerData = $sellerController -> getSellerData($item_id);
+        $row2 = mysqli_fetch_assoc($sellerData);
+    $itemAverageRating = $sellerController->getItemAverage($item_id);
+        $row3= mysqli_fetch_assoc($itemAverageRating);
+    $itemRating = $sellerController ->getItemReviews($item_id);
+    if($itemRating) {
+        $row4= mysqli_fetch_assoc($itemRating);
+    }
+    $itemInventory= $sellerController->getInventory($item_id);
+}
 
     if(isset($_POST["deleteItem"]))
     {
         $item_id = $_POST['item_id'];
 
-        $sellerEntity = new sellerEntity;
-        $result = $sellerEntity -> deleteItem($item_id);
-            
-        if($result)
-        {
-            header("Location: sellerHomepage.php");
-			exit();
-        }else{
-            echo "Failed";
-        }
+        $sellerController = new sellerController;
+        $result = $sellerController -> deleteItem($item_id);
+        echo "<script>location.replace('./sellerHomepage.php');</script>";
+		exit();
+   
     }
 	
 	if (isset($_GET['search'])) {
-		$sellerEntity = new sellerEntity();
+		$sellerController = new sellerController();
         $inputdata = isset($_GET['search']) ? $_GET['search'] : '';
-		$search = $sellerEntity->searchItem($inputdata);
+		$search = $sellerController->searchItem($inputdata);
 		
 		if(!empty($inputdata)) {
 			$result = $search;
@@ -86,82 +74,126 @@
 	}
 	?>
 	
-<!-- Start Header/Navigation -->
-<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="iCloth navigation bar">
-
-<div class="container">
-<a class="navbar-brand" href="sellerHomepage.php">iCloth</a>
-
-<div class="collapse navbar-collapse">
-    <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-        <li>
-        <a class="nav-link" href="sellerHomepage.php">Item Listings</a>
-            <a class="nav-link" href="addItem.php">Add Items</a>
-            <a class="nav-link" href="sellerAccountSetting.php">Account Setting</a>
-            <a class="nav-link" href="sellerRequestCategory.php">Category Requests</a>
-            <a class="nav-link" href="view_revenue_report.php">Revenue Report</a>
-            <a class="nav-link" href="view_inventory.php">Manage Inventory</a>
-        </li>
-    </ul>
-    <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-        <li><span class="nav-link">Welcome,
-                <?php echo htmlspecialchars("seller"); ?>
-            </span></li>
-            <li><a class="nav-link" href="logout.php"><img src="images/user.svg"><span> log out</span></a></li>
-    </ul>
-</div>
-</div>
-</nav>
-<!-- End Header/Navigation -->
+    <?php
+    include dirname(__FILE__) . ('/sellerNavBar.php');
+    ?>
 	
-    
-    <div class="seller-container">
-        <div class="seller-container01">
+    <div>
+    <div class="view-item-container">
+            <div class="view-item-container01">
+                <div id="message"></div>
+                <div class="view-item-container02">
             <?php 
             if($itemData)
             {    
             ?>
-            <div class="item-details-container">
-            <img alt="image" class ="view-item-image" src=".<?php echo $row['item_image_path']?>"/>
-
-            <div class="item-name-price-container">
+            <img alt="image" class ="view-item-image" src="..<?php echo $row['item_image_path']?>"></img>
+            <div class="view-item-container03">
+            <div class="view-item-container04">
+            <span class="view-item-text">
             <span class = "item-details-text-underline">Item Name :</span>
+            <br>    
+            </span>
             <span class = "item-details-text"><?=$row['item_name'] ?></span>
-            <span class = "item-details-text-underline">Price :</span>
-            <span class = "item-details-text">$<?=$row['price'] ?></span>
+            <span class="view-item-text03">
+                <span>$</span>
+                    <span><?=$row['price'] ?></span><br />
+                </span>
             </div>
-            </div>
+            <div class="view-item-container05">
+                            <div class="view-item-container06">
+                                <img alt="image" src="..<?php echo $row2["profile_image"] ?>" class="view-item-image1" />
+                                <div class="view-item-container07">
+                                    <span class="view-item-text07">
+                                        <span>
+                                           <?=$row2['seller_name']?>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                        <label for="size">Size</label>
+                                        <select id="size" name="size" class=" Dropdown-Inventory"
+                                            style="margin-bottom: 5px;">
+                                            <option value="free">check size and item stock here</option> 
+                                            <?php
+                                                foreach ($itemInventory as $item) {
+                                                    $item_id_loop = $item['item_id'];
+                                                    $itemSize = $item['size']; 
+                                                    $quantity = $item['quantity'];
+                                                    echo '<option value="'.$itemSize.'">'.$itemSize .' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          '.$quantity.'</option>';
+                                                }
+                                            ?>
+                                        </select>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="item-category-description-container">
-            <span class = "item-details-text-underline">Category :</span>
-            <span class = "item-details-text"><?php echo $row['category_name']; ?></span>
-            <span class = "item-details-text-underline">Description :</span>
-            <span class = "item-details-text-description"><?php echo $row['description']; ?></span>
-            </div>
-            
-            <div onclick="window.location='viewReviews.php'" class = "item-review-header-container">
-            <span class = "item-details-text-underline">Reviews :</span>
-            <span class = "item-details-average-rating"><?php if($row3["average_value"]){echo "Average : " . $row3["average_value"] . "stars";}?></span>
-            </div>
-
+                    <div class="view-item-container09"></div>
+                    <div class="view-item-container10">
+                        <span class="view-item-text16">
+                            <span class="view-item-text17">Category</span><br />
+                        </span>
+                        <span class="view-item-text19">
+                            <span><?php echo $row['category_name']; ?></span>
+                            <br />
+                        </span>
+                    </div>
+                    <div class="view-item-container11">
+                        <span class="view-item-text22">
+                            <span class="view-item-text23">Description</span><br /> 
+                        </span>
+                        <span class="view-item-text25">&gt;<?php echo $row['description']; ?></span>
+                    </div>
+                    <div class="view-item-container12"></div>
+                    <div class="view-item-container10">
+                        <span class="view-item-text16">
+                            <span class="view-item-text17">Reviews</span><br />
+                        </span>
+                        <span class="view-item-text33">
+                        <span><?php if($row3["average_value"]){echo "Average : " . $row3["average_value"] . "stars";}?></span>
+                            <br />
+                        </span>
+                        <span class="view-item-text33">
+                        <span><?php echo $row3["Review_count"] ?> Reviews</span>
+                            <br />
+                        </span>
+                    </div>
+                    </div>
             
             <?php if($itemAverageRating){?>
-                <span class = "item-details-text"><?php echo $row3["Review_count"] ?> Reviews</span>
+       
             <div class="container-overflow">
             <div class="item-review-container">
             <?php
              }
                 if($itemRating){
                 foreach($itemRating as $row4){?>
-                    <div class="item-review-detail-container">
-                    <img class="item-review-image" alt="image" src=".<?php echo $row4["image_path"] ?>" />
-                    <div class="item-review-text-container">
-                    <span class="item-review-text"><?php echo $row4["nickname"] ?></span><br>
-                    <span class="item-review-text"> (<?php echo $row4["rating_value"] ?> stars)</span><br><br>
-                    <span class="item-review-text"></span>
-                    <span class="item-review-text"><?php echo $row4["review_text"] ?></span>
-                    </div>
-                    </div>
+                    <div class="view-item-container14">
+                                    <img alt="image" src="..<?php echo $row4["image_path"] ?>" class="view-item-image2" />
+                                    <div class="view-item-container15">
+                                        <div class="view-item-container16">
+                                            <span class="view-item-text36">
+                                                <span>
+                                                <?php echo $row4["nickname"] ?>
+                                                </span>
+                                                <br />
+                                            </span>
+                                            <span class="view-item-text39">
+                                                <span class="view-item-text40">
+                                                <?php echo $row4["rating_value"] ?> star
+                                                </span>
+                                                <br />
+                                            </span>
+                                        </div>
+                                        <span class="view-item-text42">
+                                            <span>
+                                            <?php echo $row4["review_text"] ?>
+                                            </span>
+                                            <br />
+                                        </span>
+                                    </div>
+                                </div>
                     <?php }}?>
             </div>
             </div>
@@ -176,28 +208,7 @@
                     <form action='#' method="POST" id="deleteItemForm">
 										<button  class="seller-setting-button1" type="submit" name="deleteItem">Delete Item</button>
 										<input type="hidden" name="item_id" value="<?php echo $item_id; ?>">
-									</form></button>
-                    </td>
-                    </tr>
-                    </table>
-                    </div>
-                    </div>
-                    <span>
-                                    
-                                    <?php
-                            if ($sellerData){
-                        ?>
-        
-                                <img alt="image" src=".<?php echo $row["item_image_path"] ?>" />
-            
-                                        <span><?=$row2['seller_name']?></span>
-                                        <span><?=$row2['rating_value']?>star</span>
-                        <?php
-                                }
-                        ?>
-        </div>
-    </div>
-                   
+									</form></button>         
 
     <?php
         }
