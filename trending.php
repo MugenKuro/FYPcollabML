@@ -48,7 +48,6 @@ if (isset($_SESSION['accountType'])) {
     <?php
     include dirname(__FILE__) . ('/custNavBar.php');
 
-    // Include the Python script processing here
     $customer_user_id = $_SESSION['user_id'];
     // for windows
     // $output = shell_exec("python customer/customer_recommender.py $customer_user_id 2>&1");
@@ -115,57 +114,93 @@ if (isset($_SESSION['accountType'])) {
         echo '</div>';
     } else {
         echo $output;
-        // Query to retrieve most popular items
-        $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
-            JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
-            GROUP BY Items.item_id 
-            ORDER BY AVG(ItemRatings.rating_value) DESC 
-            LIMIT 8";
-        $popularItemsResult = $db->query($popularItemsQuery);
 
         echo '<div class="homepage-container">';
         echo '<h1 class="homepage-text">Most Popular Items</h1>';
         echo '<div class="homepage-container01">';
 
-        // Initialize counter for homepage-container02
-        $container02Count = 0;
+        // Fetch the user's gender from the Customer table
+        $genderQuery = "SELECT gender FROM Customers WHERE user_id = ?";
+        $genderResult = $db->query($genderQuery, [$customer_user_id]);
 
-        // Loop through the popular items and display them
-        while ($row = $popularItemsResult->fetch_assoc()) {
-            $item_id = $row['item_id'];
-            $item_name = $row['item_name'];
-            $item_image_path = $row['item_image_path'];
-            $item_price = $row['price'];
+        if ($genderResult->num_rows > 0) {
+            $row = $genderResult->fetch_assoc();
+            $userGender = $row['gender'];
 
-            if ($container02Count % 4 == 0) {
-                // Start a new homepage-container02 after every 4 items
-                echo '<div class="homepage-container02">';
+            // Determine the category range based on user's gender
+            if ($userGender === 'Male' || $userGender === 'male') {
+                // For male users, use category_id ranging from 1 to 5
+                $minCategoryId = 1;
+                $maxCategoryId = 5;
+            } elseif ($userGender === 'Female' || $userGender === 'female') {
+                // For female users, use category_id ranging from 6 to 11
+                $minCategoryId = 6;
+                $maxCategoryId = 11;
+            } else {
+                // Handle other gender options as needed
+                $minCategoryId = null;
+                $maxCategoryId = null;
             }
 
-            echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
-            echo '<img alt="image" src="' . $item_image_path . '" class="homepage-image" />';
-            echo '<span>';
-            echo '<span>' . $item_name . '</span>';
-            echo '<br />';
-            echo '</span>';
-            echo '<span>$' . $item_price . '</span>';
-            echo '</div>';
+            // Check if the user's gender is valid and determine the category range
+            if ($minCategoryId !== null && $maxCategoryId !== null) {
+                // Display most popular items based on user's gender and category range
+                // Query to retrieve most popular items filtered by gender and category range
+                $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
+                    JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
+                    WHERE Items.category_id >= ? AND Items.category_id <= ?  -- Filter by category range
+                    GROUP BY Items.item_id 
+                    ORDER BY AVG(ItemRatings.rating_value) DESC 
+                    LIMIT 8";
 
-            if (($container02Count + 1) % 4 == 0) {
-                // Close the current homepage-container02 after every 4 items
+                // Execute the query with the category range as parameters
+                $popularItemsResult = $db->query($popularItemsQuery, [$minCategoryId, $maxCategoryId]);
+
+                // Initialize counter for homepage-container02
+                $container02Count = 0;
+
+                // Loop through the popular items and display them
+                while ($row = $popularItemsResult->fetch_assoc()) {
+                    $item_id = $row['item_id'];
+                    $item_name = $row['item_name'];
+                    $item_image_path = $row['item_image_path'];
+                    $item_price = $row['price'];
+
+                    if ($container02Count % 4 == 0) {
+                        // Start a new homepage-container02 after every 4 items
+                        echo '<div class="homepage-container02">';
+                    }
+
+                    echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
+                    echo '<img alt="image" src="' . $item_image_path . '" class="homepage-image" />';
+                    echo '<span>';
+                    echo '<span>' . $item_name . '</span>';
+                    echo '<br />';
+                    echo '</span>';
+                    echo '<span>$' . $item_price . '</span>';
+                    echo '</div>';
+
+                    if (($container02Count + 1) % 4 == 0) {
+                        // Close the current homepage-container02 after every 4 items
+                        echo '</div>';
+                    }
+
+                    $container02Count++;
+                }
+
+                // Close the last homepage-container02 if not already closed
+                if ($container02Count % 4 != 0) {
+                    echo '</div>';
+                }
+
                 echo '</div>';
+                echo '</div>';
+            } else {
+                echo 'Invalid user gender or other options.';
             }
-
-            $container02Count++;
+        } else {
+            echo 'User gender not found.';
         }
-
-        // Close the last homepage-container02 if not already closed
-        if ($container02Count % 4 != 0) {
-            echo '</div>';
-        }
-
-        echo '</div>';
-        echo '</div>';
     }
     ?>
     <script>
