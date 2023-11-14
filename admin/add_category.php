@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $successMessage = "Error adding category!";
     }
 }
-// include "admin_header.php";
+include "admin_header.php";
 ?>
 
 <!DOCTYPE html>
@@ -26,11 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
 </head>
     <body>
-    <?php
-    include "admin_header.php";
-    ?>
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mt-5">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
