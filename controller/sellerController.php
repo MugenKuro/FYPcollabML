@@ -95,5 +95,12 @@ class sellerController {
 	public function deleteItem($inputdata){
 		return $this->seller->deleteItem($inputdata);
 	}
+
+	public function searchItemByName($tags) {
+		return $this->seller->searchItemByName($tags);
+	}
+	public function getInventory($tags) {
+		return $this->seller->getInventory($tags);
+	}
 }
 ?>

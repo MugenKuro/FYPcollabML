@@ -170,6 +170,23 @@
                 return false;
             }
 		}
+        public function searchItemByName($search) {
+            $db = new Db();
+            // get seller id
+        $userID = $_SESSION['user_id'];
+        $sellerQuery = "SELECT seller_id FROM sellers where user_id = $userID";
+        $sellersql = $this->db->query($sellerQuery);
+        $sellerfetch = $sellersql->fetch_assoc();
+        $sellerIDString = $sellerfetch["seller_id"];
+            // Prepare a select statement
+            $sql = "SELECT * FROM items WHERE seller_id = $sellerIDString AND `item_name` LIKE '%$search%'";
+            $result = $db->query($sql);
+            if ($result->num_rows > 0) {
+                return $result;
+            }
+        
+         
+        }
         public function getSellerData($item_id){
             // get seller id
             $sellerQuery = "SELECT seller_id FROM items where item_id = $item_id";
@@ -177,13 +194,10 @@
             $sellerfetch = $sellersql->fetch_assoc();
             $sellerIDString = $sellerfetch["seller_id"];
 
-            $userQuery = "SELECT sellers.*,sellerRatings.rating_value FROM sellers join sellerRatings on sellerRatings.seller_id = sellers.seller_id WHERE sellers.seller_id= $sellerIDString";
-            $result = $this->db->query($userQuery);
-            if($result->num_rows > 0){
+            $userQuery = "SELECT sellers.* FROM sellers WHERE sellers.seller_id= $sellerIDString";
+            $result = $this->db->query($userQuery);            
                 return $result;
-            }else{
-                return false;
-            }
+
     }
         public function getCategoryName($category_id){
             $userQuery = "SELECT category_name from categories where category_id = $category_id";
@@ -314,6 +328,14 @@
             }else{
                 return false;
             }
+        }
+
+        public function getInventory($item_id){
+            $userQuery = "SELECT *
+            FROM `inventory`
+            WHERE `item_id` = $item_id";
+            $result = $this->db->query($userQuery);
+                return $result;
         }
     }
 
