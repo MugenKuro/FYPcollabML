@@ -121,7 +121,7 @@ if (isset($_SESSION['accountType'])) {
                                         </td>
                                         <input type="hidden" class="itemId" value="<?= $item->cart_item_id ?>">
 
-                                        <td><img src="<?= $dir . $item->item_image_path ?>" width="50"></td>
+                                        <td><img src="<?= "." . $item->item_image_path ?>" width="50"></td>
 
                                         <td>
                                             <?= $item->item_name ?>

@@ -132,12 +132,15 @@ class shoppingcarts {
                 $totalPrice += $rowTotal;
             }
             $tprice = $totalPrice + $total_price;
-            $sql = "UPDATE shoppingcarts SET total_price = '$tprice' WHERE cart_id = '$cart_id'";
-            $result = $db->query($sql);
-            if ($result > 0) {
-                $data = true;
-            }
-        } 
+
+        } else {
+            $tprice = $total_price;
+        }
+        $sql = "UPDATE shoppingcarts SET total_price = '$tprice' WHERE cart_id = '$cart_id'";
+        $result = $db->query($sql);
+        if ($result > 0) {
+            $data = true;
+        }
 
     
         return $data;
