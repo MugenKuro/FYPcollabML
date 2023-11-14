@@ -40,7 +40,7 @@ try:
         if len(sys.argv) > 1:
             customer_user_id = int(sys.argv[1])
         else:
-            # Handle the case where the user ID isn't provided. You can exit the script or use a default user ID.
+            # Handle the case where the user ID isn't provided.
             print("Error: User ID not provided.")
             sys.exit(1)
         
@@ -49,7 +49,7 @@ try:
         user_gender = cursor.fetchone()[0]
         
         # Determine relevant categories based on user gender
-        if user_gender == 'Male':
+        if user_gender == 'Male' or user_gender == 'male' :
             relevant_categories = ['Male Tops', 'Male Bottoms', 'Male Shoes', 'Male Accessories', 'Male Outerwear']
         else:
             relevant_categories = ['Female Tops', 'Female Bottoms', 'Female Shoes', 'Female Outerwear', 'Female Dresses', 'Female Accessories',]
