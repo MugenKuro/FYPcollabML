@@ -64,8 +64,25 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     <title>iCloth</title>
 
-    <script>
-    </script>
+    <style>
+        .view-item-container06 {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .view-item-image1, .view-item-text07 {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .view-item-container06:hover .view-item-image1 {
+            transform: scale(1.1);
+        }
+
+        .view-item-container06:hover .view-item-text07 {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 
 <body>
@@ -106,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (!empty($itemSeller)) {
         foreach ($itemSeller as $seller) {
             // Access item properties and generate the HTML dynamically
+            $sellerId = $seller->seller_id;
             $sellerName = $seller->seller_name;
             $sellerImage = $seller->profile_image;
         }
@@ -143,7 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                             </span>
                         </div>
                         <div class="view-item-container05">
-                            <div class="view-item-container06">
+                            <div class="view-item-container06"
+                                onclick="window.location='viewSellerIndex.php?seller_id=<?php echo $sellerId; ?>'">
                                 <img alt="image" src="<?php echo "." . $sellerImage ?>" class="view-item-image1" />
                                 <div class="view-item-container07">
                                     <span class="view-item-text07">

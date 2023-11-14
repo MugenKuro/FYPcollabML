@@ -10,6 +10,7 @@ require_once dirname(__FILE__) . '/../entity/cartitems.php';
 require_once dirname(__FILE__) . '/../entity/inventory.php';
 require_once dirname(__FILE__) . '/../entity/sellers.php';
 require_once dirname(__FILE__) . '/../entity/shoppingcarts.php';
+require_once dirname(__FILE__) . '/../entity/sellerratings.php';
 
 class registerController{
     
@@ -321,6 +322,31 @@ class makePayment {
         $data = $cart->setCartInactive($cart_id);
 
         return $data;
+    }
+}
+
+class viewSeller{
+    public function viewItemBySeller($seller_id) {
+        $items = new items();
+        $data = json_decode($items->viewItemBySeller($seller_id));
+
+        return json_encode($data);
+    }
+
+    public function viewSellers($seller_id) {
+        $seller = new sellers();
+        $data = json_decode($seller->viewSellers($seller_id));
+
+        return json_encode($data);
+    }
+}
+
+class viewSellerReviews {
+    public function viewReviewBySeller($seller_id) {
+        $seller = new sellerratings();
+        $data = json_decode($seller->viewReviewBySeller($seller_id));
+
+        return json_encode($data);
     }
 }
 

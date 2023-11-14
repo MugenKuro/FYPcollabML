@@ -110,6 +110,21 @@ class items {
         return json_encode($data);
     }
 
+    public function viewItemBySeller($seller_id) {
+        $sql = "SELECT * FROM `items` where `seller_id` = $seller_id";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = array();
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+    
+        return json_encode($data);
+
+    }
 
 }
 
