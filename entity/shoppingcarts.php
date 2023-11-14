@@ -113,6 +113,51 @@ class shoppingcarts {
         return $data;
     }
 
+    public function updateCartPriceTotal($cart_id, $total_price, $cartItemId) {
+        $db = new Db();
+        $sql1 = "SELECT ci.quantity, i.price FROM `cartitems` as ci, `items` as i 
+        WHERE ci.item_id = i.item_id AND ci.cart_item_id != '$cartItemId' AND ci.cart_id = '$cart_id'";
+        $result1 = $db->query($sql1);
+        $data = false;
+        $totalPrice = 0;
+        if ($result1->num_rows > 0) {
+            while ($row = $result1->fetch_assoc()) {
+                $quantity = $row['quantity'];
+                $price = $row['price'];
+        
+                // Calculate the total price for the current row
+                $rowTotal = $quantity * $price;
+        
+                // Add the current row total to the overall total
+                $totalPrice += $rowTotal;
+            }
+            $tprice = $totalPrice + $total_price;
+
+        } else {
+            $tprice = $total_price;
+        }
+        $sql = "UPDATE shoppingcarts SET total_price = '$tprice' WHERE cart_id = '$cart_id'";
+        $result = $db->query($sql);
+        if ($result > 0) {
+            $data = true;
+        }
+
+    
+        return $data;
+    }
+
+    public function setCartInactive($cart_id) {
+        $sql = "UPDATE shoppingcarts SET status = 'Inactive' WHERE cart_id = '$cart_id'";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = false;
+        if ($result > 0) {
+            $data = true;
+        }
+    
+        return $data;
+    }
+
 
 }
 

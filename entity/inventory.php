@@ -54,6 +54,52 @@ class inventory {
 
     }
 
+    public function viewStock($cart_item_id) {
+        $sql = "SELECT inv.quantity
+        FROM `cartitems` as ci, `items` as i, `inventory` as inv
+        WHERE ci.item_id = i.item_id AND i.item_id = inv.item_id
+        AND ci.cart_item_id = $cart_item_id";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = '';
+    
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $data = $row['quantity'];
+
+        }
+    
+        return $data;
+
+    }
+
+    public function decreaseQuantity($cart_item_id) {
+        $sql = "UPDATE Inventory
+        SET quantity = quantity - (
+            SELECT quantity
+            FROM cartitems
+            WHERE cartitems.item_id = inventory.item_id
+              AND cartitems.size = inventory.size
+              AND cartitems.cart_id = $cart_item_id
+        )
+        WHERE EXISTS (
+            SELECT 1
+            FROM cartitems
+            WHERE cartitems.item_id = inventory.item_id
+              AND cartitems.size = inventory.size
+              AND cartitems.cart_id = $cart_item_id
+        )";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = false;
+    
+        if ($result > 0) {
+            $data = true;
+        }
+    
+        return $data;
+    }
+
 
 }
 

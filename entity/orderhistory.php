@@ -60,6 +60,22 @@ class orderhistory {
     
         return json_encode($data);
     }
+
+    public function addOrderHistory($cart_id, $user_id) {
+        $sql = "INSERT INTO OrderHistory (customer_id, cart_id, order_date) 
+        SELECT customers.customer_id, $cart_id, CONVERT_TZ(NOW(), '+00:00', '+08:00')
+        FROM customers 
+        WHERE customers.user_id = $user_id";
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = false;
+    
+        if ($result > 0) {
+            $data = true;
+        }
+    
+        return $data;
+    }
     
 
 

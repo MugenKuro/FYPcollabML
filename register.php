@@ -95,7 +95,7 @@
                     <div class="button-container side-by-side">
                         <button class="custom-button buyer-button" onclick="window.location='registerCustomer.php'">
                             <i class="fas fa-user icon"></i>
-                            <span>Buyer</span>
+                            <span>Customer</span>
                         </button>
                         <button class="custom-button seller-button" onclick="window.location='registerSeller.php'">
                             <i class="fas fa-store icon"></i>

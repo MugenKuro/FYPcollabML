@@ -155,10 +155,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                             </div>
                             <div class="view-item-container08">
                                 <form action="" class="add-form-submit">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label for="size">Size</label>
                                         <select id="size" name="size" class="added_size form-control"
-                                            style="margin-bottom: 5px;">
+                                            style="margin-bottom: 5px; width: 100%;">
                                             <?php
                                             if (!empty($itemInventory)) {
                                                 foreach ($itemInventory as $item) {

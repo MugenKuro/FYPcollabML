@@ -72,5 +72,48 @@ if (isset($_GET['remove']) && isset($_GET['price'])) {
     }
 }
 
+// Set total price of the product in the cart table
+if (isset($_POST['itemQty'])) {
+    $itemQty = $_POST['itemQty'];
+    $cartItemId = $_POST['itemId'];
+    $itemPrice = $_POST['itemPrice'];
+
+    $tprice = $itemQty * $itemPrice;
+
+    $cart = new checkOutCart();
+
+    $quantity = (int)$cart->viewStock($cartItemId);
+    if (isset($quantity) && $itemQty > 0 && $itemQty <= $quantity) {
+
+        $result2 = $cart->updateCartPriceTotal($_SESSION['cart_id'], $tprice, $cartItemId);
+        $result = $cart->updateCartItemQty($cartItemId, $itemQty);
+        if ($result && $result2) {
+            $cartitems = new viewCartItems();
+            // Fetch the updated itemData
+            $updatedItemData = json_decode($cartitems->viewCartItem($_SESSION['cart_id']));
+
+            // Echo the updated data
+            echo json_encode($updatedItemData);
+        } else {
+            $_SESSION['showAlert'] = 'block';
+            $_SESSION['message'] = 'Error. Something went wrong!';
+            
+        }
+
+    } elseif (isset($quantity) && $itemQty <= 0) {
+        $_SESSION['showAlert'] = 'block';
+        $_SESSION['message'] = 'Quantity cannot be negative!';
+        
+    } elseif (isset($quantity) && $itemQty > $quantity) {
+        $_SESSION['showAlert'] = 'block';
+        $_SESSION['message'] = 'Quantity exceed current stock!';
+        
+    } else {
+        $_SESSION['showAlert'] = 'block';
+        $_SESSION['message'] = 'Error. Something went wrong!';
+        
+    }
+
+}
 
 ?>

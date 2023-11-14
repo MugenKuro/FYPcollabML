@@ -123,7 +123,7 @@ if (isset($_SESSION['accountType'])) {
                             // You can repeat the HTML block for each purchase
                             echo '<div class="purchase-history-container5" onclick="window.location=\'rateItem.php?item_id=' . $item_id . '&customer_id=' . $customer_id . '\'">';
                             echo '<div class="col-sm-4">';
-                            echo '<img alt="image" src="' . $dir . $image . '" class="purchase-history-image" />';
+                            echo '<img alt="image" src="' . '.' . $image . '" class="purchase-history-image" />';
                             echo '</div>';
                             echo '<div class="col-sm-3">';
                             echo '<span class="purchase-history-text19 style="text-align: left;"><span>' . $name . '</span></span>';
