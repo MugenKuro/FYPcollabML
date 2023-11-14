@@ -50,10 +50,10 @@ if (isset($_SESSION['accountType'])) {
 
     $customer_user_id = $_SESSION['user_id'];
     // for windows
-    // $output = shell_exec("python customer/customer_recommender.py $customer_user_id 2>&1");
+    $output = shell_exec("python customer/customer_recommender.py $customer_user_id 2>&1");
 
     // for Azure
-    $output = shell_exec("/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/customer/customer_recommender.py $customer_user_id 2>&1");
+    // $output = shell_exec("/home/site/wwwroot/myenv/bin/python3 /home/site/wwwroot/customer/customer_recommender.py $customer_user_id 2>&1");
     $recommendations = json_decode($output, true);
 
     // Database connection
@@ -148,7 +148,7 @@ if (isset($_SESSION['accountType'])) {
                 // Query to retrieve most popular items filtered by gender and category range
                 $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
                     JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
-                    WHERE Items.category_id >= ? AND Items.category_id <= ?  -- Filter by category range
+                    WHERE Items.category_id >= ? AND Items.category_id <= ?  AND Items.status = 'Active'
                     GROUP BY Items.item_id 
                     ORDER BY AVG(ItemRatings.rating_value) DESC 
                     LIMIT 8";

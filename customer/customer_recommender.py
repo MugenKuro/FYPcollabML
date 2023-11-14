@@ -60,7 +60,7 @@ try:
 
         # Filter items based on relevant categories
         placeholders = ', '.join(['%s'] * len(relevant_categories))
-        cursor.execute(f"SELECT item_id FROM Items JOIN Categories ON Items.category_id = Categories.category_id WHERE Categories.category_name IN ({placeholders}) AND Categories.status = 'Active'", tuple(relevant_categories))
+        cursor.execute(f"SELECT item_id FROM Items JOIN Categories ON Items.category_id = Categories.category_id WHERE Categories.category_name IN ({placeholders}) AND Categories.status = 'Active' AND Items.status = 'Active'", tuple(relevant_categories))
         relevant_item_ids = [item[0] for item in cursor.fetchall()]
         
         # Create a DataFrame from the fetched data
