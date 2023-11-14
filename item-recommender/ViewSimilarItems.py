@@ -55,7 +55,7 @@ cursor = connection.cursor()
 # cursor1 = connection.cursor()
 
 # item_id, seller_id, item_name, category_id
-cursor.execute("SELECT * FROM ITEMS")
+cursor.execute("SELECT * FROM ITEMS WHERE status = 'Active'")
 items = cursor.fetchall()
 # cursor1.execute("SELECT * FROM ITEMRATINGS")
 # items_rating = cursor1.fetchall()
