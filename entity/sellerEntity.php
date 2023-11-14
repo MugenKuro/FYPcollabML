@@ -19,7 +19,7 @@
             $sellerfetch = $sellersql->fetch_assoc();
             $sellerIDString = $sellerfetch["seller_id"];
 
-            $userQuery = "SELECT * FROM items WHERE seller_id = '$sellerIDString'";
+            $userQuery = "SELECT * FROM items WHERE status= 'Active' AND seller_id = '$sellerIDString'";
             $result = $this->db->query($userQuery);
             if($result->num_rows > 0){
                 return $result;
@@ -80,11 +80,7 @@
         public function deleteItem($inputdata)
         {
             $item_id = $inputdata;
-            $deleteInventory = "DELETE FROM Inventory where `item_id` = $item_id";
-            $statement = $this->db->query($deleteInventory);
-            $deleteRating = "DELETE FROM itemRatings where `item_id`=$item_id";
-            $statement2 = $this->db->query($deleteRating);
-            $userQuery = "DELETE FROM items WHERE `item_id` = $item_id";
+            $userQuery = "UPDATE items set status ='Inactive' WHERE `item_id` = $item_id";
             $result = $this->db->query($userQuery);
             if($result){
                 return true;
@@ -107,7 +103,7 @@
         }
 		
 		public function getCategoriesForDropdown() {
-			$categoriesQuery = "SELECT category_id, category_name FROM categories";
+			$categoriesQuery = "SELECT category_id, category_name FROM categories where status='Active'";
             $result = $this->db->query($categoriesQuery);
 			$categories = [];
 			if ($result->num_rows > 0) {
@@ -160,7 +156,7 @@
             $sellerfetch = $sellersql->fetch_assoc();
             $sellerIDString = $sellerfetch["seller_id"];
             
-			$userQuery = "SELECT * FROM items WHERE seller_id = $sellerIDString AND `item_name` LIKE '%$search%'";
+			$userQuery = "SELECT * FROM items WHERE status = 'Active' AND seller_id = $sellerIDString AND `item_name` LIKE '%$search%'";
 			
 			$result = $this->db->query($userQuery);
 			
