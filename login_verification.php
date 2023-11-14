@@ -1,6 +1,8 @@
 <?php
 require_once('auth.php');
 require_once dirname(__FILE__) . '/entity/users.php';
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
 
 $user = new users();
 $user_data = json_decode($user->get_user_data($_SESSION['otp_verify_user_id']));
@@ -34,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $verify = json_decode($user->otp_verify());
 
     if ($verify->status == 'success') {
-        $_SESSION['verifyStatus'] = "success";
+        $_SESSION['verifyStatus'] = 'success';
         if (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'System Admin') {
             echo "<script>location.replace('./admin/view_seller.php');</script>";
         } elseif (isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'Customer') {
