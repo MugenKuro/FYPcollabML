@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                             $current_seller_id = $_SESSION["seller_id"];
                             ?>
                             <button type="button" class="view-review-button button"
-                                onclick="window.location='viewSellerIndex.php?item_id=<?php echo $current_seller_id; ?>'">
+                                onclick="window.location='viewSellerIndex.php?seller_id=<?php echo $current_seller_id; ?>'">
                                 <span class="view-review-text86">
                                     <span class="view-review-text87">back</span>
                                     <br />
