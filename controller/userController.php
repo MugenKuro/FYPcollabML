@@ -151,6 +151,22 @@ class ratePurchasedItem {
     }
 }
 
+class rateSeller {
+    public function viewSellerByItem($item_id) {
+        $seller = new items();
+        $data = json_decode($seller->viewSellerByItem($item_id));
+
+        return json_encode($data);
+    }
+
+    public function addSellerRating($customer_id, $seller_id, $rating_value, $review_text) {
+        $rate = new sellerratings();
+        $data = json_decode($rate->addSellerRating($customer_id, $seller_id, $rating_value, $review_text));
+
+        return json_encode($data);
+    }
+}
+
 class viewItemByCat {
     public function viewItemByCategory($category_id) {
         $items = new items();
@@ -228,6 +244,13 @@ class addItemsToCart {
     public function checkIfCartExist($user_id) {
         $cart = new shoppingcarts();
         $data = $cart->checkIfCartExist($user_id);
+
+        return $data;
+    }
+
+    public function viewItemStock($item_id, $size) {
+        $inventory = new inventory();
+        $data = $inventory->viewItemStock($item_id, $size);
 
         return $data;
     }

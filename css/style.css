@@ -2974,8 +2974,8 @@ a:hover {
 
 .rate-item-container1 {
     width: 924px;
-    height: 505px;
     display: flex;
+    min-height:90vh;
     box-shadow: 5px 5px 10px 2px #d4d4d4;
     margin-top: 10px;
     align-items: center;
@@ -3118,6 +3118,7 @@ a:hover {
 }
 
 .rate-item-container8 {
+    margin-bottom:20px;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;

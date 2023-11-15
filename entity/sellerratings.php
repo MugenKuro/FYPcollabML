@@ -41,17 +41,17 @@ class sellerratings {
         return $this->review_text;
     }
 
-    public function addItemRating($customer_id, $item_id, $rating_value, $review_text) {
-        $sql = "SELECT * FROM `itemratings` where `customer_id` = $customer_id AND `item_id` = $item_id ";
+    public function addSellerRating($customer_id, $seller_id, $rating_value, $review_text) {
+        $sql = "SELECT * FROM `sellerratings` where `customer_id` = $customer_id AND `seller_id` = $seller_id ";
         $db = new Db();
         $result = $db->query($sql);
         if ($result->num_rows > 0) {
             $resp['status'] = 'failed';
-            $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'You have rated this item.';
+            $_SESSION['flashdata']['type2'] = 'danger';
+            $_SESSION['flashdata']['msg2'] = 'You have rated this seller.';
         } else {
-            $sql = "INSERT INTO `itemratings` (`customer_id`, `item_id`, `rating_value`, `review_text`) 
-            VALUES ('$customer_id', '$item_id', '$rating_value', '$review_text')";
+            $sql = "INSERT INTO `sellerratings` (`customer_id`, `seller_id`, `rating_value`, `review_text`) 
+            VALUES ('$customer_id', '$seller_id', '$rating_value', '$review_text')";
             $save = $db->query($sql);
             if ($save) {
                 $resp['status'] = 'success';

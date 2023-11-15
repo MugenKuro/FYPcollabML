@@ -30,7 +30,6 @@ if (isset($_SESSION['accountType'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['user-account-setting-button2'])) {
         $submitClass = $_POST['user-account-setting-button2'];
-
         if ($submitClass == 'deactivate-form') {
             $user = new deactivateCustomerAccount();
             $deactivateUser = json_decode($user->deactivateCustAcc($_SESSION['user_id']));
@@ -310,7 +309,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </button>
                             <form class="deactivate-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
                                 method="post" enctype="multipart/form-data" onsubmit="return confirmAction()">
-                                <button type="submit" class="user-account-setting-button2 button">
+                                <button type="submit" name="user-account-setting-button2" value="deactivate-form" class="user-account-setting-button2 button">
                                     <span class="settings-text18">
                                         <span>Deactivate account</span>
                                     </span>

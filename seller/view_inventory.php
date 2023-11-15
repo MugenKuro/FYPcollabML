@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $sql = "SELECT i.item_id, iv.inventory_id, i.item_name, iv.size, iv.quantity
         FROM Items i
         INNER JOIN Inventory iv ON i.item_id = iv.item_id
-        WHERE i.seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?)";
+        WHERE i.seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?) AND i.status = 'Active'";
 
 // Add search condition if a search query is provided
 if (!empty($searchQuery)) {
@@ -214,7 +214,7 @@ include('sellerNavBar.php');
                         <select class="form-control" id="item_name" name="item_name" required>
                             <?php
                             // Query to retrieve item names for the seller
-                            $itemNamesSql = "SELECT item_name FROM Items WHERE seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?)";
+                            $itemNamesSql = "SELECT item_name FROM Items WHERE seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?) AND status = 'Active'";
                             $itemNamesParams = [$sellerUserId];
 
                             try {

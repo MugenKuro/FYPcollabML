@@ -26,6 +26,9 @@ if (isset($_SESSION['accountType'])) {
     exit;
 }
 
+$rating = null;
+$review = null;
+
 // request data
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (!isset($_GET["item_id"]) || !isset($_GET["customer_id"])) {
@@ -33,19 +36,35 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         exit;
     }
     $_SESSION["item_id"] = $_GET["item_id"];
-    ;
     $_SESSION["customer_id"] = $_GET["customer_id"];
-    ;
+
 
 } else {
-    $rate = new ratePurchasedItem();
-    extract($_POST);
-    $rating = json_decode($rate->addItemRating($_SESSION["customer_id"], $_SESSION["item_id"], $rating, $review));
-    if ($rating->status == 'success') {
-        $_SESSION['flashdata']['type'] = 'success';
-        $_SESSION['flashdata']['msg'] = 'Review added successfully.';
+    if (isset($_POST['review'])) {
+        $rate = new ratePurchasedItem();
+        extract($_POST);
+        $rating = json_decode($rate->addItemRating($_SESSION["customer_id"], $_SESSION["item_id"], $rating, $review));
+        if ($rating->status == 'success') {
+            $_SESSION['flashdata']['type'] = 'success';
+            $_SESSION['flashdata']['msg'] = 'Review added successfully.';
+        }
+    } elseif (isset($_POST['sreview'])) {
+        $rate = new rateSeller();
+        $seller = json_decode($rate->viewSellerByItem($_SESSION["item_id"]));
+        if (!empty($seller)) {
+            foreach ($seller as $seller) {
+                // Access item properties and generate the HTML dynamically
+                $sellerId = $seller->seller_id;
+            }
+            extract($_POST);
+            $rate = new rateSeller();
+            $rating = json_decode($rate->addSellerRating($_SESSION["customer_id"], $sellerId, $srating, $sreview));
+            if ($rating->status == 'success') {
+                $_SESSION['flashdata']['type2'] = 'success';
+                $_SESSION['flashdata']['msg2'] = 'Review added successfully.';
+            }
+        }
     }
-
 }
 ?>
 
@@ -98,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     <form class="update-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
                         method="post" enctype="multipart/form-data">
                         <?php
-                        if (isset($_SESSION['flashdata'])):
+                        if (isset($_SESSION['flashdata']['msg'])):
                             ?>
                             <div
                                 class="dynamic_alert alert alert-<?php echo $_SESSION['flashdata']['type'] ?> my-2 rounded-0">
@@ -120,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                             <span class="rate-item-text03">
                                 <span>Rate</span>
                                 <span>this</span>
-                                <span>product</span>
+                                <span>item</span>
                                 <br />
                             </span>
                             <select id="rating" name="rating" class="form-control rate-item-select" required>
@@ -138,10 +157,79 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         </div>
                         <div class="rate-item-container6">
 
-                            <label class="rate-item-text08" for="review">Your Review</label>
+                            <label class="rate-item-text08" for="review">Item Review</label>
                             <textarea id="review" name="review" class="form-control"
                                 placeholder="Share about your experience on this product" rows="4"
                                 required><?= isset($_POST['review']) ? $_POST['review'] : '' ?></textarea>
+                        </div>
+                        <div class="rate-item-container7">
+                            <div class="rate-item-container8">
+                                <button type="submit" class="rate-item-button button">
+                                    <span class="rate-item-text11">
+                                        <span>Submit</span>
+                                        <br />
+                                    </span>
+                                </button>
+                                <button type="button" class="rate-item-button1 button"
+                                    onclick="window.location='purchaseHistory.php'">
+                                    <span class="rate-item-text14">
+                                        <span class="rate-item-text15">Cancel</span>
+                                        <br />
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                    <br />
+                    <br />
+                    <div class="rate-item-container3"></div>
+                    <form class="update-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
+                        method="post" enctype="multipart/form-data">
+                        <?php
+                        if (isset($_SESSION['flashdata'])):
+                            ?>
+                            <div
+                                class="dynamic_alert alert alert-<?php echo $_SESSION['flashdata']['type2'] ?> my-2 rounded-0">
+                                <div class="d-flex align-items-center">
+                                    <div class="col-11">
+                                        <?php echo $_SESSION['flashdata']['msg2'] ?>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <div class="float-end"><a href="javascript:void(0)"
+                                                class="text-dark text-decoration-none"
+                                                onclick="$(this).closest('.dynamic_alert').hide('slow').remove()">x</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php unset($_SESSION['flashdata']) ?>
+                        <?php endif; ?>
+                        <div class="rate-item-container5">
+                            <span class="rate-item-text03">
+                                <span>Rate</span>
+                                <span>Seller</span>
+                                <br />
+                            </span>
+                            <select id="srating" name="srating" class="form-control rate-item-select" required>
+                                <option value="1" <?php if (isset($_POST['srating']) && $_POST['srating'] === '1')
+                                    echo 'selected'; ?>>1</option>
+                                <option value="2" <?php if (isset($_POST['srating']) && $_POST['srating'] === '2')
+                                    echo 'selected'; ?>>2</option>
+                                <option value="3" <?php if (isset($_POST['srating']) && $_POST['srating'] === '3')
+                                    echo 'selected'; ?>>3</option>
+                                <option value="4" <?php if (isset($_POST['srating']) && $_POST['srating'] === '4')
+                                    echo 'selected'; ?>>4</option>
+                                <option value="5" <?php if (isset($_POST['srating']) && $_POST['srating'] === '5')
+                                    echo 'selected'; ?>>5</option>
+                            </select>
+                        </div>
+                        <div class="rate-item-container6">
+
+                            <label class="rate-item-text08" for="review">Seller Review</label>
+                            <textarea id="sreview" name="sreview" class="form-control"
+                                placeholder="Share about your experience on this product" rows="4"
+                                required><?= isset($_POST['sreview']) ? $_POST['sreview'] : '' ?></textarea>
                         </div>
                         <div class="rate-item-container7">
                             <div class="rate-item-container8">
