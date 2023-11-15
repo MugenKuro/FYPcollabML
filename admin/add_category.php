@@ -3,19 +3,26 @@ require_once  "../controller/AdminController.php";
 
 $adminController = new AdminController();
 
-$successMessage = ''; // Initialize an empty success message
+$Message = ''; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryName = $_POST["category_name"];
 
     // Check if the 'active' checkbox is selected
     $status = isset($_POST["active"]) ? "Active" : "Inactive";
-
-    if ($adminController->addCategory($categoryName, $status)) {; 
-        header("Location: view_category.php");
+    $categoryName = $_POST["category_name"];
+    
+    if (empty($categoryName)) {
+        $Message = "Category name cannot be empty!";
     } else {
-        $successMessage = "Error adding category!";
+        if ($adminController->addCategory($categoryName, $status)) {;
+            $Message = "Category added successfully!"; 
+            header("Location: view_category.php");
+        } else {
+            $Message = "Error adding category!";
+        }
     }
+    
 }
 include "admin_header.php";
 ?>
@@ -34,6 +41,13 @@ include "admin_header.php";
                             <h2 class="card-title"><b>Add New Category</b></h2>
                         </div>
                         <div class="card-body">
+                            <!-- Display message -->
+                            <?php if (!empty($Message)) : ?>
+                                <div class="alert alert-<?php echo $Message == 'Category added successfully!' ? 'success' : 'danger'; ?> alert-dismissible mt-3" role="alert">
+                                    <?php echo $Message; ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php endif; ?>
                             <form method="POST" action="add_category.php">
                                 <div class="mb-3">
                                     <label for="category_name" class="form-label">Category Name:</label>
