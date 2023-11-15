@@ -2974,8 +2974,8 @@ a:hover {
 
 .rate-item-container1 {
     width: 924px;
-    height: 505px;
     display: flex;
+    min-height:90vh;
     box-shadow: 5px 5px 10px 2px #d4d4d4;
     margin-top: 10px;
     align-items: center;
@@ -3118,6 +3118,7 @@ a:hover {
 }
 
 .rate-item-container8 {
+    margin-bottom:20px;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -4663,7 +4664,7 @@ a:hover {
     display: flex;
     overflow: auto;
     min-height: 100vh;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: row;
     justify-content: flex-start;
 }
@@ -4672,7 +4673,6 @@ a:hover {
     width: 305px;
     height: 1199px;
     display: flex;
-    align-self: center;
     margin-top: 50px;
     align-items: flex-start;
     margin-left: 50px;
@@ -4727,7 +4727,6 @@ a:hover {
 .seller-listings-container03 {
     flex: 1;
     width: 955px;
-    height: 1200px;
     display: flex;
     align-self: flex-end;
     box-shadow: 5px 5px 10px 2px #d4d4d4;
@@ -6359,7 +6358,6 @@ a:hover {
 }
 
 .view-review-container11 {
-    width: 387px;
     display: flex;
     margin-top: 5px;
     align-items: flex-start;

@@ -6,17 +6,17 @@ if (session_status() === PHP_SESSION_NONE)
 // Include file
 require_once("db.php");
 
-class itemratings {
+class sellerratings {
     private $rating_id;
     private $customer_id;
-    private $item_id;
+    private $seller_id;
     private $rating_value;
     private $review_text;
 
-    public function __construct($rating_id=NULL, $customer_id=NULL, $item_id=NULL, $rating_value=NULL, $review_text=NULL) {
+    public function __construct($rating_id=NULL, $customer_id=NULL, $seller_id=NULL, $rating_value=NULL, $review_text=NULL) {
         $this->rating_id = $rating_id;
         $this->customer_id = $customer_id;
-        $this->item_id = $item_id;
+        $this->seller_id = $seller_id;
         $this->rating_value = $rating_value;
         $this->review_text = $review_text;
     }
@@ -29,8 +29,8 @@ class itemratings {
         return $this->customer_id;
     }
 
-    public function getItemId() {
-        return $this->item_id;
+    public function getSellerId() {
+        return $this->seller_id;
     }
 
     public function getRatingValue() {
@@ -41,17 +41,17 @@ class itemratings {
         return $this->review_text;
     }
 
-    public function addItemRating($customer_id, $item_id, $rating_value, $review_text) {
-        $sql = "SELECT * FROM `itemratings` where `customer_id` = $customer_id AND `item_id` = $item_id";
+    public function addSellerRating($customer_id, $seller_id, $rating_value, $review_text) {
+        $sql = "SELECT * FROM `sellerratings` where `customer_id` = $customer_id AND `seller_id` = $seller_id ";
         $db = new Db();
         $result = $db->query($sql);
         if ($result->num_rows > 0) {
             $resp['status'] = 'failed';
-            $_SESSION['flashdata']['type'] = 'danger';
-            $_SESSION['flashdata']['msg'] = 'You have rated this item.';
+            $_SESSION['flashdata']['type2'] = 'danger';
+            $_SESSION['flashdata']['msg2'] = 'You have rated this seller.';
         } else {
-            $sql = "INSERT INTO `itemratings` (`customer_id`, `item_id`, `rating_value`, `review_text`) 
-            VALUES ('$customer_id', '$item_id', '$rating_value', '$review_text')";
+            $sql = "INSERT INTO `sellerratings` (`customer_id`, `seller_id`, `rating_value`, `review_text`) 
+            VALUES ('$customer_id', '$seller_id', '$rating_value', '$review_text')";
             $save = $db->query($sql);
             if ($save) {
                 $resp['status'] = 'success';
@@ -63,11 +63,11 @@ class itemratings {
         return json_encode($resp);
     }
 
-    public function viewReviewByItem($item_id) {
-        $sql = "SELECT ir.rating_id, c.customer_id, c.nickname, c.image_path, ir.rating_value, ir.review_text
-        FROM `itemratings` as ir, `customers` as c
-        WHERE ir.customer_id = c.customer_id
-        AND ir.item_id = $item_id";
+    public function viewReviewBySeller($seller_id) {
+        $sql = "SELECT sr.rating_id, c.customer_id, c.nickname, c.image_path, sr.rating_value, sr.review_text
+        FROM `sellerratings` as sr, `customers` as c
+        WHERE sr.customer_id = c.customer_id
+        AND sr.seller_id = $seller_id";
         $db = new Db();
         $result = $db->query($sql);
         $data = array(); // Initialize an empty array to store category data

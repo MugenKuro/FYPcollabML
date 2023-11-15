@@ -55,10 +55,27 @@ class inventory {
     }
 
     public function viewStock($cart_item_id) {
-        $sql = "SELECT inv.quantity
-        FROM `cartitems` as ci, `items` as i, `inventory` as inv
-        WHERE ci.item_id = i.item_id AND i.item_id = inv.item_id
-        AND ci.cart_item_id = $cart_item_id";
+        $sql = "SELECT quantity FROM inventory WHERE (item_id, size) IN (SELECT item_id, size FROM cartitems WHERE cart_item_id = $cart_item_id)";
+
+        $db = new Db();
+        $result = $db->query($sql);
+        $data = '';
+    
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $data = $row['quantity'];
+
+        }
+    
+        return $data;
+
+    }
+
+    public function viewItemStock($item_id, $size) {
+        $sql = "SELECT quantity
+        FROM inventory
+        WHERE `item_id` = $item_id 
+        AND `size` = '$size'";
         $db = new Db();
         $result = $db->query($sql);
         $data = '';
