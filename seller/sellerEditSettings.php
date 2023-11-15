@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../sellerAuth.php';
+require_once __DIR__ . '/./auth.php';
+require_once __DIR__ . '/./sellerAuth.php';
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +30,18 @@ require_once __DIR__ . '/../sellerAuth.php';
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>iCloth</title>
+
+<script>
+function confirmAction() {
+    if (confirm("Are you sure you want to deactivate your account?")) {
+        // User clicked OK, proceed with the action
+        return true;
+    } else {
+        // User clicked Cancel, do nothing
+        return false;
+    }
+}
+</script>
 </head>
 
 <body>
@@ -258,7 +270,8 @@ require_once __DIR__ . '/../sellerAuth.php';
                         </table>
                     </form>
 
-                    <form method="POST" action="sellerEditSettings.php">
+                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
+                        enctype="multipart/form-data" onsubmit="return confirmAction()">
                         <div class="seller-settings-button-container">
                             <input type="submit" name="requestDeactivation" value="Request Deactivation"  class="seller-setting-button2 button">
                         </div>
