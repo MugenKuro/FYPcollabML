@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../sellerAuth.php';
+require_once __DIR__ . '/./auth.php';
+require_once __DIR__ . '/./sellerAuth.php';
 ?>
 
 <!DOCTYPE html>
@@ -151,7 +151,7 @@ require_once __DIR__ . '/../sellerAuth.php';
             <div class="seller-container01">
 				<div class= "centering-div">
                             <br>
-                <span class= "seller-setting-header">Edit Item</span>
+                <span class= "seller-setting-header">Update Item</span>
 				<table class ="seller-edit-table">
 						<input type="hidden" name="item_id" value="<?php echo $item_id; ?>"></input>
                             <tr>
