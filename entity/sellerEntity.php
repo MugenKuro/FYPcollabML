@@ -206,7 +206,10 @@
             }
         }
 		public function getItemReviews($item_id) {
-			$userQuery = "SELECT * FROM itemratings join customers on itemratings.customer_id = customers.customer_id WHERE itemratings.item_id = $item_id";
+			$userQuery = "SELECT * FROM itemratings 
+            inner join customers on itemratings.customer_id = customers.customer_id 
+            inner join users on users.user_id = customers.user_id
+            WHERE itemratings.item_id = $item_id";
 			$result = $this->db->query($userQuery);
 			
             if($result->num_rows > 0){
