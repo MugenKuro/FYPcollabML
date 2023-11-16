@@ -64,10 +64,11 @@ class itemratings {
     }
 
     public function viewReviewByItem($item_id) {
-        $sql = "SELECT ir.rating_id, c.customer_id, c.nickname, c.image_path, ir.rating_value, ir.review_text
-        FROM `itemratings` as ir, `customers` as c
-        WHERE ir.customer_id = c.customer_id
-        AND ir.item_id = $item_id";
+        $sql = "SELECT ir.rating_id, c.customer_id, u.username, c.nickname, c.image_path, ir.rating_value, ir.review_text
+        FROM itemratings as ir
+        JOIN customers as c ON ir.customer_id = c.customer_id
+        JOIN users as u ON c.user_id = u.user_id
+        WHERE ir.item_id = $item_id";
         $db = new Db();
         $result = $db->query($sql);
         $data = array(); // Initialize an empty array to store category data
