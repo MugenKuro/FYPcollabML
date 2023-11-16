@@ -2,8 +2,7 @@
 // Include files
 require_once dirname(__FILE__) . '/controller/userController.php';
 require_once dirname(__FILE__) . '/controller/categoriesController.php';
-if (session_status() === PHP_SESSION_NONE)
-    session_start();
+require_once('auth.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Form selection based on radio button value
