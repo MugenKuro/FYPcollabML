@@ -8,6 +8,7 @@ $db = new Db();
 // Initialize the success message and search query as empty strings
 $successMessage = '';
 $searchQuery = '';
+$errorMessage = ''; // Add an error message variable
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -49,22 +50,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $size = $_POST["size"];
         $quantity = $_POST["quantity"];
 
-        // Query to add a new inventory record
-        $insertSql = "INSERT INTO Inventory (item_id, size, quantity)
-                      VALUES ((SELECT item_id FROM Items WHERE item_name = ? AND seller_id = (SELECT seller_id FROM Users WHERE user_id = ? AND account_type = 'Seller')), ?, ?)";
-        $insertParams = [$itemName, $sellerUserId, $size, $quantity];
+        // Query to check if the size already exists for the selected item
+        $checkSizeSql = "SELECT COUNT(*) AS size_count
+                        FROM Inventory iv
+                        INNER JOIN Items i ON iv.item_id = i.item_id
+                        WHERE i.item_name = ? AND iv.size = ? AND i.seller_id = (SELECT seller_id FROM Users WHERE user_id = ?)";
+        $checkSizeParams = [$itemName, $size, $sellerUserId];
 
         try {
-            $result = $db->query($insertSql, $insertParams);
+            $sizeResult = $db->query($checkSizeSql, $checkSizeParams);
+            $sizeRow = $sizeResult->fetch_assoc();
 
-            if ($result) {
-                // Set the success message
-                $successMessage = 'Inventory added successfully.';
+            if ($sizeRow['size_count'] > 0) {
+                // Size already exists, set an error message
+                $errorMessage = 'Size already exists for this item.';
             } else {
-                $successMessage = 'Error adding inventory: ' . $db->getConnectError();
+                // Size doesn't exist, proceed to add new inventory record
+                // Query to add a new inventory record
+                $insertSql = "INSERT INTO Inventory (item_id, size, quantity)
+                            VALUES ((SELECT item_id FROM Items WHERE item_name = ? AND seller_id = (SELECT seller_id FROM Users WHERE user_id = ? AND account_type = 'Seller')), ?, ?)";
+                $insertParams = [$itemName, $sellerUserId, $size, $quantity];
+
+                try {
+                    $result = $db->query($insertSql, $insertParams);
+
+                    if ($result) {
+                        // Set the success message
+                        $successMessage = 'Inventory added successfully.';
+                    } else {
+                        $errorMessage = 'Error adding inventory: ' . $db->getConnectError();
+                    }
+                } catch (Exception $e) {
+                    $errorMessage = 'Error: ' . $e->getMessage();
+                }
             }
         } catch (Exception $e) {
-            $successMessage = 'Error: ' . $e->getMessage();
+            $errorMessage = 'Error: ' . $e->getMessage();
         }
     }
 
@@ -89,7 +110,6 @@ if (!empty($searchQuery)) {
     $params = [$sellerUserId];
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,11 +134,17 @@ if (!empty($searchQuery)) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>iCloth</title>
+
+    <style>
+    .close-right {
+        position: absolute;
+        right: 10px;
+    }
+</style>
+
 </head>
 <body>
-<?php
-include('sellerNavBar.php');
-?>
+<?php include('sellerNavBar.php'); ?>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h1>Inventory Management</h1>
@@ -126,14 +152,15 @@ include('sellerNavBar.php');
     </div>
     <form method="post" action="" class="mb-3">
         <div class="input-group">
-            <input type="text" class="form-control" name="search_query" placeholder="Search Item Names" value="<?php echo $searchQuery; ?>">
+            <input type="text" class="form-control" name="search_query" placeholder="Search Item Names"
+                   value="<?php echo $searchQuery; ?>">
             <div class="input-group-append">
                 <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </div>
     </form>
     <?php
-    try {
+	try {
         $result = $db->query($sql, $params);
         if ($result->num_rows > 0) {
             ?>
@@ -175,10 +202,11 @@ include('sellerNavBar.php');
                                             <label for="new_quantity">New Quantity:</label>
                                             <input type="text" class="form-control" id="new_quantity<?php echo $row['inventory_id']; ?>" name="new_quantity" placeholder="New Quantity" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        
                                     </form>
                                 </div>
                                 <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -208,7 +236,14 @@ include('sellerNavBar.php');
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="">
+                <!-- Error message display -->
+                <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;">
+                    <span id="error-message-text"></span>
+                    <button type="button" class="close close-right" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="" onsubmit="return validateForm();">
                     <div class="form-group">
                         <label for="item_name">Item Name:</label>
                         <select class="form-control" id="item_name" name="item_name" required>
@@ -235,16 +270,59 @@ include('sellerNavBar.php');
                     <div class="form-group">
                         <label for="quantity">Quantity:</label>
                         <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
+                        <span id="quantity-error" class="text-danger"></span>
                     </div>
                     <button type="submit" class="btn btn-primary">Add</button>
+                    
                 </form>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer">      
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function validateForm() {
+        var size = document.getElementById("size").value;
+        var quantity = document.getElementById("quantity").value;
 
+        // Check if size is empty
+        if (size.trim() === "") {
+            alert("Size cannot be empty.");
+            return false;
+        }
+
+        // Check if quantity is empty
+        if (quantity.trim() === "") {
+            alert("Quantity cannot be empty.");
+            return false;
+        }
+
+        // Check if quantity is a valid number
+        if (isNaN(quantity)) {
+            document.getElementById("quantity-error").innerText = "Quantity must be a valid number.";
+            return false;
+        }
+        
+
+        // Clear any previous error message
+        document.getElementById("quantity-error").innerText = "";
+
+        return true;
+    }
+</script>
+<script>
+    // Display error message using JavaScript
+    var errorMessage = "<?php echo $errorMessage; ?>";
+    if (errorMessage !== "") {
+        var errorMessageDiv = document.getElementById("errorMessage");
+        var errorMessageText = document.getElementById("error-message-text");
+        errorMessageText.innerText = errorMessage;
+        errorMessageDiv.style.display = "block";
+
+        $('#addInventoryModal').modal('show');
+    }
+</script>
 </body>
 </html>

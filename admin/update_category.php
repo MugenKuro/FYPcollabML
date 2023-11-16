@@ -11,23 +11,24 @@ if (!$categoryData) {
     exit();
 }
 
-$Message = "";
+$errorMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryName = htmlspecialchars($_POST["category_name"]);
     $status = isset($_POST["active"]) ? "Active" : "Inactive";
 
-    if (empty($categoryName)) {
-        $Message = "Category name is required";
+    // Check if the category name already exists for updating
+    if (!empty($categoryName) && $adminController->isCategoryExistsForUpdate($categoryName, $categoryId)) {
+        $errorMessage = "Category name already exists!";
     } else {
         if ($adminController->updateCategory($categoryId, $categoryName, $status)) {
-            $Message = "Category updated successfully!";
+            echo "Category updated successfully!";
             header("Location: view_category.php");
             exit();
         } else {
-            $Message = "Error updating category!";
+            $errorMessage = "Error updating category!";
         }
-    }  
+    }
 }
 include "admin_header.php";
 ?>
@@ -45,17 +46,15 @@ include "admin_header.php";
                         <h2 class="card-title"><b>Update Category</b></h2>
                     </div>
                     <div class="card-body">
-                        <!-- Display message -->
-                        <?php if (!empty($Message)) : ?>
-                                <div class="alert alert-<?php echo $Message == 'Category updated successfully!' ? 'success' : 'danger'; ?> alert-dismissible mt-3" role="alert">
-                                    <?php echo $Message; ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            <?php endif; ?>
-                        <form method="POST" action="update_category.php?category_id=<?php echo $categoryId; ?>">
+                        <!-- Display error message -->
+                        <div id="errorMessage" class="alert alert-danger mt-3 d-none">
+                            <span id="error-message-text"></span>
+                            <button type="button" class="btn-close float-end" aria-label="Close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <form method="POST" action="update_category.php?category_id=<?php echo $categoryId; ?>" onsubmit="return validateForm();">
                             <div class="mb-3">
                                 <label for="category_name" class="form-label">Category Name:</label>
-                                <input type="text" class="form-control" id="category_name" name="category_name" value="<?php echo $categoryData["category_name"]; ?>">
+                                <input type="text" class="form-control" id="category_name" name="category_name" value="<?php echo $categoryData["category_name"]; ?>" required>
                             </div>
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="active" name="active" <?php if ($categoryData["status"] === "Active") echo "checked"; ?>>
@@ -68,5 +67,14 @@ include "admin_header.php";
             </div>
         </div>
     </div>
+
+    <script>
+        <?php if (!empty($errorMessage)) : ?>
+            var errorMessageDiv = document.getElementById("errorMessage");
+            var errorMessageText = document.getElementById("error-message-text");
+            errorMessageText.innerText = '<?php echo $errorMessage; ?>';
+            errorMessageDiv.classList.remove("d-none"); 
+        <?php endif; ?>
+    </script>
 </body>
 </html>

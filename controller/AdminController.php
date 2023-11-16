@@ -8,18 +8,26 @@ class AdminController {
         $this->admin = new Admin();
     }
 
+    public function isCategoryExists($categoryName) {
+        return $this->admin->isCategoryExists($categoryName);
+    }
+
     public function addCategory($categoryName, $status) {
         return $this->admin->addCategory($categoryName, $status);
     }
 
-    public function confirmDeletion() {
-        // Implement logic here for confirming deletion
-        return true; // assume confirmation is true.
+    public function isCategoryExistsForUpdate($categoryName, $categoryId) {
+        return $this->admin->isCategoryExistsForUpdate($categoryName, $categoryId);
     }
 
-    public function deleteCategory($categoryID) {
-        return $this->admin->deleteCategory($categoryID);
-    }
+    // public function confirmDeletion() {
+    //     // Implement logic here for confirming deletion
+    //     return true; // assume confirmation is true.
+    // }
+
+    // public function deleteCategory($categoryID) {
+    //     return $this->admin->deleteCategory($categoryID);
+    // }
 
     public function handleCategoryRequests() {
         return $this->admin->handleCategoryRequests();
