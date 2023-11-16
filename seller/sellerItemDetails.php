@@ -177,9 +177,13 @@ require_once __DIR__ . '/./sellerAuth.php';
                                                 <span>
                                                 <?php echo $row4["nickname"] ?>
                                                 </span>
-                                                <br />
+                                             
                                             </span>
                                             <span class="view-item-text39">
+                                                <span class="view-item-text40">
+                                                <?php echo "@".$row4["username"] ?>
+                                                </span>
+                                                <br />
                                                 <span class="view-item-text40">
                                                 <?php echo $row4["rating_value"] ?> star
                                                 </span>
