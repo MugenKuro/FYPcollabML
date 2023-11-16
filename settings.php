@@ -326,7 +326,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label for="username">Username</label>
                                 <input type="text" id="username" name="username" class="form-control"
                                     placeholder="your username use to login(jack123)"
-                                    value="<?= isset($_POST['username']) ? $_POST['username'] : $username ?>" required>
+                                    value="<?= isset($_POST['username']) ? $_POST['username'] : $username ?>" disabled>
                             </div>
                             <div class="col-sm-6">
                                 <label for="lastName">Last Name</label>

@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php endif; ?>
                         <div class="fa-container5">
                             <span class="fa-text03">
-                                <p class="">We have sent an OPT in your Email [<?= isset($email) ? $email : '' ?>].
+                                <p class="">We have sent an OTP in your Email [<?= isset($email) ? $email : '' ?>].
                                 </p>
                             </span>
                             <div class="form-group">

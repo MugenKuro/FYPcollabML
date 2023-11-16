@@ -100,6 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         <?php endif; ?>
                         <div class="homepage-container03"
                             onclick="window.location='viewItem.php?item_id=<?php echo $item->item_id; ?>'">
+                            <span style="font-weight: bold; ">
+                                <?php echo $item->seller_username; ?>
+                            </span>
                             <img alt="image" src="<?php echo '.' . $item->item_image_path; ?>" class="homepage-image" />
                             <span class="item-name">
                                 <?php echo $item->item_name; ?>
