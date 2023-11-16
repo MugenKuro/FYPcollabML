@@ -74,7 +74,7 @@ if (isset($_SESSION['cart_id'])) {
                     <img src="./images/tick.png" alt="image" class="transaction-success-image" />
                     <h1>Transaction Completed</h1>
                     <button type="button" class="transaction-success-button button"
-                        onclick="window.location='cart.php'">
+                        onclick="window.location='trending.php'">
                         <span class="transaction-success-text1">
                             <span>Done</span>
                             <br />

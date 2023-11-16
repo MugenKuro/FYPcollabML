@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../sellerAuth.php';
+require_once __DIR__ . '/./auth.php';
+require_once __DIR__ . '/./sellerAuth.php';
 	
 ?>
 
@@ -164,7 +164,7 @@ require_once __DIR__ . '/../sellerAuth.php';
                             <tr>
                                 <div class= "seller-setting-button-container">
                                 <td class="seller-edit-setting-button-td">
-                                <input required type="submit" name="submit" class="seller-setting-button" value="Add"></input>
+                                <input required type="submit" name="submit" class="seller-setting-button" value="Submit"></input>
                                 </td>
                                 <td class="seller-edit-setting-button-td">
                                 <button type="button" class="seller-setting-button1"

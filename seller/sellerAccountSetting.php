@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../entity/users.php';
 require_once __DIR__ . '/../controller/sellerController.php';
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../sellerAuth.php';
+require_once __DIR__ . '/./auth.php';
+require_once __DIR__ . '/./sellerAuth.php';
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@ require_once __DIR__ . '/../sellerAuth.php';
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <title>iCloth</title>
+
 </head>
 
 <body>

@@ -289,9 +289,7 @@
             $profile_image = '/images/sellerLogo/' . $profile_image;
             $username=  $inputData['username'];
             $password = $inputData['password1'];
-            $password = password_hash($password, PASSWORD_DEFAULT);
             $confirmPass = $inputData['password2']; 
-            $confirmPass = password_hash($confirmPass, PASSWORD_DEFAULT);
             $sellerName = $inputData['seller_name']; //seller
             $description = $inputData['description']; //seller
             $address = $inputData['pick_up_address']; //seller
@@ -301,8 +299,9 @@
             $bank_account_no = $inputData['bank_account_no'];
             $userID = $_SESSION['user_id'];
             if($password == $confirmPass){
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $statement = $this->db->prepare("UPDATE users SET  username = ? , password = ?, email =? where user_id = $userID");
-            $statement->bind_param("sss",  $username, $password, $email);
+            $statement->bind_param("sss",  $username, $passwordHash, $email);
             }else{
                 $statement = $this->db->prepare("UPDATE users SET  username = ? , email =? where user_id = $userID");
                 $statement->bind_param("ss",  $username, $email);

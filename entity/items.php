@@ -56,7 +56,14 @@ class items {
 
 
     public function viewItemByCategory($category_id) {
-        $sql = "SELECT * FROM `items` where `category_id` = $category_id AND `status` = 'Active'";
+        $sql = "SELECT items.*, SUM(cartitems.quantity) as total_sold
+        FROM items
+        JOIN cartitems ON items.item_id = cartitems.item_id
+        JOIN orderhistory ON cartitems.cart_id = orderhistory.cart_id
+        WHERE items.category_id = $category_id AND items.status = 'Active'
+        GROUP BY items.item_id
+        ORDER BY total_sold DESC";
+
         $db = new Db();
         $result = $db->query($sql);
 
