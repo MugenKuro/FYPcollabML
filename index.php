@@ -131,6 +131,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </section>
 
 
+    <?php
+    $category = new viewTop6Categories();
+    $categories = json_decode($category->viewTopCategories());
+
+
+    ?>
     <!-- categories Grid-->
     <section class="page-section bg-light" id="categories">
         <div class="container">
@@ -139,96 +145,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h3 class="section-subheading text-muted">Here's some of the categories we provide</h3>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <!-- categories item 1-->
-                    <div class="categories-item">
-                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
-                            <div class="categories-hover">
-                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/categories/1.jpg" alt="..." />
-                        </a>
-                        <div class="categories-caption">
-                            <div class="categories-caption-heading">Women's Dresses</div>
-                            <div class="categories-caption-subheading text-muted"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <!-- categories item 2-->
-                    <div class="categories-item">
-                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
-                            <div class="categories-hover">
-                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/categories/2.jpg" alt="..." />
-                        </a>
-                        <div class="categories-caption">
-                            <div class="categories-caption-heading">Women's Shoes</div>
-                            <div class="categories-caption-subheading text-muted"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <!-- categories item 3-->
-                    <div class="categories-item">
-                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
-                            <div class="categories-hover">
-                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/categories/3.jpg" alt="..." />
-                        </a>
-                        <div class="categories-caption">
-                            <div class="categories-caption-heading">Men's Jeans</div>
-                            <div class="categories-caption-subheading text-muted"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
-                    <!-- categories item 4-->
-                    <div class="categories-item">
-                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
-                            <div class="categories-hover">
-                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/categories/4.jpg" alt="..." />
-                        </a>
-                        <div class="categories-caption">
-                            <div class="categories-caption-heading">Men's Shirts</div>
-                            <div class="categories-caption-subheading text-muted"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
-                    <!-- categories item 5-->
-                    <div class="categories-item">
-                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
-                            <div class="categories-hover">
-                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/categories/5.jpg" alt="..." />
-                        </a>
-                        <div class="categories-caption">
-                            <div class="categories-caption-heading">Men's Pants</div>
-                            <div class="categories-caption-subheading text-muted"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <!-- categories item 6-->
-                    <div class="categories-item">
-                        <a class="categories-link" data-bs-toggle="modal" href="login.php">
-                            <div class="categories-hover">
-                                <div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/categories/6.jpg" alt="..." />
-                        </a>
-                        <div class="categories-caption">
-                            <div class="categories-caption-heading">Women's Shirts</div>
-                            <div class="categories-caption-subheading text-muted"></div>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                if (!empty($categories)) {
+                    // Loop through each category
+                    foreach ($categories as $category) {
+                        // Output the dynamically generated HTML for each category
+                        echo '<div class="col-lg-4 col-sm-6 mb-4">';
+                        echo '<div class="categories-item">';
+                        echo '<a class="categories-link" data-bs-toggle="modal" href="login.php">';
+                        echo '<div class="categories-hover">';
+                        echo '<div class="categories-hover-content"><i class="fas fa-plus fa-3x"></i></div>';
+                        echo '</div>';
+                        echo '<img class="img-fluid" style="width: 600px; height: 450px;" src="' .".". $category->item_image_path . '" alt="' . $category->category_name . '" />';
+                        echo '</a>';
+                        echo '<div class="categories-caption">';
+                        echo '<div class="categories-caption-heading">' . $category->category_name . '</div>';
+                        echo '<div class="categories-caption-subheading text-muted"></div>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    // Handle the case when no categories are available
+                    echo 'No categories available.';
+                }
+                ?>
             </div>
         </div>
     </section>

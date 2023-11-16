@@ -90,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $sellerDesc = $seller->description;
             $sellerName = $seller->seller_name;
             $sellerImage = $seller->profile_image;
+            $sellerUsername = $seller->seller_username;
         }
     }
     ?>
@@ -98,6 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             <div class="seller-listings-container01">
                 <img src="<?php echo '.'. $sellerImage?>" alt="image" class="seller-listings-image" />
                 <h1 class="seller-listings-text"><?php echo $sellerName?></h1>
+                <h1 class="seller-listings-text"><?php echo "@".$sellerUsername?></h1>
                 <div class="seller-listings-container02"></div>
                 <span class="seller-listings-text01">
                 <?php echo $sellerDesc?>

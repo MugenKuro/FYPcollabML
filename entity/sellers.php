@@ -74,9 +74,10 @@ class sellers {
     }
 
     public function viewSellers($seller_id) {
-        $sql = "SELECT *
-        FROM `sellers`
-        WHERE `seller_id` = $seller_id";
+        $sql = "SELECT sellers.*, users.username as seller_username
+        FROM sellers
+        JOIN users ON sellers.user_id = users.user_id
+        WHERE sellers.seller_id = $seller_id";
         $db = new Db();
         $result = $db->query($sql);
         $data = array(); // Initialize an empty array to store category data

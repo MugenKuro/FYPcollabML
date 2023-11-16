@@ -71,7 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             cursor: pointer;
         }
 
-        .view-item-image1, .view-item-text07 {
+        .view-item-image1,
+        .view-item-text07 {
             transition: transform 0.3s ease-in-out;
         }
 
@@ -126,6 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $sellerId = $seller->seller_id;
             $sellerName = $seller->seller_name;
             $sellerImage = $seller->profile_image;
+            $sellerUsername = $seller->seller_username;
         }
     }
 
@@ -169,6 +171,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                         <span>
                                             <?php echo $sellerName ?>
                                         </span>
+                                    </span>
+                                    <span>
+                                        <?php echo "@" . $sellerUsername ?>
                                     </span>
                                 </div>
                             </div>
@@ -266,6 +271,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 $userName = $review->nickname;
                                 $rating = $review->rating_value;
                                 $reviewText = $review->review_text;
+                                $user_username = $review->username;
                                 ?>
                                 <div class="view-item-container14">
                                     <img alt="image" src="<?php echo "." . $userImage; ?>" class="view-item-image2" />
@@ -275,7 +281,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                                 <span>
                                                     <?php echo $userName; ?>
                                                 </span>
-                                                <br />
+                                            </span>
+                                            <span>
+                                                <?php echo "@" . $user_username; ?>
                                             </span>
                                             <span class="view-item-text39">
                                                 <span class="view-item-text40">
