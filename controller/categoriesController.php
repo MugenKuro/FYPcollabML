@@ -27,4 +27,13 @@ class viewCatById {
     }
 }
 
+class viewTop6Categories {
+    public function viewTopCategories() {
+        $category = new categories();
+        $data = json_decode($category->viewTopCategories());
+
+        return json_encode($data);
+    }
+}
+
 ?>
