@@ -113,6 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 $userName = $review->nickname;
                                 $rating = $review->rating_value;
                                 $reviewText = $review->review_text;
+                                $user_username = $review->username;
                                 ?>
                                 <div class="view-review-container10">
                                     <img alt="image" src="<?php echo "." . $userImage; ?>" class="view-review-image1" />
@@ -122,7 +123,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                                 <span>
                                                     <?php echo $userName; ?>
                                                 </span>
-                                                <br />
+                                            </span>
+                                            <span>
+                                                <?php echo "@" . $user_username; ?>
                                             </span>
                                             <span class="view-review-text26">
                                                 <span class="view-review-text27">

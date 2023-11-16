@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label for="address2" class="col-sm-4 col-form-label">Address 2</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="address2" name="address2" class="form-control"
-                                        placeholder="BLK 123 #01-99"
+                                        placeholder="Block no. #unit-floor"
                                         value="<?= isset($_POST['address2']) ? $_POST['address2'] : '' ?>" required>
                                 </div>
                             </div>
