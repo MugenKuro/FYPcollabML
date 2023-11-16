@@ -39,6 +39,20 @@ class Admin
         return $customers;
     }    
     
+    public function isCategoryExists($categoryName) {
+        try {
+            $sql = "SELECT COUNT(*) FROM categories WHERE category_name = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("s", $categoryName);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $count = $result->fetch_assoc()['COUNT(*)'];
+            return $count > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    
 
     // Function to add a new category
     public function addCategory($categoryName, $status) {
@@ -57,7 +71,7 @@ class Admin
         }
     }
     
-    // Function to delete a category
+    // Function to deactivate a category
     public function deactivateCategory($categoryID) {
         try {
             $sql = "UPDATE categories SET status = 'Inactive' WHERE category_id = ?";
@@ -70,10 +84,10 @@ class Admin
         }
     }    
 
-    public function confirmDeletion() {
-        // confirmation logic using javascript
-        return true; 
-    }
+    // public function confirmDeletion() {
+    //     // confirmation logic using javascript
+    //     return true; 
+    // }
 
     // public function deleteCategory($categoryID) {
     //     try {
@@ -100,6 +114,17 @@ class Admin
         } else {
             return false;
         }
+    }
+
+    // Function to check if a category name exists for updates
+    public function isCategoryExistsForUpdate($categoryName, $categoryId) {
+        $sql = "SELECT * FROM categories WHERE category_name = ? AND category_id != ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("si", $categoryName, $categoryId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
     }
 
     public function updateCategory($categoryId, $categoryName, $status) {

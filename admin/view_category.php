@@ -13,6 +13,23 @@ $result = $adminController->viewAllCategories();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>System Admin</title>
+
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .table-wrapper {
+            align
+            background: #fff;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            width: 750px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">

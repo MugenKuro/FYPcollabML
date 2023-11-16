@@ -42,6 +42,18 @@ if (isset($_SESSION['accountType'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>iCloth</title>
+    <style>
+        .seller-name {
+            font-weight: bold; 
+        }
+
+        .item-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+    </style>
 
 </head>
 <body>
@@ -72,7 +84,7 @@ if (isset($_SESSION['accountType'])) {
         // Loop through the recommendations and display them dynamically
         foreach ($recommendations as $recommendation) {
             // Query to retrieve item details based on item_id
-            $itemQuery = "SELECT item_name, item_image_path, price FROM Items WHERE item_id = ?";
+            $itemQuery = "SELECT item_name, item_image_path, price, seller_id FROM Items WHERE item_id = ?";
             $itemResult = $db->query($itemQuery, [$recommendation]);
 
             if ($itemResult->num_rows > 0) {
@@ -81,6 +93,14 @@ if (isset($_SESSION['accountType'])) {
                 $item_name = $row['item_name'];
                 $item_image_path = $row['item_image_path'];
                 $item_price = $row['price'];
+                $seller_id = $row['seller_id'];
+
+                // Query to retrieve seller name based on seller_id
+                $sellerQuery = "SELECT Users.username FROM Sellers
+                                JOIN Users ON Sellers.user_id = Users.user_id
+                                WHERE Sellers.seller_id = ?";
+                $sellerResult = $db->query($sellerQuery, [$seller_id]);
+                $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['username'] : 'Prem Shop';
 
                 if ($container02Count % 4 == 0) {
                     // Start a new homepage-container02 after every 4 items
@@ -88,10 +108,14 @@ if (isset($_SESSION['accountType'])) {
                 }
 
                 echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
+                echo '<span>';
+                echo '<span class="seller-name">' . $seller_name . '</span>';
+                // echo '<br />';
+                echo '</span>';
                 echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
                 echo '<span>';
-                echo '<span>' . $item_name . '</span>';
-                echo '<br />';
+                echo '<div class="item-name">' . $item_name . '</div>';
+                // echo '<br />';
                 echo '</span>';
                 echo '<span>$' . $item_price . '</span>';
                 echo '</div>';
@@ -146,9 +170,9 @@ if (isset($_SESSION['accountType'])) {
             if ($minCategoryId !== null && $maxCategoryId !== null) {
                 // Display most popular items based on user's gender and category range
                 // Query to retrieve most popular items filtered by gender and category range
-                $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price FROM Items 
+                $popularItemsQuery = "SELECT Items.item_id, item_name, item_image_path, price, seller_id FROM Items 
                     JOIN ItemRatings ON Items.item_id = ItemRatings.item_id 
-                    WHERE Items.category_id >= ? AND Items.category_id <= ?  AND Items.status = 'Active'
+                    WHERE Items.category_id >= ? AND Items.category_id <= ? AND Items.status = 'Active'
                     GROUP BY Items.item_id 
                     ORDER BY AVG(ItemRatings.rating_value) DESC 
                     LIMIT 8";
@@ -165,6 +189,14 @@ if (isset($_SESSION['accountType'])) {
                     $item_name = $row['item_name'];
                     $item_image_path = $row['item_image_path'];
                     $item_price = $row['price'];
+                    $seller_id = $row['seller_id'];
+
+                    // Query to retrieve seller name based on seller_id
+                    $sellerQuery = "SELECT Users.username FROM Sellers
+                                    JOIN Users ON Sellers.user_id = Users.user_id
+                                    WHERE Sellers.seller_id = ?";
+                    $sellerResult = $db->query($sellerQuery, [$seller_id]);
+                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['username'] : 'Prem Shop';
 
                     if ($container02Count % 4 == 0) {
                         // Start a new homepage-container02 after every 4 items
@@ -172,10 +204,14 @@ if (isset($_SESSION['accountType'])) {
                     }
 
                     echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
-                    echo '<img alt="image" src="' . $item_image_path . '" class="homepage-image" />';
                     echo '<span>';
-                    echo '<span>' . $item_name . '</span>';
-                    echo '<br />';
+                    echo '<span class="seller-name">' . $seller_name . '</span>';
+                    // echo '<br />';
+                    echo '</span>';
+                    echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
+                    echo '<span>';
+                    echo '<div class="item-name">' . $item_name . '</div>';
+                    // echo '<br />';
                     echo '</span>';
                     echo '<span>$' . $item_price . '</span>';
                     echo '</div>';
