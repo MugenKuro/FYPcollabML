@@ -782,7 +782,7 @@ align-items: center;
 }
 
 .view-item-container15 {
-    width: 387px;
+    width: auto;
     display: flex;
     margin-top: 5px;
     align-items: flex-start;
