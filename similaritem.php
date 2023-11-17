@@ -6,6 +6,11 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+
+    .seller-name-link:hover {
+        font-size: 1.2em;
+        transition: font-size 0.3s;
+    }
 </style>
 
 <div class="view-item-container23">
@@ -44,16 +49,13 @@
                     $seller_id = $row['seller_id'];
 
                     // Query to retrieve seller name based on seller_id
-                    $sellerQuery = "SELECT Users.username FROM Sellers
-                                JOIN Users ON Sellers.user_id = Users.user_id
-                                WHERE Sellers.seller_id = ?";
+                    $sellerQuery = "SELECT seller_name FROM Sellers
+                                    WHERE seller_id = ?";
                     $sellerResult = $db->query($sellerQuery, [$seller_id]);
-                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['username'] : 'Prem Shop';
+                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['seller_name'] : 'Prem Shop';
 
                     echo '<div class="view-item-container' . $container02Count . '" onclick="redirectToViewItem(' . $item_id . ')">';
-                    echo '<span style="font-weight: bold; ">';
-                    echo '<span class="seller-name">' . $seller_name . '</span>';
-                    echo '</span>';
+                    echo '<a href="viewSellerIndex.php?seller_id=' . $seller_id . '" class="seller-name-link" style="font-weight: bold; text-decoration: none; color: inherit;">' . $seller_name . '</a>';
                     echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
                     echo '<span class="item-name">';
                     echo '<span>' . $item_name . '</span>';
@@ -89,17 +91,14 @@
                     $seller_id = $row['seller_id'];
 
                     // Query to retrieve seller name based on seller_id
-                    $sellerQuery = "SELECT Users.username FROM Sellers
-                                JOIN Users ON Sellers.user_id = Users.user_id
-                                WHERE Sellers.seller_id = ?";
+                    $sellerQuery = "SELECT seller_name FROM Sellers
+                                    WHERE seller_id = ?";
                     $sellerResult = $db->query($sellerQuery, [$seller_id]);
-                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['username'] : 'Prem Shop';
+                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['seller_name'] : 'Prem Shop';
 
 
                     echo '<div class="view-item-container' . $container02Count . '" onclick="redirectToViewItem(' . $item_id . ')">';
-                    echo '<span style="font-weight: bold; ">';
-                    echo '<span class="seller-name">' . $seller_name . '</span>';
-                    echo '</span>';
+                    echo '<a href="viewSellerIndex.php?seller_id=' . $seller_id . '" class="seller-name-link" style="font-weight: bold; text-decoration: none; color: inherit;">' . $seller_name . '</a>';
                     echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
                     echo '<span>';
                     echo '<span style="display: block; text-align: center">' . $item_name . '</span>';
