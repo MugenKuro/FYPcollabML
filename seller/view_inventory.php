@@ -37,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Set the success message
                 $successMessage = 'Quantity updated successfully.';
             } else {
-                $successMessage = 'Error updating quantity: ' . $db->getConnectError();
+                $errorMessage = 'Error updating quantity: ' . $db->getConnectError();
             }
         } catch (Exception $e) {
-            $successMessage = 'Error: ' . $e->getMessage();
+            $errorMessage = 'Error: ' . $e->getMessage();
         }
     }
 
