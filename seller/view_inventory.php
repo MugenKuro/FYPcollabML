@@ -203,11 +203,12 @@ if (!empty($searchQuery)) {
                                             <input type="text" class="form-control" id="new_quantity<?php echo $row['inventory_id']; ?>" name="new_quantity" placeholder="New Quantity" required>
                                         </div>
                                         
-                                    </form>
+                                   
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary">Update</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					 </form>
                                 </div>
                             </div>
                         </div>

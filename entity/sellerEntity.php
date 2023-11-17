@@ -190,7 +190,7 @@
             $sellerfetch = $sellersql->fetch_assoc();
             $sellerIDString = $sellerfetch["seller_id"];
 
-            $userQuery = "SELECT sellers.* FROM sellers WHERE sellers.seller_id= $sellerIDString";
+            $userQuery = "SELECT * FROM sellers join users on users.user_id = sellers.user_id WHERE sellers.seller_id= $sellerIDString";
             $result = $this->db->query($userQuery);            
                 return $result;
 
@@ -209,7 +209,8 @@
 			$userQuery = "SELECT * FROM itemratings 
             inner join customers on itemratings.customer_id = customers.customer_id 
             inner join users on users.user_id = customers.user_id
-            WHERE itemratings.item_id = $item_id";
+            WHERE itemratings.item_id = $item_id and users.status ='Active'
+            ORDER BY itemratings.rating_id DESC";
 			$result = $this->db->query($userQuery);
 			
             if($result->num_rows > 0){
@@ -301,11 +302,13 @@
             $bank_name = $inputData['bank_name'];
             $bank_account_no = $inputData['bank_account_no'];
             $userID = $_SESSION['user_id'];
+            if($password){
             if($password == $confirmPass){
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $statement = $this->db->prepare("UPDATE users SET  username = ? , password = ?, email =? where user_id = $userID");
-            $statement->bind_param("sss",  $username, $passwordHash, $email);
-            }else{
+            $statement->bind_param("sss",  $username, $passwordHash, $email);}
+            }
+            else{
                 $statement = $this->db->prepare("UPDATE users SET  username = ? , email =? where user_id = $userID");
                 $statement->bind_param("ss",  $username, $email);
             }

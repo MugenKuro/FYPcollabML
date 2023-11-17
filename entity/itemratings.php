@@ -42,8 +42,12 @@ class itemratings {
     }
 
     public function addItemRating($customer_id, $item_id, $rating_value, $review_text) {
-        $sql = "SELECT * FROM `itemratings` where `customer_id` = $customer_id AND `item_id` = $item_id";
         $db = new Db();
+        $customer_id = $db->escape($customer_id);
+        $item_id = $db->escape($item_id);
+        $rating_value = $db->escape($rating_value);
+        $review_text = $db->escape($review_text);
+        $sql = "SELECT * FROM `itemratings` where `customer_id` = $customer_id AND `item_id` = $item_id";
         $result = $db->query($sql);
         if ($result->num_rows > 0) {
             $resp['status'] = 'failed';

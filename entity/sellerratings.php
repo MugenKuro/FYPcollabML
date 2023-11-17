@@ -42,8 +42,12 @@ class sellerratings {
     }
 
     public function addSellerRating($customer_id, $seller_id, $rating_value, $review_text) {
-        $sql = "SELECT * FROM `sellerratings` where `customer_id` = $customer_id AND `seller_id` = $seller_id ";
         $db = new Db();
+        $customer_id = $db->escape($customer_id);
+        $seller_id = $db->escape($seller_id);
+        $rating_value = $db->escape($rating_value);
+        $review_text = $db->escape($review_text);
+        $sql = "SELECT * FROM `sellerratings` where `customer_id` = $customer_id AND `seller_id` = $seller_id ";
         $result = $db->query($sql);
         if ($result->num_rows > 0) {
             $resp['status'] = 'failed';
