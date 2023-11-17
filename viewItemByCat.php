@@ -71,6 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
+        .seller-name-link:hover {
+            font-size: 1.2em;
+            transition: font-size 0.3s;
+        }
     </style>
 
 
@@ -100,9 +105,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         <?php endif; ?>
                         <div class="homepage-container03"
                             onclick="window.location='viewItem.php?item_id=<?php echo $item->item_id; ?>'">
-                            <span style="font-weight: bold; ">
-                                <?php echo $item->seller_username; ?>
-                            </span>
+                            <a href="viewSellerIndex.php?seller_id=<?php echo $item->seller_id; ?>" class="seller-name-link"
+                                style="font-weight: bold; text-decoration: none; color: inherit;">
+                                <?php echo $item->seller_name; ?>
+                            </a>
                             <img alt="image" src="<?php echo '.' . $item->item_image_path; ?>" class="homepage-image" />
                             <span class="item-name">
                                 <?php echo $item->item_name; ?>
