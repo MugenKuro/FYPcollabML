@@ -108,6 +108,10 @@ require_once __DIR__ . '/./sellerAuth.php';
                                         <span>
                                            <?=$row2['seller_name']?>
                                         </span>
+                                        <br>
+                                        <span>
+                                           <?="@".$row2['username']?>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
