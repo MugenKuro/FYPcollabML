@@ -36,7 +36,7 @@ class categories
 
     public function viewAllCategories()
     {
-        $sql = "SELECT * FROM `categories`";
+        $sql = "SELECT * FROM `categories` WHERE status = 'Active'";
         $db = new Db();
         $result = $db->query($sql);
 
