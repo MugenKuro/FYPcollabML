@@ -3,6 +3,8 @@ require_once  "../controller/AdminController.php";
 
 $adminController = new AdminController();
 
+$successMessage = '';
+
 $errorMessage = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessage = "Category name already exists!";
     } else {
         if ($adminController->addCategory($categoryName, $status)) {
-            echo "Category added successfully!";
+            $successMessage = "Category added successfully!";
             header("Location: view_category.php");
         } else {
             $errorMessage = "Error adding category!";
@@ -43,7 +45,11 @@ include "admin_header.php";
                         <h2 class="card-title"><b>Add New Category</b></h2>
                     </div>
                     <div class="card-body">
-                        <!-- Display error message -->
+                        <!-- Display message -->
+                        <div id="successMessage" class="alert alert-success mt-3 d-none">
+                            <span id="success-message-text"></span>
+                            <button type="button" class="btn-close float-end" aria-label="Close" data-bs-dismiss="alert"></button>
+                        </div>
                         <div id="errorMessage" class="alert alert-danger mt-3 d-none">
                             <span id="error-message-text"></span>
                             <button type="button" class="btn-close float-end" aria-label="Close" data-bs-dismiss="alert"></button>
@@ -72,6 +78,12 @@ include "admin_header.php";
             var errorMessageText = document.getElementById("error-message-text");
             errorMessageText.innerText = '<?php echo $errorMessage; ?>';
             errorMessageDiv.classList.remove("d-none"); 
+        <?php endif; ?>
+        <?php if (!empty($successMessage)) : ?>
+            var successMessageDiv = document.getElementById("successMessage");
+            var successMessageText = document.getElementById("success-message-text");
+            successMessageText.innerText = '<?php echo $successMessage; ?>';
+            successMessageDiv.classList.remove("d-none");
         <?php endif; ?>
     </script>
 </body>
