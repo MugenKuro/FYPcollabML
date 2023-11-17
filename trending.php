@@ -43,8 +43,10 @@ if (isset($_SESSION['accountType'])) {
 
     <title>iCloth</title>
     <style>
-        .seller-name {
-            font-weight: bold; 
+        .seller-name:hover {
+            /* font-weight: bold;  */
+            font-size: 1.2em;
+            transition: font-size 0.3s;
         }
 
         .item-name {
@@ -96,11 +98,9 @@ if (isset($_SESSION['accountType'])) {
                 $seller_id = $row['seller_id'];
 
                 // Query to retrieve seller name based on seller_id
-                $sellerQuery = "SELECT Users.username FROM Sellers
-                                JOIN Users ON Sellers.user_id = Users.user_id
-                                WHERE Sellers.seller_id = ?";
+                $sellerQuery = "SELECT seller_name FROM Sellers WHERE seller_id = ?";
                 $sellerResult = $db->query($sellerQuery, [$seller_id]);
-                $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['username'] : 'Prem Shop';
+                $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['seller_name'] : 'Prem Shop';
 
                 if ($container02Count % 4 == 0) {
                     // Start a new homepage-container02 after every 4 items
@@ -109,7 +109,7 @@ if (isset($_SESSION['accountType'])) {
 
                 echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
                 echo '<span>';
-                echo '<span class="seller-name">' . $seller_name . '</span>';
+                echo '<a class="seller-name" style="font-weight: bold; text-decoration: none; color: inherit;" href="viewSellerIndex.php?seller_id=' . $seller_id . '">' . $seller_name . '</a>';
                 // echo '<br />';
                 echo '</span>';
                 echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
@@ -192,11 +192,9 @@ if (isset($_SESSION['accountType'])) {
                     $seller_id = $row['seller_id'];
 
                     // Query to retrieve seller name based on seller_id
-                    $sellerQuery = "SELECT Users.username FROM Sellers
-                                    JOIN Users ON Sellers.user_id = Users.user_id
-                                    WHERE Sellers.seller_id = ?";
+                    $sellerQuery = "SELECT seller_name FROM Sellers WHERE seller_id = ?";
                     $sellerResult = $db->query($sellerQuery, [$seller_id]);
-                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['username'] : 'Prem Shop';
+                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['seller_name'] : 'Prem Shop';
 
                     if ($container02Count % 4 == 0) {
                         // Start a new homepage-container02 after every 4 items
@@ -205,7 +203,7 @@ if (isset($_SESSION['accountType'])) {
 
                     echo '<div class="homepage-container03" onclick="redirectToViewItem(' . $item_id . ')">';
                     echo '<span>';
-                    echo '<span class="seller-name">' . $seller_name . '</span>';
+                    echo '<a class="seller-name" style="font-weight: bold; text-decoration: none; color: inherit;" href="viewSellerIndex.php?seller_id=' . $seller_id . '">' . $seller_name . '</a>';
                     // echo '<br />';
                     echo '</span>';
                     echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
