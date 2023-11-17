@@ -39,15 +39,15 @@ $result = $adminController->viewRegistrationRequests();
             margin: 30px 0;
             border-radius: 3px;
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-            overflow-x: auto; /* Add horizontal scroll on small screens */
-            min-width: 1200px; /* Adjust this to the minimum width that your table needs */
+            overflow-x: auto; 
+            min-width: 1200px; 
         }
         button.btn {
-            width: 100px; /* Set a fixed width */
-            height: 40px; /* Set a fixed height */
-            line-height: 40px; /* Align text vertically */
-            text-align: center; /* Align text horizontally */
-            padding: 0; /* Remove padding */
+            width: 100px; 
+            height: 40px; 
+            line-height: 40px;
+            text-align: center; 
+            padding: 0; 
         }
     </style>
 </head>
