@@ -151,7 +151,7 @@ function confirmAction() {
                             </div>
                             <div class="col-sm-6">
                             <label for="username">Username</label>
-                                <input required type="text" placeholder="username" name="username" value="<?php echo $row['username'] ?>"
+                                <input required readonly type="text" placeholder="username" name="username" value="<?php echo $row['username'] ?>"
                                     class="form-control" /></input>
                             </div>
                         </div>
