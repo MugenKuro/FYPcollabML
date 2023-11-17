@@ -1,12 +1,17 @@
 <style>
-        .item-name {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            /* Number of lines to show */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    </style>
+    .item-name {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        /* Number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .seller-name-link:hover {
+        font-size: 1.2em;
+        transition: font-size 0.3s;
+    }
+</style>
 
 <div class="view-item-container23">
     <span class="view-item-text63">
@@ -32,7 +37,7 @@
             // Loop through the recommendations and display them dynamically
             foreach ($recommendations as $recommendation) {
                 // Query to retrieve item details based on item_id
-                $itemQuery = "SELECT item_name, item_image_path, price FROM Items WHERE item_id = ?";
+                $itemQuery = "SELECT item_name, item_image_path, price, seller_id FROM Items WHERE item_id = ?";
                 $itemResult = $db->query($itemQuery, [$recommendation]);
 
                 if ($itemResult->num_rows > 0) {
@@ -41,8 +46,16 @@
                     $item_name = $row['item_name'];
                     $item_image_path = $row['item_image_path'];
                     $item_price = $row['price'];
+                    $seller_id = $row['seller_id'];
+
+                    // Query to retrieve seller name based on seller_id
+                    $sellerQuery = "SELECT seller_name FROM Sellers
+                                    WHERE seller_id = ?";
+                    $sellerResult = $db->query($sellerQuery, [$seller_id]);
+                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['seller_name'] : 'Prem Shop';
 
                     echo '<div class="view-item-container' . $container02Count . '" onclick="redirectToViewItem(' . $item_id . ')">';
+                    echo '<a href="viewSellerIndex.php?seller_id=' . $seller_id . '" class="seller-name-link" style="font-weight: bold; text-decoration: none; color: inherit;">' . $seller_name . '</a>';
                     echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
                     echo '<span class="item-name">';
                     echo '<span>' . $item_name . '</span>';
@@ -55,7 +68,7 @@
                 }
             }
 
-        }  else {
+        } else {
             // failure so display random
             // Set the seed
             mt_srand($item_id_rec);
@@ -66,7 +79,7 @@
                 // Generate a random number between 1 and 10
                 $random_number = mt_rand(4, 580);
 
-                $itemQuery = "SELECT item_name, item_image_path, price FROM Items WHERE item_id = ?";
+                $itemQuery = "SELECT item_name, item_image_path, price, seller_id FROM Items WHERE item_id = ?";
                 $itemResult = $db->query($itemQuery, [$random_number]);
 
                 if ($itemResult->num_rows > 0) {
@@ -75,11 +88,20 @@
                     $item_name = $row['item_name'];
                     $item_image_path = $row['item_image_path'];
                     $item_price = $row['price'];
+                    $seller_id = $row['seller_id'];
+
+                    // Query to retrieve seller name based on seller_id
+                    $sellerQuery = "SELECT seller_name FROM Sellers
+                                    WHERE seller_id = ?";
+                    $sellerResult = $db->query($sellerQuery, [$seller_id]);
+                    $seller_name = ($sellerResult->num_rows > 0) ? $sellerResult->fetch_assoc()['seller_name'] : 'Prem Shop';
+
 
                     echo '<div class="view-item-container' . $container02Count . '" onclick="redirectToViewItem(' . $item_id . ')">';
+                    echo '<a href="viewSellerIndex.php?seller_id=' . $seller_id . '" class="seller-name-link" style="font-weight: bold; text-decoration: none; color: inherit;">' . $seller_name . '</a>';
                     echo '<img alt="image" src="./' . $item_image_path . '" class="homepage-image" />';
                     echo '<span>';
-                    echo '<span>' . $item_name . '</span>';
+                    echo '<span style="display: block; text-align: center">' . $item_name . '</span>';
                     echo '<br />';
                     echo '</span>';
                     echo '<span>$' . $item_price . '</span>';
@@ -87,8 +109,8 @@
 
                     $container02Count++;
                 }
-            } 
             }
+        }
         ?>
         <script>
             function redirectToViewItem(itemId) {
