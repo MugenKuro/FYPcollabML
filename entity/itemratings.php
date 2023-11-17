@@ -68,7 +68,8 @@ class itemratings {
         FROM itemratings as ir
         JOIN customers as c ON ir.customer_id = c.customer_id
         JOIN users as u ON c.user_id = u.user_id
-        WHERE ir.item_id = $item_id";
+        WHERE ir.item_id = $item_id
+        ORDER BY ir.rating_id DESC";
         $db = new Db();
         $result = $db->query($sql);
         $data = array(); // Initialize an empty array to store category data
