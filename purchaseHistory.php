@@ -117,7 +117,7 @@ if (isset($_SESSION['accountType'])) {
                             $customer_id = $purchase->customer_id;
                             $image = $purchase->item_image_path;
                             $name = $purchase->item_name;
-                            $price = $purchase->price;
+                            $price = $purchase->total_price;
                             $date = $purchase->order_date;
                             // Add more fields as needed
                             // You can repeat the HTML block for each purchase
