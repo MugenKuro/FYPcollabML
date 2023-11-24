@@ -52,10 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Query to check if the size already exists for the selected item
         $checkSizeSql = "SELECT COUNT(*) AS size_count
-                        FROM Inventory iv
-                        INNER JOIN Items i ON iv.item_id = i.item_id
-                        WHERE i.item_name = ? AND iv.size = ? AND i.seller_id = (SELECT seller_id FROM Users WHERE user_id = ?)";
-        $checkSizeParams = [$itemName, $size, $sellerUserId];
+            FROM Inventory iv
+            INNER JOIN Items i ON iv.item_id = i.item_id
+            WHERE i.item_id = ? AND iv.size = ?";
+            // AND i.seller_id = (SELECT seller_id FROM Users WHERE user_id = ?)";
+        $checkSizeParams = [$_POST["item_id"], $size];
 
         try {
             $sizeResult = $db->query($checkSizeSql, $checkSizeParams);
@@ -68,8 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Size doesn't exist, proceed to add new inventory record
                 // Query to add a new inventory record
                 $insertSql = "INSERT INTO Inventory (item_id, size, quantity)
-                            VALUES ((SELECT item_id FROM Items WHERE item_name = ? AND seller_id = (SELECT seller_id FROM Users WHERE user_id = ? AND account_type = 'Seller')), ?, ?)";
-                $insertParams = [$itemName, $sellerUserId, $size, $quantity];
+                              VALUES (?, ?, ?)";
+                $insertParams = [$_POST["item_id"], $size, $quantity];
 
                 try {
                     $result = $db->query($insertSql, $insertParams);
@@ -250,13 +251,13 @@ if (!empty($searchQuery)) {
                         <select class="form-control" id="item_name" name="item_name" required>
                             <?php
                             // Query to retrieve item names for the seller
-                            $itemNamesSql = "SELECT item_name FROM Items WHERE seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?) AND status = 'Active'";
+                            $itemNamesSql = "SELECT item_id, item_name FROM Items WHERE seller_id = (SELECT seller_id FROM Sellers WHERE user_id = ?) AND status = 'Active'";
                             $itemNamesParams = [$sellerUserId];
 
                             try {
                                 $itemNamesResult = $db->query($itemNamesSql, $itemNamesParams);
                                 while ($itemNameRow = $itemNamesResult->fetch_assoc()) {
-                                    echo "<option value='" . $itemNameRow['item_name'] . "'>" . $itemNameRow['item_name'] . "</option>";
+                                    echo "<option value='" . $itemNameRow['item_name'] . "' data-item-id='" . $itemNameRow['item_id'] . "'>" . $itemNameRow['item_name'] . "</option>";
                                 }
                             } catch (Exception $e) {
                                 echo 'Error: ' . $e->getMessage();
@@ -264,6 +265,7 @@ if (!empty($searchQuery)) {
                             ?>
                         </select>
                     </div>
+                    <input type="hidden" id="item_id" name="item_id" value=""> 
                     <div class="form-group">
                         <label for="size">Size:</label>
                         <input type="text" class="form-control" id="size" name="size" placeholder="Size" required>
@@ -283,6 +285,15 @@ if (!empty($searchQuery)) {
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $("#item_name").change(function() {
+            var selectedItem = $("#item_name option:selected");
+            var itemId = selectedItem.data("item-id");
+            $("#item_id").val(itemId);
+        });
+    });
+</script>
 <script>
     function validateForm() {
         var size = document.getElementById("size").value;
